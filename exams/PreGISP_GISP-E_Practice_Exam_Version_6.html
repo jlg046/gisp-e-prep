@@ -1,14 +1,1089 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>PreGISP (GISP-E) Practice Examination — Version 6</title><style>
-:root{--primary:#1a5f7a;--primary-dark:#114154;--primary-light:#f0f5f7;--success:#217a45;--warning:#9a6a00;--danger:#b83232;--text:#263746;--text-light:#667784;--border:#d9e0e5;--card-bg:#fff;--body-bg:#f5f7fa}*{box-sizing:border-box}body{font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;background:var(--body-bg);color:var(--text);line-height:1.55;margin:0}.container{max-width:980px;margin:32px auto;padding:0 18px}header{text-align:center;margin-bottom:28px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:34px 20px;border-radius:12px}header h1{margin:0 0 8px;font-size:2.1rem}header p{margin:4px 0;opacity:.95}.card{background:var(--card-bg);border-radius:9px;padding:24px;margin-bottom:20px;border:1px solid var(--border)}.question-header{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid var(--border);padding-bottom:9px;margin-bottom:16px}.domain-tag{background:var(--primary-light);color:var(--primary);padding:4px 10px;border-radius:20px;font-size:.82rem;font-weight:650}.question-num{font-weight:700;color:var(--text-light)}.question-text{font-size:1.08rem;font-weight:650;margin-bottom:16px}.options-container{display:flex;flex-direction:column;gap:10px}.option-label{display:flex;align-items:flex-start;padding:12px 14px;border:1px solid var(--border);border-radius:6px;cursor:pointer}.option-label:hover{background:var(--primary-light);border-color:var(--primary)}.option-label input{margin:5px 12px 0 0;transform:scale(1.15)}.action-container{text-align:center;margin:32px 0}.btn{background:var(--primary);color:#fff;border:0;padding:14px 34px;font-size:1.08rem;font-weight:700;border-radius:6px;cursor:pointer}.btn:hover{background:var(--primary-dark)}#results-dashboard{display:none}.score-summary{text-align:center}.score-big{font-size:4rem;font-weight:800;margin:10px}.pass-status{font-size:1.35rem;font-weight:750}.remediation-item{border-left:5px solid var(--danger);background:#fffafa}.feedback-box{margin-top:14px;padding:16px;background:#f8fafb;border:1px solid var(--border);border-radius:6px}.ref-tag{display:block;margin-top:10px;color:var(--primary);font-weight:650;word-break:break-word}.badge-wrong,.badge-correct{font-weight:700;padding:2px 7px;border-radius:4px}.badge-wrong{color:var(--danger);background:#fdeaea}.badge-correct{color:var(--success);background:#e8f5ec}.domain-breakdown{margin-top:18px;text-align:left;border-collapse:collapse;width:100%}.domain-breakdown th,.domain-breakdown td{padding:9px;border-bottom:1px solid var(--border);vertical-align:top}.domain-breakdown th{background:var(--primary-light);color:var(--primary)}.note{background:var(--primary-light);border-left:5px solid var(--primary)}.small{font-size:.92rem;color:var(--text-light)}a{color:var(--primary)}@media(max-width:650px){.question-header{align-items:flex-start;flex-direction:column}.domain-breakdown{font-size:.86rem}.card{padding:18px}header h1{font-size:1.65rem}}
-</style></head><body><div style="max-width:980px;margin:12px auto 0;padding:0 18px"><a href="../practice-exams.html" style="font-family:Segoe UI,Tahoma,sans-serif">← Back to preparation website</a></div><div class="container">
-<header><h1>PreGISP® / GISP-E Practice Examination</h1><p>Interactive Practice Form — Version 6</p><p>75 Questions · 11 Blueprint Domains · Blueprint-Weighted Scoring</p></header>
-<div id="quiz-interface"><div class="card note"><strong>Exam Instructions:</strong> Answer all 75 questions, then select <em>Submit and Score Exam</em>. The report includes raw accuracy, official blueprint-weighted performance by domain, and an item-by-item remediation plan linked to the supplied GIS&T Body of Knowledge resources.<p class="small">Practice note: These are study diagnostics generated from the supplied exam blueprint and detailed GIS&T BoK subtopic list; they are not official GISCI examination items.</p></div><form id="exam-form"><div id="questions-container"></div><div class="action-container"><button type="button" class="btn" id="submitBtn">Submit and Score Exam</button></div></form></div>
-<div id="results-dashboard"><div class="card score-summary" id="score-card"><h2>Your Evaluation Summary</h2><div class="score-big" id="weighted-score">0%</div><p id="score-raw">0 out of 75 Questions Correct</p><p class="small">Large score = official blueprint-weighted practice score. Raw accuracy is shown separately.</p><div class="pass-status" id="pass-label">STATUS</div><h3>Domain-Specific Performance</h3><table class="domain-breakdown"><thead><tr><th>Knowledge Domain</th><th>Official Weight</th><th>Items</th><th>Your Performance</th><th>Weighted Contribution</th></tr></thead><tbody id="domain-breakdown-body"></tbody></table></div><div id="remediation-header-zone"></div><div id="remediation-container"></div><div class="action-container"><button type="button" class="btn" id="resetBtn">Reset & Retake This Version</button></div></div>
-</div><script>
-const examQuestions=[{"id": 1, "domain": "Analytical Methods & GeoComputation", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply boundaries and zone membership?", "options": ["A) Buffers", "B) Areal Interpolation", "C) Boundaries and Zone Membership", "D) Grid Operations and Map Algebra"], "correct": "C", "explanation": "The tested competency is AM-02-098: Boundaries and Zone Membership, within the GIS&T BoK topic “Building Blocks.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-02-098", "subtopic": "AM-02-098 — Boundaries and Zone Membership", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 2, "domain": "Analytical Methods & GeoComputation", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving geospatial analysis and model building. Which topic should the analyst review first?", "options": ["A) Spatial Data Uncertainty", "B) The Evolution of Geospatial Reasoning, Analytics, and Modeling", "C) Geospatial Analysis and Model Building", "D) Exploratory Spatial Data Analysis (ESDA)"], "correct": "C", "explanation": "The tested competency is AM-01-020: Geospatial Analysis and Model Building, within the GIS&T BoK topic “Methodological Context.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-01-020", "subtopic": "AM-01-020 — Geospatial Analysis and Model Building", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 3, "domain": "Analytical Methods & GeoComputation", "question": "During project planning, a team identifies a knowledge gap involving classification and clustering. Which GIS&T BoK subtopic best matches that need?", "options": ["A) Grid Operations and Map Algebra", "B) Classification and Clustering", "C) Areal Interpolation", "D) Overlay"], "correct": "B", "explanation": "The tested competency is AM-02-009: Classification and Clustering, within the GIS&T BoK topic “Building Blocks.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-02-009", "subtopic": "AM-02-009 — Classification and Clustering", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 4, "domain": "Analytical Methods & GeoComputation", "question": "A student is studying the broader area “Data Exploration & Spatial Statistics.” Which subtopic most directly addresses work centered on grid-based statistics and metrics?", "options": ["A) Grid-based Statistics and Metrics", "B) Global Measures of Spatial Association", "C) Spatial Statistics", "D) Regression Fundamentals"], "correct": "A", "explanation": "The tested competency is AM-03-053: Grid-based Statistics and Metrics, within the GIS&T BoK topic “Data Exploration & Spatial Statistics.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-03-053", "subtopic": "AM-03-053 — Grid-based Statistics and Metrics", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 5, "domain": "Analytical Methods & GeoComputation", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is pattern recognition and matching?", "options": ["A) Machine Learning Approaches", "B) Rule Learning for Spatial Data Mining", "C) Artificial Intelligence Approaches", "D) Pattern Recognition and Matching"], "correct": "D", "explanation": "The tested competency is AM-08-038: Pattern Recognition and Matching, within the GIS&T BoK topic “Big Data & Geospatial Analytics.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-08-038", "subtopic": "AM-08-038 — Pattern Recognition and Matching", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 6, "domain": "Analytical Methods & GeoComputation", "question": "A project requirement explicitly calls for expertise in point pattern analysis. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) Exploratory Spatial Data Analysis (ESDA)", "B) Global Measures of Spatial Association", "C) Point Pattern Analysis", "D) Cartographic Modeling"], "correct": "C", "explanation": "The tested competency is AM-03-007: Point Pattern Analysis, within the GIS&T BoK topic “Data Exploration & Spatial Statistics.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-03-007", "subtopic": "AM-03-007 — Point Pattern Analysis", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 7, "domain": "Analytical Methods & GeoComputation", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply object-oriented programming in gis applications?", "options": ["A) Linear Programming and GIS", "B) Natural Language Processing in GIScience Applications", "C) Object-Oriented Programming in GIS Applications", "D) Real-time GIS Programming and Geocomputation"], "correct": "C", "explanation": "The tested competency is PD-01-021: Object-Oriented Programming in GIS Applications, within the GIS&T BoK topic “Algorithm Design & Algorithmic Approaches.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/PD-01-021", "subtopic": "PD-01-021 — Object-Oriented Programming in GIS Applications", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 8, "domain": "Analytical Methods & GeoComputation", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving spatial autoregressive models. Which topic should the analyst review first?", "options": ["A) Spatial Autoregressive Models", "B) Point Pattern Analysis", "C) The Geographically Weighted Regression Framework", "D) Kernels and Density Estimation"], "correct": "A", "explanation": "The tested competency is AM-03-032: Spatial Autoregressive Models, within the GIS&T BoK topic “Data Exploration & Spatial Statistics.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-03-032", "subtopic": "AM-03-032 — Spatial Autoregressive Models", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 9, "domain": "Analytical Methods & GeoComputation", "question": "During project planning, a team identifies a knowledge gap involving mathematical models of uncertainty: probability and statistics. Which GIS&T BoK subtopic best matches that need?", "options": ["A) Error-based Uncertainty", "B) Monte Carlo Simulation", "C) Fuzzy Aggregation Operators", "D) Mathematical models of uncertainty: probability and statistics"], "correct": "D", "explanation": "The tested competency is AM-09-048: Mathematical models of uncertainty: probability and statistics, within the GIS&T BoK topic “Analysis of Errors and Uncertainty.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-09-048", "subtopic": "AM-09-048 — Mathematical models of uncertainty: probability and statistics", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 10, "domain": "Analytical Methods & GeoComputation", "question": "A student is studying the broader area “Algorithm Design & Algorithmic Approaches.” Which subtopic most directly addresses work centered on gis and parallel programming?", "options": ["A) GIS and Parallel Programming", "B) Object-Oriented Programming in GIS Applications", "C) Modern Programming Libraries and Infrastructures for Raster Data Analysis", "D) Linear Programming and GIS"], "correct": "A", "explanation": "The tested competency is PD-01-014: GIS and Parallel Programming, within the GIS&T BoK topic “Algorithm Design & Algorithmic Approaches.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/PD-01-014", "subtopic": "PD-01-014 — GIS and Parallel Programming", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 11, "domain": "Analytical Methods & GeoComputation", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is regression fundamentals?", "options": ["A) Global Measures of Spatial Association", "B) Landscape Metrics", "C) Multi-Criteria Evaluation", "D) Regression Fundamentals"], "correct": "D", "explanation": "The tested competency is AM-03-063: Regression Fundamentals, within the GIS&T BoK topic “Data Exploration & Spatial Statistics.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-03-063", "subtopic": "AM-03-063 — Regression Fundamentals", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 12, "domain": "Analytical Methods & GeoComputation", "question": "A project requirement explicitly calls for expertise in fuzzy aggregation operators. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) Thematic Accuracy Assessment", "B) Fuzzy Aggregation Operators", "C) Spatial Data Uncertainty", "D) Monte Carlo Simulation"], "correct": "B", "explanation": "The tested competency is AM-09-088: Fuzzy Aggregation Operators, within the GIS&T BoK topic “Analysis of Errors and Uncertainty.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-09-088", "subtopic": "AM-09-088 — Fuzzy Aggregation Operators", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 13, "domain": "Analytical Methods & GeoComputation", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply error-based uncertainty?", "options": ["A) Error-based Uncertainty", "B) Monte Carlo Simulation", "C) Spatial Data Uncertainty", "D) Mathematical models of uncertainty: probability and statistics"], "correct": "A", "explanation": "The tested competency is AM-09-106: Error-based Uncertainty, within the GIS&T BoK topic “Analysis of Errors and Uncertainty.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/AM-09-106", "subtopic": "AM-09-106 — Error-based Uncertainty", "domainResource": "https://geospacebok.eu/AM | https://geospacebok.eu/GC"}, {"id": 14, "domain": "Conceptual Foundations", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving conceptual models of error and uncertainty. Which topic should the analyst review first?", "options": ["A) Problems of Scale and Zoning", "B) Academic Developments of GIS&T in English-speaking Countries: a Partial History", "C) Spatial Queries", "D) Conceptual Models of Error and Uncertainty"], "correct": "D", "explanation": "The tested competency is FC-07-024: Conceptual Models of Error and Uncertainty, within the GIS&T BoK topic “Uncertainty.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-07-024", "subtopic": "FC-07-024 — Conceptual Models of Error and Uncertainty", "domainResource": "https://geospacebok.eu/CF"}, {"id": 15, "domain": "Conceptual Foundations", "question": "During project planning, a team identifies a knowledge gap involving relationships between space and time. Which GIS&T BoK subtopic best matches that need?", "options": ["A) Networks", "B) Neighborhoods", "C) Spaces in Spatial Science", "D) Relationships Between Space and Time"], "correct": "D", "explanation": "The tested competency is FC-04-009: Relationships Between Space and Time, within the GIS&T BoK topic “Domains of Geographic Information.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-04-009", "subtopic": "FC-04-009 — Relationships Between Space and Time", "domainResource": "https://geospacebok.eu/CF"}, {"id": 16, "domain": "Conceptual Foundations", "question": "A student is studying the broader area “Basic Measures.” Which subtopic most directly addresses work centered on shape?", "options": ["A) Shape", "B) Geometric Primitives and Algorithms", "C) First, Second, and Third Laws of Geography", "D) Proximity and Distance Decay"], "correct": "A", "explanation": "The tested competency is FC-05-015: Shape, within the GIS&T BoK topic “Basic Measures.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-05-015", "subtopic": "FC-05-015 — Shape", "domainResource": "https://geospacebok.eu/CF"}, {"id": 17, "domain": "Conceptual Foundations", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is philosophical perspectives?", "options": ["A) Geometric Primitives and Algorithms", "B) Openness", "C) Epistemology", "D) Philosophical Perspectives"], "correct": "D", "explanation": "The tested competency is FC-02-003: Philosophical Perspectives, within the GIS&T BoK topic “Philosophical.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-02-003", "subtopic": "FC-02-003 — Philosophical Perspectives", "domainResource": "https://geospacebok.eu/CF"}, {"id": 18, "domain": "Conceptual Foundations", "question": "A project requirement explicitly calls for expertise in landscape and place. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) Landscape and Place", "B) Perception and Cognitive Processing of Geographic Phenomena: a Choropleth Map Case Study", "C) Semantic Information Elicitation", "D) The power of maps"], "correct": "A", "explanation": "The tested competency is FC-03-006: Landscape and Place, within the GIS&T BoK topic “Cognitive.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-03-006", "subtopic": "FC-03-006 — Landscape and Place", "domainResource": "https://geospacebok.eu/CF"}, {"id": 19, "domain": "Conceptual Foundations", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply an introduction to the gis and geospatial technology body of knowledge?", "options": ["A) Public and Private Sector Origins", "B) Conceptual Models of Error and Uncertainty", "C) An Introduction to the GIS&T Body of Knowledge", "D) Academic Developments of GIS&T in English-speaking Countries: a Partial History"], "correct": "C", "explanation": "The tested competency is FC-01-038: An Introduction to the GIS&T Body of Knowledge, within the GIS&T BoK topic “Origins.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-01-038", "subtopic": "FC-01-038 — An Introduction to the GIS&T Body of Knowledge", "domainResource": "https://geospacebok.eu/CF"}, {"id": 20, "domain": "Conceptual Foundations", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving openness. Which topic should the analyst review first?", "options": ["A) Epistemology", "B) Openness", "C) Philosophical Perspectives", "D) Public and Private Sector Origins"], "correct": "B", "explanation": "The tested competency is FC-02-035: Openness, within the GIS&T BoK topic “Philosophical.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-02-035", "subtopic": "FC-02-035 — Openness", "domainResource": "https://geospacebok.eu/CF"}, {"id": 21, "domain": "Conceptual Foundations", "question": "During project planning, a team identifies a knowledge gap involving epistemology. Which GIS&T BoK subtopic best matches that need?", "options": ["A) Distance Operations", "B) Epistemology", "C) Philosophical Perspectives", "D) Openness"], "correct": "B", "explanation": "The tested competency is FC-02-002: Epistemology, within the GIS&T BoK topic “Philosophical.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-02-002", "subtopic": "FC-02-002 — Epistemology", "domainResource": "https://geospacebok.eu/CF"}, {"id": 22, "domain": "Conceptual Foundations", "question": "A student is studying the broader area “Basic Measures.” Which subtopic most directly addresses work centered on distance operations?", "options": ["A) First, Second, and Third Laws of Geography", "B) Distance Operations", "C) Areal Operations", "D) Shape"], "correct": "B", "explanation": "The tested competency is FC-05-042: Distance Operations, within the GIS&T BoK topic “Basic Measures.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-05-042", "subtopic": "FC-05-042 — Distance Operations", "domainResource": "https://geospacebok.eu/CF"}, {"id": 23, "domain": "Conceptual Foundations", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is resolution?", "options": ["A) Proximity and Distance Decay", "B) Resolution", "C) Areal Operations", "D) Distance Operations"], "correct": "B", "explanation": "The tested competency is FC-05-021: Resolution, within the GIS&T BoK topic “Basic Measures.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-05-021", "subtopic": "FC-05-021 — Resolution", "domainResource": "https://geospacebok.eu/CF"}, {"id": 24, "domain": "Conceptual Foundations", "question": "A project requirement explicitly calls for expertise in public and private sector origins. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) An Introduction to the GIS&T Body of Knowledge", "B) Spaces in Spatial Science", "C) Public and Private Sector Origins", "D) Academic Developments of GIS&T in English-speaking Countries: a Partial History"], "correct": "C", "explanation": "The tested competency is FC-01-029: Public and Private Sector Origins, within the GIS&T BoK topic “Origins.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/FC-01-029", "subtopic": "FC-01-029 — Public and Private Sector Origins", "domainResource": "https://geospacebok.eu/CF"}, {"id": 25, "domain": "Data Modeling", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply vector-to-raster and raster-to-vector conversions?", "options": ["A) Vector-to-Raster and Raster-to-Vector Conversions", "B) Coordinate Transformations", "C) Point, Line, and Area Generalization", "D) Transaction Management"], "correct": "A", "explanation": "The tested competency is DM-06-086: Vector-to-Raster and Raster-to-Vector Conversions, within the GIS&T BoK topic “Data Manipulation.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-06-086", "subtopic": "DM-06-086 — Vector-to-Raster and Raster-to-Vector Conversions", "domainResource": "https://geospacebok.eu/DM"}, {"id": 26, "domain": "Data Modeling", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving fuzzy models. Which topic should the analyst review first?", "options": ["A) The topological model", "B) Fuzzy Models", "C) Hierarchical Data Models", "D) Modeling three-dimensional (3-D) entities"], "correct": "B", "explanation": "The tested competency is DM-02-041: Fuzzy Models, within the GIS&T BoK topic “Representation of Spatial Objects.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-02-041", "subtopic": "DM-02-041 — Fuzzy Models", "domainResource": "https://geospacebok.eu/DM"}, {"id": 27, "domain": "Data Modeling", "question": "During project planning, a team identifies a knowledge gap involving geographic coordinate systems. Which GIS&T BoK subtopic best matches that need?", "options": ["A) Geographic Coordinate Systems", "B) Linear Referencing", "C) Vertical (Geopotential) Datums", "D) Horizontal (Geometric) Datums"], "correct": "A", "explanation": "The tested competency is DM-05-047: Geographic Coordinate Systems, within the GIS&T BoK topic “Georeferencing Systems.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-05-047", "subtopic": "DM-05-047 — Geographic Coordinate Systems", "domainResource": "https://geospacebok.eu/DM"}, {"id": 28, "domain": "Data Modeling", "question": "A student is studying the broader area “Spatial Access Methods.” Which subtopic most directly addresses work centered on spatial indexing?", "options": ["A) Spatial Indexing", "B) Space-driven Structures: Grid, linear quadtree, and z-ordering tree files", "C) Data retrieval strategies", "D) Data-driven Structures: R-trees and Cost Models"], "correct": "A", "explanation": "The tested competency is DM-03-066: Spatial Indexing, within the GIS&T BoK topic “Spatial Access Methods.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-03-066", "subtopic": "DM-03-066 — Spatial Indexing", "domainResource": "https://geospacebok.eu/DM"}, {"id": 29, "domain": "Data Modeling", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is entity-based models?", "options": ["A) The Hexagonal Model", "B) Fuzzy Models", "C) Entity-based Models", "D) Spatial Network Modeling"], "correct": "C", "explanation": "The tested competency is DM-02-020: Entity-based Models, within the GIS&T BoK topic “Representation of Spatial Objects.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-02-020", "subtopic": "DM-02-020 — Entity-based Models", "domainResource": "https://geospacebok.eu/DM"}, {"id": 30, "domain": "Data Modeling", "question": "A project requirement explicitly calls for expertise in vector data models. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) Triangular Irregular Network (TIN) Models", "B) Vector Data Models", "C) Fuzzy Models", "D) The Raster Data Model"], "correct": "B", "explanation": "The tested competency is DM-02-014: Vector Data Models, within the GIS&T BoK topic “Representation of Spatial Objects.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-02-014", "subtopic": "DM-02-014 — Vector Data Models", "domainResource": "https://geospacebok.eu/DM"}, {"id": 31, "domain": "Data Modeling", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply geospatial knowledge graphs?", "options": ["A) Logical Data Models", "B) Geospatial Knowledge Graphs", "C) NoSQL Databases", "D) Spatial Database Management Systems"], "correct": "B", "explanation": "The tested competency is DM-01-092: Geospatial Knowledge Graphs, within the GIS&T BoK topic “Spatial Databases.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-01-092", "subtopic": "DM-01-092 — Geospatial Knowledge Graphs", "domainResource": "https://geospacebok.eu/DM"}, {"id": 32, "domain": "Data Modeling", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving defining and designing spatial queries. Which topic should the analyst review first?", "options": ["A) Modeling Semi-Structured and Unstructured Spatial Data", "B) Data retrieval strategies", "C) Spatial Indexing", "D) Defining and Designing Spatial Queries"], "correct": "D", "explanation": "The tested competency is DM-03-075: Defining and Designing Spatial Queries, within the GIS&T BoK topic “Spatial Access Methods.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-03-075", "subtopic": "DM-03-075 — Defining and Designing Spatial Queries", "domainResource": "https://geospacebok.eu/DM"}, {"id": 33, "domain": "Data Modeling", "question": "During project planning, a team identifies a knowledge gap involving transaction management. Which GIS&T BoK subtopic best matches that need?", "options": ["A) Raster resampling", "B) Vector-to-Raster and Raster-to-Vector Conversions", "C) Point, Line, and Area Generalization", "D) Transaction Management"], "correct": "D", "explanation": "The tested competency is DM-06-089: Transaction Management, within the GIS&T BoK topic “Data Manipulation.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-06-089", "subtopic": "DM-06-089 — Transaction Management", "domainResource": "https://geospacebok.eu/DM"}, {"id": 34, "domain": "Geospatial Data", "question": "A student is studying the broader area “Spatial Data Standards & Infrastructure.” Which subtopic most directly addresses work centered on data evaluation, metadata, and data quality?", "options": ["A) Marine Spatial Data Infrastructure", "B) Ontology for Geospatial Semantic Interoperability", "C) Data Evaluation, Metadata, and Data Quality", "D) Spatial Data Infrastructures"], "correct": "C", "explanation": "The tested competency is DM-07-057: Data Evaluation, Metadata, and Data Quality, within the GIS&T BoK topic “Spatial Data Standards & Infrastructure.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-07-057", "subtopic": "DM-07-057 — Data Evaluation, Metadata, and Data Quality", "domainResource": "https://geospacebok.eu/GD"}, {"id": 35, "domain": "Geospatial Data", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is social media platforms?", "options": ["A) Mobile Applications and Technologies", "B) Time-of-Arrival (TOA) Localization for Indoor GIS", "C) Aerial Photography: History and Georeferencing", "D) Social Media Platforms"], "correct": "D", "explanation": "The tested competency is DC-02-004: Social Media Platforms, within the GIS&T BoK topic “Digital Data Sources and Capture Methods.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-02-004", "subtopic": "DC-02-004 — Social Media Platforms", "domainResource": "https://geospacebok.eu/GD"}, {"id": 36, "domain": "Geospatial Data", "question": "A project requirement explicitly calls for expertise in field data capture technologies. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) Changes in Geospatial Data Capture Over Time: Part 1, Technological Developments", "B) Sampling: size selection, sample types, and intervals", "C) Field Data Capture Technologies", "D) United States Census Data"], "correct": "C", "explanation": "The tested competency is DC-06-009: Field Data Capture Technologies, within the GIS&T BoK topic “Field Data Collection.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-06-009", "subtopic": "DC-06-009 — Field Data Capture Technologies", "domainResource": "https://geospacebok.eu/GD"}, {"id": 37, "domain": "Geospatial Data", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply sampling: size selection, sample types, and intervals?", "options": ["A) Field Data Capture Technologies", "B) United States Census Data", "C) Sampling: size selection, sample types, and intervals", "D) Social Media Platforms"], "correct": "C", "explanation": "The tested competency is DC-06-006: Sampling: size selection, sample types, and intervals, within the GIS&T BoK topic “Field Data Collection.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-06-006", "subtopic": "DC-06-006 — Sampling: size selection, sample types, and intervals", "domainResource": "https://geospacebok.eu/GD"}, {"id": 38, "domain": "Geospatial Data", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving georeferencing and georectification. Which topic should the analyst review first?", "options": ["A) Georeferencing and Georectification", "B) Changes in Geospatial Data Capture Over Time: Part 1, Technological Developments", "C) Changes in Geospatial Data Capture Over Time: Part 2, Implications and Case Studies", "D) Spatial Data Infrastructures"], "correct": "A", "explanation": "The tested competency is DC-01-030: Georeferencing and Georectification, within the GIS&T BoK topic “History and Trends.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-01-030", "subtopic": "DC-01-030 — Georeferencing and Georectification", "domainResource": "https://geospacebok.eu/GD"}, {"id": 39, "domain": "Geospatial Data", "question": "During project planning, a team identifies a knowledge gap involving volunteered geographic information. Which GIS&T BoK subtopic best matches that need?", "options": ["A) Texts", "B) Volunteered Geographic Information", "C) Historical Maps in GIS", "D) Street-level Imagery"], "correct": "B", "explanation": "The tested competency is DC-02-029: Volunteered Geographic Information, within the GIS&T BoK topic “Digital Data Sources and Capture Methods.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-02-029", "subtopic": "DC-02-029 — Volunteered Geographic Information", "domainResource": "https://geospacebok.eu/GD"}, {"id": 40, "domain": "Geospatial Data", "question": "A student is studying the broader area “Spatial Data Standards & Infrastructure.” Which subtopic most directly addresses work centered on u.s. national spatial data infrastructure?", "options": ["A) Data Evaluation, Metadata, and Data Quality", "B) U.S. National Spatial Data Infrastructure", "C) Geospatial Content Standards", "D) Spatial Data Infrastructures"], "correct": "B", "explanation": "The tested competency is DM-07-079: U.S. National Spatial Data Infrastructure, within the GIS&T BoK topic “Spatial Data Standards & Infrastructure.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DM-07-079", "subtopic": "DM-07-079 — U.S. National Spatial Data Infrastructure", "domainResource": "https://geospacebok.eu/GD"}, {"id": 41, "domain": "Geospatial Data", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is land records?", "options": ["A) Land records", "B) Ocean Surveying", "C) Professional Land Surveying", "D) Historical Maps in GIS"], "correct": "A", "explanation": "The tested competency is DC-05-002: Land records, within the GIS&T BoK topic “GIS and Surveying.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-05-002", "subtopic": "DC-05-002 — Land records", "domainResource": "https://geospacebok.eu/GD"}, {"id": 42, "domain": "Cartography & Visualization", "question": "A project requirement explicitly calls for expertise in visual hierarchy and layout. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) Statistical Mapping (Enumeration, Normalization, Classification)", "B) Map Production and Management", "C) Map Projections", "D) Visual Hierarchy and Layout"], "correct": "D", "explanation": "The tested competency is CV-03-007: Visual Hierarchy and Layout, within the GIS&T BoK topic “Map Design Fundamentals.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/CV-03-007", "subtopic": "CV-03-007 — Visual Hierarchy and Layout", "domainResource": "https://geospacebok.eu/CV"}, {"id": 43, "domain": "Cartography & Visualization", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply design and aesthetics?", "options": ["A) Typography", "B) Design and Aesthetics", "C) Symbolization and the Visual Variables", "D) Color Theory"], "correct": "B", "explanation": "The tested competency is CV-03-029: Design and Aesthetics, within the GIS&T BoK topic “Map Design Fundamentals.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/CV-03-029", "subtopic": "CV-03-029 — Design and Aesthetics", "domainResource": "https://geospacebok.eu/CV"}, {"id": 44, "domain": "Cartography & Visualization", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving color theory. Which topic should the analyst review first?", "options": ["A) Map Production and Management", "B) Typography", "C) Color Theory", "D) Design and Aesthetics"], "correct": "C", "explanation": "The tested competency is CV-03-009: Color Theory, within the GIS&T BoK topic “Map Design Fundamentals.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/CV-03-009", "subtopic": "CV-03-009 — Color Theory", "domainResource": "https://geospacebok.eu/CV"}, {"id": 45, "domain": "Cartography & Visualization", "question": "During project planning, a team identifies a knowledge gap involving map reading. Which GIS&T BoK subtopic best matches that need?", "options": ["A) Map Reading", "B) Usability Engineering & Evaluation", "C) Map Interpretation", "D) Map Analysis"], "correct": "A", "explanation": "The tested competency is CV-06-021: Map Reading, within the GIS&T BoK topic “Map Use.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/CV-06-021", "subtopic": "CV-06-021 — Map Reading", "domainResource": "https://geospacebok.eu/CV"}, {"id": 46, "domain": "Cartography & Visualization", "question": "A student is studying the broader area “History and Trends.” Which subtopic most directly addresses work centered on cartography and art?", "options": ["A) Cartography and Art", "B) Cartography and Science", "C) Cartography and Power", "D) Lesson Design in Cartography Education"], "correct": "A", "explanation": "The tested competency is CV-01-027: Cartography and Art, within the GIS&T BoK topic “History and Trends.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/CV-01-027", "subtopic": "CV-01-027 — Cartography and Art", "domainResource": "https://geospacebok.eu/CV"}, {"id": 47, "domain": "Cartography & Visualization", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is web mapping?", "options": ["A) Virtual and Immersive Environments", "B) User Interface and User Experience (UI/UX) Design", "C) Mobile Maps and Responsive Design", "D) Web Mapping"], "correct": "D", "explanation": "The tested competency is CV-05-015: Web Mapping, within the GIS&T BoK topic “Interactive Design Techniques.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/CV-05-015", "subtopic": "CV-05-015 — Web Mapping", "domainResource": "https://geospacebok.eu/CV"}, {"id": 48, "domain": "Cartography & Visualization", "question": "A project requirement explicitly calls for expertise in geovisualization. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) Usability Engineering & Evaluation", "B) User Interface and User Experience (UI/UX) Design", "C) Geovisual Analytics", "D) Geovisualization"], "correct": "D", "explanation": "The tested competency is CV-05-035: Geovisualization, within the GIS&T BoK topic “Interactive Design Techniques.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/CV-05-035", "subtopic": "CV-05-035 — Geovisualization", "domainResource": "https://geospacebok.eu/CV"}, {"id": 49, "domain": "Cartography & Visualization", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply flow maps?", "options": ["A) Cartograms", "B) Terrain Representation", "C) Collaborative Cartography", "D) Flow Maps"], "correct": "D", "explanation": "The tested competency is CV-04-031: Flow Maps, within the GIS&T BoK topic “Map Design Techniques.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/CV-04-031", "subtopic": "CV-04-031 — Flow Maps", "domainResource": "https://geospacebok.eu/CV"}, {"id": 50, "domain": "Platforms, Sensors, Physical Principles & Image Processing", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving fundamentals of aerial photo interpretation. Which topic should the analyst review first?", "options": ["A) Spectral Properties of Earth's Surface", "B) Feature Extraction from Satellite Imagery", "C) Fundamentals of Aerial Photo Interpretation", "D) Ground Verification and Accuracy Assessment"], "correct": "C", "explanation": "The tested competency is DC-04-012: Fundamentals of Aerial Photo Interpretation, within the GIS&T BoK topic “Processing Remotely-Sensed Data.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-04-012", "subtopic": "DC-04-012 — Fundamentals of Aerial Photo Interpretation", "domainResource": "https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"}, {"id": 51, "domain": "Platforms, Sensors, Physical Principles & Image Processing", "question": "During project planning, a team identifies a knowledge gap involving light detection and ranging (lidar). Which GIS&T BoK subtopic best matches that need?", "options": ["A) Light Detection and Ranging (LiDAR)", "B) Nature of Multispectral Image Data", "C) Hyperspectral Remote Sensing", "D) Acoustic Imaging of the Oceans"], "correct": "A", "explanation": "The tested competency is DC-03-027: Light Detection and Ranging (LiDAR), within the GIS&T BoK topic “Remote Sensing Platforms and Sensors.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-03-027", "subtopic": "DC-03-027 — Light Detection and Ranging (LiDAR)", "domainResource": "https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"}, {"id": 52, "domain": "Platforms, Sensors, Physical Principles & Image Processing", "question": "A student is studying the broader area “Processing Remotely-Sensed Data.” Which subtopic most directly addresses work centered on structure from motion photogrammetry?", "options": ["A) Feature Extraction from Satellite Imagery", "B) Fundamentals of Aerial Photo Interpretation", "C) Structure from Motion Photogrammetry", "D) Spectral Properties of Earth's Surface"], "correct": "C", "explanation": "The tested competency is DC-04-038: Structure from Motion Photogrammetry, within the GIS&T BoK topic “Processing Remotely-Sensed Data.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-04-038", "subtopic": "DC-04-038 — Structure from Motion Photogrammetry", "domainResource": "https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"}, {"id": 53, "domain": "Platforms, Sensors, Physical Principles & Image Processing", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is multispectral and thermal imagery: rgb and lwir sensors?", "options": ["A) Landsat", "B) Multispectral and Thermal Imagery: RGB and LWIR Sensors", "C) Light Detection and Ranging (LiDAR)", "D) Airborne LiDAR Bathymetry"], "correct": "B", "explanation": "The tested competency is DC-03-034: Multispectral and Thermal Imagery: RGB and LWIR Sensors, within the GIS&T BoK topic “Remote Sensing Platforms and Sensors.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-03-034", "subtopic": "DC-03-034 — Multispectral and Thermal Imagery: RGB and LWIR Sensors", "domainResource": "https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"}, {"id": 54, "domain": "Platforms, Sensors, Physical Principles & Image Processing", "question": "A project requirement explicitly calls for expertise in nature of multispectral image data. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) Nature of Multispectral Image Data", "B) Airborne LiDAR Bathymetry", "C) Acoustic Imaging of the Oceans", "D) Remote Sensing Platforms"], "correct": "A", "explanation": "The tested competency is DC-03-016: Nature of Multispectral Image Data, within the GIS&T BoK topic “Remote Sensing Platforms and Sensors.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-03-016", "subtopic": "DC-03-016 — Nature of Multispectral Image Data", "domainResource": "https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"}, {"id": 55, "domain": "Platforms, Sensors, Physical Principles & Image Processing", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply unmanned aerial systems (uncrewed aircraft systems)?", "options": ["A) Unmanned Aerial Systems (UAS)", "B) Landsat", "C) Remote Sensing Platforms", "D) Hyperspectral Remote Sensing"], "correct": "A", "explanation": "The tested competency is DC-03-024: Unmanned Aerial Systems (UAS), within the GIS&T BoK topic “Remote Sensing Platforms and Sensors.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-03-024", "subtopic": "DC-03-024 — Unmanned Aerial Systems (UAS)", "domainResource": "https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"}, {"id": 56, "domain": "Platforms, Sensors, Physical Principles & Image Processing", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving remote sensing platforms. Which topic should the analyst review first?", "options": ["A) Light Detection and Ranging (LiDAR)", "B) Multispectral and Thermal Imagery: RGB and LWIR Sensors", "C) Hyperspectral Remote Sensing", "D) Remote Sensing Platforms"], "correct": "D", "explanation": "The tested competency is DC-03-026: Remote Sensing Platforms, within the GIS&T BoK topic “Remote Sensing Platforms and Sensors.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DC-03-026", "subtopic": "DC-03-026 — Remote Sensing Platforms", "domainResource": "https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"}, {"id": 57, "domain": "Design of Systems", "question": "During project planning, a team identifies a knowledge gap involving geospatial technology transfer opportunities, and a case study of the taghreed system. Which GIS&T BoK subtopic best matches that need?", "options": ["A) Spatial MapReduce", "B) Enterprise GIS", "C) Geospatial Technology Transfer Opportunities, and a Case Study of the Taghreed System", "D) Artificial Intelligence Tools and Platforms for GIS"], "correct": "C", "explanation": "The tested competency is CP-04-005: Geospatial Technology Transfer Opportunities, and a Case Study of the Taghreed System, within the GIS&T BoK topic “Software Systems.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/CP-04-005", "subtopic": "CP-04-005 — Geospatial Technology Transfer Opportunities, and a Case Study of the Taghreed System", "domainResource": "https://geospacebok.eu/DA"}, {"id": 58, "domain": "Design of Systems", "question": "A student is studying the broader area “Application Development.” Which subtopic most directly addresses work centered on design, development, testing, and deployment of gis applications?", "options": ["A) Licensing of GIS Applications", "B) Design, Development, Testing, and Deployment of GIS Applications", "C) Open Source Software Development", "D) Verification & Validation of Applied GIS Research"], "correct": "B", "explanation": "The tested competency is PD-02-005: Design, Development, Testing, and Deployment of GIS Applications, within the GIS&T BoK topic “Application Development.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/PD-02-005", "subtopic": "PD-02-005 — Design, Development, Testing, and Deployment of GIS Applications", "domainResource": "https://geospacebok.eu/DA"}, {"id": 59, "domain": "Design of Systems", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is managing gis and geospatial technology operations and infrastructure?", "options": ["A) Measuring GIS Return on Investment", "B) Strategic Planning for GIS Design", "C) Managing GIS&T Operations and Infrastructure", "D) The process of GIS&T design"], "correct": "C", "explanation": "The tested competency is KE-04-019: Managing GIS&T Operations and Infrastructure, within the GIS&T BoK topic “Design and Implementation of GIS&T.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/KE-04-019", "subtopic": "KE-04-019 — Managing GIS&T Operations and Infrastructure", "domainResource": "https://geospacebok.eu/DA"}, {"id": 60, "domain": "Design of Systems", "question": "A project requirement explicitly calls for expertise in r for geospatial analysis and mapping. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) GDAL/OGR and Geospatial Data IO Libraries", "B) R for Geospatial Analysis and Mapping", "C) SQL Languages for GIS", "D) PySAL and Spatial Statistics Libraries"], "correct": "B", "explanation": "The tested competency is PD-05-015: R for Geospatial Analysis and Mapping, within the GIS&T BoK topic “Programming Languages and Libraries.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/PD-05-015", "subtopic": "PD-05-015 — R for Geospatial Analysis and Mapping", "domainResource": "https://geospacebok.eu/DA"}, {"id": 61, "domain": "Design of Systems", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply pysal and spatial statistics libraries?", "options": ["A) Python for GIS", "B) PySAL and Spatial Statistics Libraries", "C) GDAL/OGR and Geospatial Data IO Libraries", "D) R for Geospatial Analysis and Mapping"], "correct": "B", "explanation": "The tested competency is PD-05-031: PySAL and Spatial Statistics Libraries, within the GIS&T BoK topic “Programming Languages and Libraries.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/PD-05-031", "subtopic": "PD-05-031 — PySAL and Spatial Statistics Libraries", "domainResource": "https://geospacebok.eu/DA"}, {"id": 62, "domain": "Design of Systems", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving gdal/ogr and geospatial data io libraries. Which topic should the analyst review first?", "options": ["A) Python for GIS", "B) GDAL/OGR and Geospatial Data IO Libraries", "C) PySAL and Spatial Statistics Libraries", "D) R for Geospatial Analysis and Mapping"], "correct": "B", "explanation": "The tested competency is PD-05-033: GDAL/OGR and Geospatial Data IO Libraries, within the GIS&T BoK topic “Programming Languages and Libraries.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/PD-05-033", "subtopic": "PD-05-033 — GDAL/OGR and Geospatial Data IO Libraries", "domainResource": "https://geospacebok.eu/DA"}, {"id": 63, "domain": "Organizational & Institutional Aspects", "question": "During project planning, a team identifies a knowledge gap involving funding. Which GIS&T BoK subtopic best matches that need?", "options": ["A) GIS&T Education and Training", "B) System Modelling for Effective GIS Management", "C) Organizational Models for GIS Management", "D) Funding"], "correct": "D", "explanation": "The tested competency is KE-03-011: Funding, within the GIS&T BoK topic “GIS&T Operations.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/KE-03-011", "subtopic": "KE-03-011 — Funding", "domainResource": "https://geospacebok.eu/OI"}, {"id": 64, "domain": "Organizational & Institutional Aspects", "question": "A student is studying the broader area “GIS&T Workforce.” Which subtopic most directly addresses work centered on professional certification?", "options": ["A) GIS&T Positions and Qualifications", "B) Professional Certification", "C) GIS&T Workforce Development", "D) Competence in GIS&T Knowledge Work"], "correct": "B", "explanation": "The tested competency is KE-01-031: Professional Certification, within the GIS&T BoK topic “GIS&T Workforce.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/KE-01-031", "subtopic": "KE-01-031 — Professional Certification", "domainResource": "https://geospacebok.eu/OI"}, {"id": 65, "domain": "Organizational & Institutional Aspects", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is organizational models for gis management?", "options": ["A) GIS&T Positions and Qualifications", "B) Organizational Models for GIS Management", "C) System Modelling for Effective GIS Management", "D) Funding"], "correct": "B", "explanation": "The tested competency is KE-03-033: Organizational Models for GIS Management, within the GIS&T BoK topic “GIS&T Operations.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/KE-03-033", "subtopic": "KE-03-033 — Organizational Models for GIS Management", "domainResource": "https://geospacebok.eu/OI"}, {"id": 66, "domain": "Organizational & Institutional Aspects", "question": "A project requirement explicitly calls for expertise in gis and geospatial technology education and training. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) GIS&T Workforce Development", "B) GIS&T Education and Training", "C) GIS&T Positions and Qualifications", "D) Professional Certification"], "correct": "B", "explanation": "The tested competency is KE-01-025: GIS&T Education and Training, within the GIS&T BoK topic “GIS&T Workforce.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/KE-01-025", "subtopic": "KE-01-025 — GIS&T Education and Training", "domainResource": "https://geospacebok.eu/OI"}, {"id": 67, "domain": "Organizational & Institutional Aspects", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply the geospatial community?", "options": ["A) Geospatial Conferences and Publications", "B) The Geospatial Industry", "C) Multi-Organizational GIS Coordination", "D) The Geospatial Community"], "correct": "D", "explanation": "The tested competency is KE-02-029: The Geospatial Community, within the GIS&T BoK topic “Coordinating Organizations.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/KE-02-029", "subtopic": "KE-02-029 — The Geospatial Community", "domainResource": "https://geospacebok.eu/OI"}, {"id": 68, "domain": "Thematic & Application Domains", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving gis and geospatial technology and civil engineering. Which topic should the analyst review first?", "options": ["A) GIS&T in Architecture", "B) GIS&T and Agriculture", "C) GIS&T and Civil Engineering", "D) GIS&T and Civil Engineering"], "correct": "C", "explanation": "The tested competency is DA-004: GIS&T and Civil Engineering, within the GIS&T BoK topic “GIS&T and Civil Engineering.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DA-004", "subtopic": "DA-004 — GIS&T and Civil Engineering", "domainResource": "https://geospacebok.eu/TA"}, {"id": 69, "domain": "Thematic & Application Domains", "question": "During project planning, a team identifies a knowledge gap involving gis and geospatial technology in architecture. Which GIS&T BoK subtopic best matches that need?", "options": ["A) GIS&T and Civil Engineering", "B) GIS&T and Civil Engineering", "C) GIS&T in Architecture", "D) GIS&T and Agriculture"], "correct": "C", "explanation": "The tested competency is DA-003: GIS&T in Architecture, within the GIS&T BoK topic “GIS&T in Architecture.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DA-003", "subtopic": "DA-003 — GIS&T in Architecture", "domainResource": "https://geospacebok.eu/TA"}, {"id": 70, "domain": "Thematic & Application Domains", "question": "A student is studying the broader area “GIS&T and Agriculture.” Which subtopic most directly addresses work centered on gis and geospatial technology and agriculture?", "options": ["A) GIS&T and Civil Engineering", "B) GIS&T in Architecture", "C) GIS&T and Agriculture", "D) GIS&T and Agriculture"], "correct": "C", "explanation": "The tested competency is DA-001: GIS&T and Agriculture, within the GIS&T BoK topic “GIS&T and Agriculture.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DA-001", "subtopic": "DA-001 — GIS&T and Agriculture", "domainResource": "https://geospacebok.eu/TA"}, {"id": 71, "domain": "Thematic & Application Domains", "question": "Which GIS&T BoK competency is the best fit for a scenario whose primary technical or conceptual focus is gis and geospatial technology in architecture?", "options": ["A) GIS&T and Agriculture", "B) GIS&T and Civil Engineering", "C) GIS&T and Civil Engineering", "D) GIS&T in Architecture"], "correct": "D", "explanation": "The tested competency is DA-003: GIS&T in Architecture, within the GIS&T BoK topic “GIS&T in Architecture.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/DA-003", "subtopic": "DA-003 — GIS&T in Architecture", "domainResource": "https://geospacebok.eu/TA"}, {"id": 72, "domain": "GI & Society", "question": "A project requirement explicitly calls for expertise in legal mechanisms for sharing geospatial information. Which of the following BoK subtopics is the most appropriate match?", "options": ["A) Location Privacy", "B) The Geospatial Information Market", "C) Legal Mechanisms for Sharing Geospatial Information", "D) GIS&T for Equity and Social Justice"], "correct": "C", "explanation": "The tested competency is GS-01-023: Legal Mechanisms for Sharing Geospatial Information, within the GIS&T BoK topic “Law, Regulation, and Policy.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/GS-01-023", "subtopic": "GS-01-023 — Legal Mechanisms for Sharing Geospatial Information", "domainResource": "https://geospacebok.eu/GS"}, {"id": 73, "domain": "GI & Society", "question": "For exam preparation, which subtopic should a student consult when the learning objective is to understand or apply citizen science with gis and geospatial technology?", "options": ["A) Citizen Science with GIS&T", "B) GIS Participatory Modeling", "C) Mapping Spatial Justice for Marginal Societies", "D) Spatial Decision Support"], "correct": "A", "explanation": "The tested competency is GS-02-024: Citizen Science with GIS&T, within the GIS&T BoK topic “Governance and Agency.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/GS-02-024", "subtopic": "GS-02-024 — Citizen Science with GIS&T", "domainResource": "https://geospacebok.eu/GS"}, {"id": 74, "domain": "Web-Based GIS", "question": "A GIS analyst needs to choose the body-of-knowledge topic most directly relevant to a task involving javascript for gis. Which topic should the analyst review first?", "options": ["A) GIS and the Internet of Intelligent Things", "B) Web GIS", "C) GIS APIs", "D) JavaScript for GIS"], "correct": "D", "explanation": "The tested competency is PD-05-032: JavaScript for GIS, within the GIS&T BoK topic “Programming Languages and Libraries.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/PD-05-032", "subtopic": "PD-05-032 — JavaScript for GIS", "domainResource": "https://geospacebok.eu/WB"}, {"id": 75, "domain": "Web-Based GIS", "question": "During project planning, a team identifies a knowledge gap involving gis apis. Which GIS&T BoK subtopic best matches that need?", "options": ["A) GIS and the Internet of Intelligent Things", "B) Social Media Analytics", "C) Location-Based Services", "D) GIS APIs"], "correct": "D", "explanation": "The tested competency is PD-03-019: GIS APIs, within the GIS&T BoK topic “Development Tools.” Review the linked BoK page for the detailed concepts, methods, terminology, and examples that sit behind this diagnostic item.", "reference": "https://gistbok-topics.ucgis.org/PD-03-018", "subtopic": "PD-03-019 — GIS APIs", "domainResource": "https://geospacebok.eu/WB"}]; const domainWeights={"Analytical Methods & GeoComputation": 18.0, "Conceptual Foundations": 14.0, "Data Modeling": 12.0, "Geospatial Data": 11.0, "Cartography & Visualization": 10.0, "Platforms, Sensors, Physical Principles & Image Processing": 10.0, "Design of Systems": 8.0, "Organizational & Institutional Aspects": 7.0, "Thematic & Application Domains": 5.0, "GI & Society": 3.0, "Web-Based GIS": 2.0};
-function buildQuizInterface(){const c=document.getElementById('questions-container');examQuestions.forEach(q=>{const card=document.createElement('section');card.className='card';let opts=q.options.map(opt=>{const letter=opt.charAt(0);return `<label class="option-label"><input type="radio" name="item-${q.id}" value="${letter}" required><span>${opt}</span></label>`}).join('');card.innerHTML=`<div class="question-header"><span class="question-num">Question ${q.id} of 75</span><span class="domain-tag">${q.domain}</span></div><div class="question-text">${q.question}</div><div class="options-container">${opts}</div>`;c.appendChild(card)})}
-function scoreExam(){const form=document.getElementById('exam-form');if(!form.checkValidity()){alert('Please answer all 75 questions before submitting.');return}let raw=0;const stats={};Object.keys(domainWeights).forEach(d=>stats[d]={total:0,correct:0});examQuestions.forEach(q=>stats[q.domain].total++);const rem=document.getElementById('remediation-container');rem.innerHTML='';examQuestions.forEach(q=>{const picked=document.querySelector(`input[name="item-${q.id}"]:checked`).value;if(picked===q.correct){raw++;stats[q.domain].correct++}else{const chosen=q.options.find(x=>x.startsWith(picked+')'))||picked;const target=q.options.find(x=>x.startsWith(q.correct+')'))||q.correct;const b=document.createElement('section');b.className='card remediation-item';b.innerHTML=`<div class="question-header"><span class="question-num" style="color:var(--danger)">Study Required — Item ${q.id}</span><span class="domain-tag">${q.domain}</span></div><div class="question-text">${q.question}</div><p><strong>Your selection:</strong> <span class="badge-wrong">${chosen}</span></p><p><strong>Target answer:</strong> <span class="badge-correct">${target}</span></p><div class="feedback-box"><strong>Why review this:</strong> ${q.explanation}<span class="ref-tag">Specific GIS&T BoK subtopic: <a href="${q.reference}" target="_blank" rel="noopener">${q.subtopic}</a></span><span class="ref-tag">Blueprint-domain review: ${q.domainResource}</span></div>`;rem.appendChild(b)}});let weighted=0;Object.entries(stats).forEach(([d,s])=>{const rate=s.total?s.correct/s.total:0;weighted+=(domainWeights[d]||0)*rate});const weightedPct=Math.round(weighted*10)/10;const rawPct=Math.round(raw/75*1000)/10;
-const savedResult={version:6,completedAt:new Date().toISOString(),weightedScore:weightedPct,rawCorrect:raw,rawPercent:rawPct,domains:Object.fromEntries(Object.entries(stats).map(([d,s])=>[d,{correct:s.correct,total:s.total,percent:s.total?Math.round(s.correct/s.total*1000)/10:0,weight:domainWeights[d]||0}]))};
-try{let history=JSON.parse(localStorage.getItem('pregisp_exam_results_v1')||'[]');history=history.filter(x=>!(x.version===6 && x.completedAt===savedResult.completedAt));history.push(savedResult);localStorage.setItem('pregisp_exam_results_v1',JSON.stringify(history));}catch(e){console.warn('Could not save progress',e);}document.getElementById('weighted-score').textContent=weightedPct.toFixed(1)+'%';document.getElementById('score-raw').textContent=`${raw} out of 75 Questions Correct (${rawPct.toFixed(1)}% raw accuracy)`;const label=document.getElementById('pass-label'),card=document.getElementById('score-card');if(weightedPct>=75){label.textContent='PRACTICE TARGET MET: 75%+ WEIGHTED SCORE';label.style.color='var(--success)';card.style.borderTop='9px solid var(--success)'}else{label.textContent='REMEDIATION RECOMMENDED: BELOW 75% WEIGHTED TARGET';label.style.color='var(--danger)';card.style.borderTop='9px solid var(--danger)'}const tb=document.getElementById('domain-breakdown-body');tb.innerHTML='';Object.entries(domainWeights).forEach(([d,w])=>{const s=stats[d]||{total:0,correct:0},rate=s.total?(s.correct/s.total*100):0,contrib=w*(rate/100);const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${d}</strong></td><td>${w}%</td><td>${s.total}</td><td style="font-weight:700;color:${rate>=75?'var(--success)':'var(--danger)'}">${s.correct}/${s.total} (${rate.toFixed(0)}%)</td><td>${contrib.toFixed(1)} / ${w.toFixed(0)} pts</td>`;tb.appendChild(tr)});const hz=document.getElementById('remediation-header-zone');hz.innerHTML=`<div class="card"><h2 style="margin-top:0;color:var(--primary)">Custom Study & Remediation Plan</h2><p>${raw===75?'No items were missed. Use the domain table above to confirm balanced mastery.':`Start with the lowest-performing, highest-weight domains in the table above. Then review the ${75-raw} missed items below; each links to the exact GIS&T BoK subtopic supplied for exam preparation.`}</p></div>`;document.getElementById('quiz-interface').style.display='none';document.getElementById('results-dashboard').style.display='block';window.scrollTo(0,0)}
-document.getElementById('submitBtn').addEventListener('click',scoreExam);document.getElementById('resetBtn').addEventListener('click',()=>location.reload());buildQuizInterface();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreGISP (GISP-E) Practice Exam Version 6</title>
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --primary-dark: #114154;
+            --primary-light: #f0f5f7;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --border: #dcdde1;
+            --card-bg: #ffffff;
+            --body-bg: #f5f7fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.3rem;
+        }
+
+        header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .domain-tag {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .question-num {
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .action-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        #results-dashboard {
+            display: none;
+        }
+
+        .score-summary {
+            text-align: center;
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .score-big {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin: 15px 0;
+        }
+
+        .pass-status {
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .remediation-item {
+            border-left: 5px solid var(--danger);
+            background-color: #fffafb;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 18px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 0.98rem;
+        }
+
+        .ref-tag {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: bold;
+            background-color: var(--primary-light);
+            padding: 6px 12px;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .badge-wrong { color: var(--danger); font-weight: bold; background: #fde8e8; padding: 2px 8px; border-radius: 4px; }
+        .badge-correct { color: var(--success); font-weight: bold; background: #e1f7e3; padding: 2px 8px; border-radius: 4px; }
+        
+        .domain-breakdown {
+            margin-top: 20px;
+            text-align: left;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .domain-breakdown th, .domain-breakdown td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .domain-breakdown th { background-color: var(--primary-light); color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>PreGISP® / GISP-E Practice Examination — Version 6</h1>
+        <p>Applied GIS & Geospatial Knowledge Diagnostic</p>
+    </header>
+
+    <!-- Quiz Test Taking Interface -->
+    <div id="quiz-interface">
+        <div class="card" style="background-color: var(--primary-light); border-left: 5px solid var(--primary);">
+            <strong>Exam Instructions:</strong> Answer all 75 applied GIS/geospatial questions. These items test methods, analysis, calculations, interpretation, data modeling, data quality, remote sensing, cartography, systems, applications, and professional judgment—not recognition of GIS&T BoK topic names. Submit the exam for a blueprint-weighted score and targeted remediation.
+        </div>
+        <form id="exam-form">
+            <div id="questions-container"></div>
+            <div class="action-container">
+                <button type="button" class="btn" onclick="scoreExam()">Submit and Score Exam</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results & Remediation Dashboard Interface -->
+    <div id="results-dashboard">
+        <div class="card score-summary" id="score-card">
+            <h2>Your Evaluation Summary</h2><p><strong>Blueprint-weighted diagnostic score</strong></p>
+            <div class="score-big" id="score-percent">0%</div>
+            <p id="score-raw" style="font-size: 1.2rem; font-weight: 600;">0 out of 75 Questions Correct</p>
+            <div class="pass-status" id="pass-label">STATUS</div>
+            
+            <h3 style="margin-top:30px;">Domain-Specific Performance</h3>
+            <table class="domain-breakdown">
+                <thead>
+                    <tr>
+                        <th>Knowledge Domain</th>
+                        <th>Weight</th>
+                        <th>Your Performance</th>
+                    </tr>
+                </thead>
+                <tbody id="domain-breakdown-body"></tbody>
+            </table>
+        </div>
+
+        <div id="remediation-header-zone"></div>
+        <div id="remediation-container"></div>
+        
+        <div class="action-container">
+            <button type="button" class="btn" onclick="window.scrollTo(0,0); location.reload();">Reset & Retake Exam</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Centralized Data Model Architecture storing all 75 platform-neutral blueprint questions
+    const blueprintWeights = {"Analytical Methods & GeoComputation": 18, "Conceptual Foundations": 14, "Data Modeling": 12, "Geospatial Data": 11, "Cartography & Visualization": 10, "Platforms, Sensors, Physics & Image Processing": 10, "Design of Systems": 8, "Organizational & Institutional Aspects": 7, "Thematic & Application Domains": 5, "GI & Society": 3, "Web-Based GIS": 2};
+    const examQuestions = [
+        {
+            id: 1,
+            domain: "Analytical Methods & GeoComputation",
+            question: "In a road-network route that minimizes travel time rather than distance, what is travel time functioning as?",
+            options: ["A) Raster resolution", "B) Network impedance/cost", "C) Map projection", "D) A topology error"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-05-076] Network Route & Tour Problems in Geographic Information Systems \u2014 https://gistbok-topics.ucgis.org/AM-05-076 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 2,
+            domain: "Design of Systems",
+            question: "What does version control provide to GIS software projects?",
+            options: ["A) GNSS corrections", "B) Tracked history, collaboration, branching, and rollback of code and configuration", "C) Map generalization", "D) Automatic spatial accuracy"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [PD-02-037] Open Source Software Development \u2014 https://gistbok-topics.ucgis.org/PD-02-037 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 3,
+            domain: "Design of Systems",
+            question: "In a three-tier GIS architecture, what is the main role of the database tier?",
+            options: ["A) Provide GNSS satellites", "B) Choose map colors", "C) Persist and query data", "D) Render only the browser UI"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CP-04-029] Enterprise GIS \u2014 https://gistbok-topics.ucgis.org/CP-04-029 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 4,
+            domain: "Web-Based GIS",
+            question: "Why are vector tiles attractive for modern web maps?",
+            options: ["A) They are compact and can be styled dynamically on the client while remaining crisp across zoom levels", "B) They contain only screenshots", "C) They cannot be restyled", "D) They require no client rendering"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-05-015] Web Mapping \u2014 https://gistbok-topics.ucgis.org/CV-05-015 | Blueprint domain resource: https://geospacebok.eu/WB"
+        },
+        {
+            id: 5,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A model result changes dramatically after small plausible perturbations to input locations. What does this indicate?",
+            options: ["A) The result is sensitive to positional uncertainty", "B) The data have perfect precision", "C) The model is invariant to error", "D) Topology is irrelevant"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-09-107] Spatial Data Uncertainty \u2014 https://gistbok-topics.ucgis.org/AM-09-107 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 6,
+            domain: "Thematic & Application Domains",
+            question: "A coastal planner combines sea-level scenarios, elevation, buildings, and population to estimate exposure. What is essential?",
+            options: ["A) Only Global Moran\u2019s I", "B) Only parcel IDs", "C) Only a qualitative palette", "D) Scenario-based spatial overlay with attention to vertical datum and elevation uncertainty"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-01-020] Geospatial Analysis and Model Building \u2014 https://gistbok-topics.ucgis.org/AM-01-020 | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 7,
+            domain: "Conceptual Foundations",
+            question: "A map at 1:24,000 is compared with a map at 1:1,000,000. Which is the larger-scale map?",
+            options: ["A) Scale cannot be inferred", "B) 1:24,000", "C) They are the same scale", "D) 1:1,000,000"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-03-004] Scale and Generalization \u2014 https://gistbok-topics.ucgis.org/CV-03-004 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 8,
+            domain: "Geospatial Data",
+            question: "A crowdsourced road dataset is contributed by volunteers with varying expertise. What should an analyst evaluate carefully before use?",
+            options: ["A) Completeness, positional/thematic accuracy, provenance, and update patterns", "B) Nothing; volunteered data are always authoritative", "C) Only file color", "D) Only number of contributors"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-02-029] Volunteered Geographic Information \u2014 https://gistbok-topics.ucgis.org/DC-02-029 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 9,
+            domain: "Design of Systems",
+            question: "Which design issue is especially important for a mobile GIS application?",
+            options: ["A) Unlimited bandwidth is guaranteed", "B) Intermittent connectivity, battery, touch UI, sensors, and offline synchronization", "C) No screen-size constraints", "D) No need for location services"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [PD-04-029] Programming of Mobile GIS Applications \u2014 https://gistbok-topics.ucgis.org/PD-04-029 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 10,
+            domain: "Conceptual Foundations",
+            question: "In set theory, what does A \u2229 B represent?",
+            options: ["A) Elements common to A and B", "B) Everything outside A", "C) Only elements unique to A", "D) All elements in A or B"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-06-011] Set Theory \u2014 https://gistbok-topics.ucgis.org/FC-06-011 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 11,
+            domain: "Conceptual Foundations",
+            question: "Latitude expresses angular position north or south of what reference?",
+            options: ["A) The international date line", "B) A local benchmark", "C) The prime meridian", "D) The equator"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-05-047] Geographic Coordinate Systems \u2014 https://gistbok-topics.ucgis.org/DM-05-047 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 12,
+            domain: "Organizational & Institutional Aspects",
+            question: "What does return on investment compare?",
+            options: ["A) Benefits or value gained relative to costs invested", "B) Raster resolution relative to extent", "C) GNSS precision relative to satellites", "D) Map accuracy relative to scale"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [KE-04-014] Measuring GIS Return on Investment \u2014 https://gistbok-topics.ucgis.org/KE-04-014 | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 13,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A Local Moran\u2019s I result classifies a tract as High-Low. What does that mean?",
+            options: ["A) A high-value tract is surrounded mainly by low-value neighbors", "B) The tract is statistically average", "C) A high-value tract is surrounded by high-value neighbors", "D) A low-value tract is surrounded by low-value neighbors"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-023] Local Measures of Spatial Association \u2014 https://gistbok-topics.ucgis.org/AM-03-023 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 14,
+            domain: "Analytical Methods & GeoComputation",
+            question: "County obesity rates are analyzed with one statistic to summarize overall spatial autocorrelation across the entire study area. Which statistic is appropriate?",
+            options: ["A) Global Moran\u2019s I", "B) Kernel density", "C) Local Moran\u2019s I", "D) Ordinary kriging"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-022] Global Measures of Spatial Association \u2014 https://gistbok-topics.ucgis.org/AM-03-022 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 15,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Orthorectification additionally accounts for what major source of displacement?",
+            options: ["A) Only metadata", "B) Only color balance", "C) Terrain relief together with sensor and viewing geometry", "D) Only temporal resolution"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 16,
+            domain: "Conceptual Foundations",
+            question: "A dataset has an open license but poor documentation and unusable formats. Is it necessarily open in practical terms?",
+            options: ["A) Yes; license alone guarantees reuse", "B) Only proprietary data can be usable", "C) No; practical openness also depends on access, usability, and documentation", "D) Open data can never have metadata"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-02-035] Openness \u2014 https://gistbok-topics.ucgis.org/FC-02-035 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 17,
+            domain: "Design of Systems",
+            question: "What limits ideal speedup in parallel processing?",
+            options: ["A) Datum definition", "B) Serial portions, communication overhead, synchronization, and I/O", "C) Map color choice", "D) Number of labels"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [PD-01-014] GIS and Parallel Programming \u2014 https://gistbok-topics.ucgis.org/PD-01-014 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 18,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "What is supervised image classification?",
+            options: ["A) Classification using labeled training samples to learn class relationships", "B) Manual geocoding", "C) Map generalization", "D) Clustering pixels without labeled examples"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-04-014] Feature Extraction from Satellite Imagery \u2014 https://gistbok-topics.ucgis.org/DC-04-014 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 19,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Sparse groundwater measurements must be interpolated, and the analyst also needs a map of prediction uncertainty. Which method is most appropriate?",
+            options: ["A) Polygon dissolve", "B) IDW", "C) Nearest-neighbor assignment", "D) Kriging"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-04-029] Kriging Interpolation \u2014 https://gistbok-topics.ucgis.org/AM-04-029 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 20,
+            domain: "Conceptual Foundations",
+            question: "A tract has high median income. Concluding that every household in the tract has high income commits what error?",
+            options: ["A) Ecological fallacy", "B) Radiometric error", "C) Network impedance error", "D) Topological error"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-07-026] Problems of Scale and Zoning \u2014 https://gistbok-topics.ucgis.org/FC-07-026 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 21,
+            domain: "Conceptual Foundations",
+            question: "A temperature surface varying continuously across a region is best conceptualized as what?",
+            options: ["A) A geographic field", "B) A primary-key table", "C) A network node list", "D) Independent discrete objects only"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 22,
+            domain: "Analytical Methods & GeoComputation",
+            question: "An ecologist wants to flag trail segments within 250 m of nesting sites. Which method best implements the rule?",
+            options: ["A) Use a geocoding locator", "B) Buffer nesting sites and intersect/select trail segments", "C) Calculate zonal statistics on the trails", "D) Run a viewshed from each trail"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-02-003] Buffers \u2014 https://gistbok-topics.ucgis.org/AM-02-003 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 23,
+            domain: "Data Modeling",
+            question: "How does a projected coordinate system differ most directly from a geographic coordinate system?",
+            options: ["A) It has no geometry", "B) It represents positions on a planar surface using linear units", "C) It uses a time axis", "D) It uses only angles on an ellipsoid"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-05-048] Planar Coordinate Systems and the U. S. National Grid \u2014 https://gistbok-topics.ucgis.org/DM-05-048 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 24,
+            domain: "Cartography & Visualization",
+            question: "What is the main purpose of a scale bar?",
+            options: ["A) List data sources", "B) Identify the projection", "C) Allow readers to estimate ground distance from map distance", "D) Show north only"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-06-021] Map Reading \u2014 https://gistbok-topics.ucgis.org/CV-06-021 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 25,
+            domain: "Data Modeling",
+            question: "A topological vector model explicitly stores what kinds of relationships?",
+            options: ["A) Only file names", "B) Only raster cell size", "C) Only RGB values", "D) Connectivity, adjacency, and shared boundaries"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-02-013] The topological model \u2014 https://gistbok-topics.ucgis.org/DM-02-013 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 26,
+            domain: "Thematic & Application Domains",
+            question: "A bridge project requires mapping utilities that could conflict with excavation. What GIS capability is central?",
+            options: ["A) Choropleth classification", "B) Global Moran\u2019s I", "C) Accurate spatial integration of utility assets with project geometry", "D) Storytelling only"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DA-004] GIS&T and Civil Engineering \u2014 https://gistbok-topics.ucgis.org/DA-004 | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 27,
+            domain: "Organizational & Institutional Aspects",
+            question: "What is total cost of ownership for an enterprise GIS?",
+            options: ["A) Data storage only", "B) Acquisition plus ongoing operation, staffing, maintenance, training, infrastructure, and lifecycle costs", "C) Purchase price only", "D) Map printing cost only"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [KE-04-017] The Benefits and Costs of Enterprise GIS Implementations \u2014 https://gistbok-topics.ucgis.org/KE-04-017 | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 28,
+            domain: "GI & Society",
+            question: "A health agency publishes exact home locations for patients with a rare disease. What is the primary concern?",
+            options: ["A) Raster resolution", "B) Map projection", "C) Network impedance", "D) Re-identification and location privacy"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [GS-01-004] Location Privacy \u2014 https://gistbok-topics.ucgis.org/GS-01-004 | Blueprint domain resource: https://geospacebok.eu/GS"
+        },
+        {
+            id: 29,
+            domain: "Geospatial Data",
+            question: "Why is source scale important when evaluating digitized features?",
+            options: ["A) It limits reasonable expectations for positional detail and accuracy", "B) It determines satellite count", "C) It guarantees accuracy at larger display scales", "D) It changes attribute types"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-07-057] Data Evaluation, Metadata, and Data Quality \u2014 https://gistbok-topics.ucgis.org/DM-07-057 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 30,
+            domain: "Design of Systems",
+            question: "A stream of vehicle positions arrives every second. Which processing architecture is most appropriate?",
+            options: ["A) One annual batch process", "B) Manual digitizing", "C) Streaming or event-driven processing", "D) Paper-map scanning"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [PD-01-020] Real-time GIS Programming and Geocomputation \u2014 https://gistbok-topics.ucgis.org/PD-01-020 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 31,
+            domain: "Organizational & Institutional Aspects",
+            question: "Why can GIS benefits be difficult to quantify?",
+            options: ["A) Some benefits are indirect, shared, risk-reducing, or improve service quality rather than generate direct revenue", "B) All benefits are monetary", "C) ROI never applies to public agencies", "D) GIS has no costs"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [KE-04-014] Measuring GIS Return on Investment \u2014 https://gistbok-topics.ucgis.org/KE-04-014 | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 32,
+            domain: "Data Modeling",
+            question: "What does raster resampling do?",
+            options: ["A) Estimate network impedance", "B) Assign values to cells in a new grid when alignment or resolution changes", "C) Create database keys", "D) Repair polygon topology"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-06-087] Raster resampling \u2014 https://gistbok-topics.ucgis.org/DM-06-087 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 33,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Healthy vegetation typically absorbs strongly in which visible band because of chlorophyll?",
+            options: ["A) Longwave thermal only", "B) Microwave", "C) Red", "D) Near-infrared"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 34,
+            domain: "Conceptual Foundations",
+            question: "For airline distance between far-apart cities, which distance measure is most defensible when high accuracy is needed?",
+            options: ["A) Planar Pythagorean distance in unprojected degrees", "B) Screen-pixel Manhattan distance", "C) Geodesic distance on an ellipsoid", "D) Attribute-row difference"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-05-042] Distance Operations \u2014 https://gistbok-topics.ucgis.org/FC-05-042 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 35,
+            domain: "Geospatial Data",
+            question: "What does completeness mean in geospatial data quality?",
+            options: ["A) How many coordinate decimals are stored", "B) Whether expected geographic features or records are present", "C) Whether files are compressed", "D) Whether the map has a legend"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-07-057] Data Evaluation, Metadata, and Data Quality \u2014 https://gistbok-topics.ucgis.org/DM-07-057 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 36,
+            domain: "Data Modeling",
+            question: "What does a geographic coordinate system use to express horizontal position?",
+            options: ["A) Street addresses only", "B) Raster rows only", "C) Angular coordinates such as latitude and longitude", "D) Only meters from a local origin"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-05-047] Geographic Coordinate Systems \u2014 https://gistbok-topics.ucgis.org/DM-05-047 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 37,
+            domain: "Analytical Methods & GeoComputation",
+            question: "In the Analytical Hierarchy Process, what is the main purpose of pairwise comparisons?",
+            options: ["A) Calculate a semivariogram sill", "B) Estimate raster cell size", "C) Determine a geodetic datum", "D) Derive relative criterion weights from judgments of importance"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-013] Multi-Criteria Evaluation \u2014 https://gistbok-topics.ucgis.org/AM-03-013 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 38,
+            domain: "Data Modeling",
+            question: "Which data model is usually most natural for parcel boundaries requiring precise shared edges?",
+            options: ["A) Coarse raster only", "B) Time series with no geometry", "C) Point cloud only", "D) Vector polygons"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-02-014] Vector Data Models \u2014 https://gistbok-topics.ucgis.org/DM-02-014 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 39,
+            domain: "Conceptual Foundations",
+            question: "A polygon lies entirely inside another polygon. Which spatial relation is being expressed?",
+            options: ["A) Adjacency only", "B) Disjointness", "C) Equal-area projection", "D) Containment/within"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-03-075] Defining and Designing Spatial Queries \u2014 https://gistbok-topics.ucgis.org/DM-03-075 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 40,
+            domain: "Data Modeling",
+            question: "Why are database constraints useful?",
+            options: ["A) They enforce valid values and relationships and improve data integrity", "B) They guarantee perfect positional accuracy", "C) They compress imagery", "D) They select map projections"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-01-062] Database Administration \u2014 https://gistbok-topics.ucgis.org/DM-01-062 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 41,
+            domain: "Data Modeling",
+            question: "A wildfire spreads through time and changes its spatial extent. What should the data model represent?",
+            options: ["A) A dynamic event/process", "B) A fixed projection", "C) A nominal legend", "D) A static primary key"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-02-022] Events and Processes for Geospatial Computing \u2014 https://gistbok-topics.ucgis.org/DM-02-022 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 42,
+            domain: "GI & Society",
+            question: "Why can participatory GIS still reproduce unequal power?",
+            options: ["A) Participation automatically equalizes power", "B) Maps cannot reflect power", "C) Technology removes institutional differences", "D) Participants may differ in access, voice, time, technical skill, and influence over decisions"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [GS-02-029] GIS Participatory Modeling \u2014 https://gistbok-topics.ucgis.org/GS-02-029 | Blueprint domain resource: https://geospacebok.eu/GS"
+        },
+        {
+            id: 43,
+            domain: "Cartography & Visualization",
+            question: "What is one analytical limitation of animation?",
+            options: ["A) Animation guarantees better accuracy", "B) Animation cannot show time", "C) Earlier frames can be difficult to remember and compare precisely", "D) Animation eliminates clutter"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-04-017] Spatiotemporal Representation \u2014 https://gistbok-topics.ucgis.org/CV-04-017 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 44,
+            domain: "Cartography & Visualization",
+            question: "Hypsometric tinting uses color primarily to represent what?",
+            options: ["A) Population totals", "B) Map projection", "C) Elevation ranges", "D) Network impedance"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-04-014] Terrain Representation \u2014 https://gistbok-topics.ucgis.org/CV-04-014 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 45,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "What is atmospheric correction intended to reduce or estimate?",
+            options: ["A) Database duplication", "B) Effects of atmospheric scattering and absorption so surface reflectance is more comparable", "C) Network impedance", "D) Terrain slope"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 46,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "After classifying LiDAR points, what points are used most directly to derive a bare-earth DTM?",
+            options: ["A) Attribute domains", "B) Image labels", "C) Only first returns from tree crowns", "D) Ground returns"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-03-027] Light Detection and Ranging (LiDAR) \u2014 https://gistbok-topics.ucgis.org/DC-03-027 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 47,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Why does healthy vegetation typically appear bright in near-infrared imagery?",
+            options: ["A) Chlorophyll strongly absorbs all NIR", "B) Water emits NIR", "C) Soil always reflects no NIR", "D) Leaf internal structure strongly reflects NIR energy"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 48,
+            domain: "Geospatial Data",
+            question: "A mobile field app records geometry, photos, and coded inspection attributes. What is the primary advantage?",
+            options: ["A) Integrated georeferenced data capture at the source", "B) No need for metadata", "C) No need for QA/QC", "D) Automatic elimination of all error"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-06-009] Field Data Capture Technologies \u2014 https://gistbok-topics.ucgis.org/DC-06-009 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 49,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A retailer must choose 3 warehouse sites from 20 candidates to minimize weighted customer travel time. Which analysis best fits?",
+            options: ["A) Spatial join only", "B) Location-allocation", "C) Map generalization", "D) Kernel density"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-05-046] Location-allocation modeling \u2014 https://gistbok-topics.ucgis.org/AM-05-046 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 50,
+            domain: "Data Modeling",
+            question: "Why should polygon generalization preserve topology where required?",
+            options: ["A) Topology only affects colors", "B) Simplification should not create gaps, overlaps, or invalid shared boundaries", "C) Generalization must change attributes", "D) It prevents projection distortion"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-06-085] Point, Line, and Area Generalization \u2014 https://gistbok-topics.ucgis.org/DM-06-085 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 51,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Maximum-likelihood classification commonly models class signatures using what?",
+            options: ["A) Multivariate probability distributions with means and covariances", "B) Map projections", "C) Topology rules", "D) Nearest-road distance only"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-04-014] Feature Extraction from Satellite Imagery \u2014 https://gistbok-topics.ucgis.org/DC-04-014 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 52,
+            domain: "Geospatial Data",
+            question: "A survey establishes a parcel corner with legal boundary implications. Which professional activity is most directly involved?",
+            options: ["A) Land surveying", "B) Kernel density analysis", "C) Web map tiling", "D) Choropleth classification"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-05-001] Professional Land Surveying \u2014 https://gistbok-topics.ucgis.org/DC-05-001 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 53,
+            domain: "Data Modeling",
+            question: "A table stores ZIPCode and CityName, where CityName depends on ZIPCode rather than directly on the record primary key. Which issue can motivate 3NF decomposition?",
+            options: ["A) Topology", "B) Coordinate transformation", "C) Transitive dependency", "D) Raster compression"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-01-003] Relational DBMS and their Spatial Extensions \u2014 https://gistbok-topics.ucgis.org/DM-01-003 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 54,
+            domain: "Cartography & Visualization",
+            question: "Which color scheme is most appropriate for unordered land-use categories?",
+            options: ["A) Proportional grayscale only", "B) Qualitative/categorical", "C) Diverging centered on zero", "D) Sequential"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-03-009] Color Theory \u2014 https://gistbok-topics.ucgis.org/CV-03-009 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 55,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A health analyst wants to identify statistically significant clusters of high asthma rates and clusters of low asthma rates. Which method is designed for this?",
+            options: ["A) Getis-Ord Gi* Hot Spot Analysis", "B) Global Moran\u2019s I only", "C) IDW interpolation", "D) Viewshed analysis"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-058] Hot Spots and Getis-Ord Gi* Analysis \u2014 https://gistbok-topics.ucgis.org/AM-03-058 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 56,
+            domain: "Organizational & Institutional Aspects",
+            question: "A strategic GIS plan should align technology investments with what?",
+            options: ["A) Only hardware specifications", "B) Only vendor marketing", "C) Organizational mission, business processes, users, data, and long-term priorities", "D) Only map aesthetics"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [KE-04-003] Strategic Planning for GIS Design \u2014 https://gistbok-topics.ucgis.org/KE-04-003 | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 57,
+            domain: "Thematic & Application Domains",
+            question: "A proposed high-rise may block an important view corridor. Which GIS analysis directly addresses this?",
+            options: ["A) Viewshed or line-of-sight analysis using 3-D terrain/building data", "B) Areal interpolation", "C) Kernel density", "D) Geocoding"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DA-003] GIS&T in Architecture \u2014 https://gistbok-topics.ucgis.org/DA-003 | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 58,
+            domain: "Cartography & Visualization",
+            question: "What is a bivariate choropleth map designed to show?",
+            options: ["A) Only elevation", "B) The joint spatial pattern of two variables", "C) Only network direction", "D) Only one nominal variable"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-04-012] Multivariate Mapping \u2014 https://gistbok-topics.ucgis.org/CV-04-012 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 59,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A kernel-density surface is too smooth and hides local concentrations. Which parameter should generally be reduced?",
+            options: ["A) Raster bit depth", "B) Bandwidth/search radius", "C) Number of legend classes", "D) Coordinate precision"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-008] Kernels and Density Estimation \u2014 https://gistbok-topics.ucgis.org/AM-03-008 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 60,
+            domain: "Geospatial Data",
+            question: "Street-level imagery is especially useful for which task?",
+            options: ["A) Global bathymetry", "B) Detailed visual inventory of roadside features and built-environment conditions", "C) Measuring continental plate motion directly", "D) Replacing all field validation"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-02-011] Street-level Imagery \u2014 https://gistbok-topics.ucgis.org/DC-02-011 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 61,
+            domain: "Cartography & Visualization",
+            question: "Which thematic map type uses symbol size to represent magnitude at locations?",
+            options: ["A) Isarithmic map", "B) Choropleth only", "C) Dot-density only", "D) Proportional or graduated symbol map"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-04-011] Common Thematic Map Types \u2014 https://gistbok-topics.ucgis.org/CV-04-011 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 62,
+            domain: "Conceptual Foundations",
+            question: "Compared with a 30 m raster, what is a main advantage of a 1 m raster for the same phenomenon?",
+            options: ["A) It can represent finer spatial detail", "B) It always has more spectral bands", "C) It removes positional error", "D) It always has higher thematic accuracy"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-05-021] Resolution \u2014 https://gistbok-topics.ucgis.org/FC-05-021 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 63,
+            domain: "Geospatial Data",
+            question: "Why are coded value lists useful in field data collection?",
+            options: ["A) They reduce inconsistent attribute entry and improve data quality", "B) They change map projection", "C) They create contours", "D) They increase satellite count"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-06-009] Field Data Capture Technologies \u2014 https://gistbok-topics.ucgis.org/DC-06-009 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 64,
+            domain: "Cartography & Visualization",
+            question: "For ordered quantitative data, which visual variable is generally effective?",
+            options: ["A) Random orientation", "B) Size or lightness/value", "C) Arbitrary shape only", "D) Font family only"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-03-008] Symbolization and the Visual Variables \u2014 https://gistbok-topics.ucgis.org/CV-03-008 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 65,
+            domain: "Geospatial Data",
+            question: "What does differential GNSS improve by using corrections from known reference stations?",
+            options: ["A) Positioning accuracy", "B) Spectral resolution", "C) Database normalization", "D) Map typography"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-02-003] Global Navigation Satellite Systems \u2014 https://gistbok-topics.ucgis.org/DC-02-003 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 66,
+            domain: "Analytical Methods & GeoComputation",
+            question: "An analyst needs areas present in either of two habitat polygon layers, but not where they overlap. Which operation is appropriate?",
+            options: ["A) Symmetrical Difference", "B) Dissolve", "C) Intersect", "D) Spatial Join"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-02-004] Overlay \u2014 https://gistbok-topics.ucgis.org/AM-02-004 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 67,
+            domain: "Thematic & Application Domains",
+            question: "A school district wants to minimize student travel while assigning neighborhoods to schools under capacity limits. Which class of problem is involved?",
+            options: ["A) Location-allocation or network assignment with capacity constraints", "B) Map projection", "C) Remote-sensing classification", "D) Terrain interpolation"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-05-046] Location-allocation modeling \u2014 https://gistbok-topics.ucgis.org/AM-05-046 | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 68,
+            domain: "Organizational & Institutional Aspects",
+            question: "A grant funds initial GIS development but not ongoing staff or maintenance. What sustainability risk exists?",
+            options: ["A) The system may become unsupported after startup funding ends", "B) Maintenance is unnecessary", "C) Startup funding guarantees long-term operations", "D) Only hardware ages"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [KE-03-011] Funding \u2014 https://gistbok-topics.ucgis.org/KE-03-011 | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 69,
+            domain: "Conceptual Foundations",
+            question: "A choropleth of total population makes large counties appear visually dominant. What is a better variable for comparing population concentration?",
+            options: ["A) Longitude", "B) County-name length", "C) Population density or another normalized measure", "D) Raw population total only"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-03-004] Perception and Cognitive Processing of Geographic Phenomena: a Choropleth Map Case Study \u2014 https://gistbok-topics.ucgis.org/FC-03-004 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 70,
+            domain: "Design of Systems",
+            question: "What is vertical scaling?",
+            options: ["A) Changing legend layout", "B) Creating more map classes", "C) Adding more independent servers only", "D) Increasing CPU, memory, or other resources on an existing server"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CP-01-008] Spatial Cloud Computing \u2014 https://gistbok-topics.ucgis.org/CP-01-008 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 71,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A city wants one statistic indicating whether its entire pattern of burglary incidents is clustered, random, or dispersed. Which approach is most appropriate?",
+            options: ["A) A viewshed analysis", "B) Local Moran\u2019s I for each census tract", "C) A global point-pattern statistic such as Average Nearest Neighbor or Ripley\u2019s K", "D) A geocoding match score"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-007] Point Pattern Analysis \u2014 https://gistbok-topics.ucgis.org/AM-03-007 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 72,
+            domain: "Conceptual Foundations",
+            question: "How many longitudinal zones are used by the UTM system?",
+            options: ["A) 360", "B) 60", "C) 24", "D) 90"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-05-048] Planar Coordinate Systems and the U. S. National Grid \u2014 https://gistbok-topics.ucgis.org/DM-05-048 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 73,
+            domain: "Cartography & Visualization",
+            question: "Why should red-green combinations be used cautiously?",
+            options: ["A) They always imply elevation", "B) They cannot display on screens", "C) They violate projections", "D) They can be difficult to distinguish for many users with color-vision deficiencies"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-03-009] Color Theory \u2014 https://gistbok-topics.ucgis.org/CV-03-009 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 74,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Which is an active remote-sensing system?",
+            options: ["A) Human visual interpretation", "B) Passive RGB aerial camera", "C) Landsat reflective bands", "D) LiDAR"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-03-027] Light Detection and Ranging (LiDAR) \u2014 https://gistbok-topics.ucgis.org/DC-03-027 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 75,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A spatial sample is intended to capture environmental variation across elevation zones. Which design is most defensible?",
+            options: ["A) Cluster all samples in one corner", "B) Choose only convenient sites", "C) Sample only beside roads", "D) Stratify sampling by elevation zones and sample within each stratum"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-026] Spatial Sampling for Spatial Analysis \u2014 https://gistbok-topics.ucgis.org/AM-03-026 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        }
+    ];
+
+    // Dynamic Interface Builder: Injects the 75 questions into the DOM framework
+    function buildQuizInterface() {
+        const target = document.getElementById('questions-container');
+        target.innerHTML = '';
+
+        examQuestions.forEach((q) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'card';
+            
+            let choicesHTML = '';
+            q.options.forEach((choice) => {
+                const choiceLetter = choice.trim().charAt(0); // Extracts A, B, C, or D
+                choicesHTML += `
+                    <label class="option-label">
+                        <input type="radio" name="item-${q.id}" value="${choiceLetter}" required>
+                        ${choice}
+                    </label>
+                `;
+            });
+
+            wrapper.innerHTML = `
+                <div class="question-header">
+                    <span class="question-num">Question ${q.id} of ${examQuestions.length}</span>
+                    <span class="domain-tag">${q.domain}</span>
+                </div>
+                <div class="question-text">${q.id}. ${q.question}</div>
+                <div class="options-container">
+                    ${choicesHTML}
+                </div>
+            `;
+            target.appendChild(wrapper);
+        });
+    }
+
+    // Performance Metric Processor: Scores inputs and builds the remediation report
+    function scoreExam() {
+        const form = document.getElementById('exam-form');
+        if (!form.checkValidity()) {
+            alert("Validation Error: Please review the test form. You must select an answer for all 75 questions prior to submitting.");
+            return;
+        }
+
+        let scoreCount = 0;
+        const remContainer = document.getElementById('remediation-container');
+        const remHeaderZone = document.getElementById('remediation-header-zone');
+        
+        remContainer.innerHTML = ''; // Clear prior runs
+        remHeaderZone.innerHTML = '';
+
+        // Tracker dictionary mapping errors across domains
+        const statisticsTracker = {};
+        examQuestions.forEach(q => {
+            if(!statisticsTracker[q.domain]) {
+                statisticsTracker[q.domain] = { total: 0, correct: 0 };
+            }
+            statisticsTracker[q.domain].total++;
+        });
+
+        // Evaluate choices
+        examQuestions.forEach((q) => {
+            const picked = document.querySelector(`input[name="item-${q.id}"]:checked`).value;
+            
+            if (picked === q.correct) {
+                scoreCount++;
+                statisticsTracker[q.domain].correct++;
+            } else {
+                // Compile targeted remediation entry for wrong response
+                const block = document.createElement('div');
+                block.className = 'card remediation-item';
+                block.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-num" style="color: var(--danger);">Study Required — Item ${q.id}</span>
+                        <span class="domain-tag">${q.domain}</span>
+                    </div>
+                    <div class="question-text">${q.question}</div>
+                    <p><strong>Your Selection:</strong> <span class="badge-wrong">${picked}</span></p>
+                    <p><strong>Validated Target Answer:</strong> <span class="badge-correct">${q.correct}</span></p>
+                    <div class="feedback-box">
+                        <strong>Structural Explanation:</strong> ${q.explanation}
+                        <br>
+                        <div class="ref-tag">Course Framework Reference: ${q.reference}</div>
+                    </div>
+                `;
+                remContainer.appendChild(block);
+            }
+        });
+
+        // Compute scores
+        const rawPercentage = Math.round((scoreCount / examQuestions.length) * 100);
+        let weightedTotal = 0;
+        Object.entries(statisticsTracker).forEach(([domainName, stats]) => {
+            const accuracy = stats.total ? stats.correct / stats.total : 0;
+            weightedTotal += accuracy * (blueprintWeights[domainName] || 0);
+        });
+        const finalPercentage = Math.round(weightedTotal * 10) / 10;
+        document.getElementById('score-percent').innerText = finalPercentage + "%";
+        document.getElementById('score-raw').innerText = `${scoreCount} out of ${examQuestions.length} Questions Correct (raw ${rawPercentage}%)`;
+        
+        const cardRef = document.getElementById('score-card');
+        const labelRef = document.getElementById('pass-label');
+        
+        if (finalPercentage >= 75) {
+            cardRef.style.borderTop = "10px solid var(--success)";
+            labelRef.innerText = "PASSED: Competency Standard Satisfied";
+            labelRef.style.color = "var(--success)";
+        } else {
+            cardRef.style.borderTop = "10px solid var(--danger)";
+            labelRef.innerText = "REMEDIATION NEEDED: Below 75% Target Threshold";
+            labelRef.style.color = "var(--danger)";
+        }
+
+        // Build dynamic domain statistics reporting table
+        const tableBody = document.getElementById('domain-breakdown-body');
+        tableBody.innerHTML = '';
+        for (const [domainName, stats] of Object.entries(statisticsTracker)) {
+            const rate = Math.round((stats.correct / stats.total) * 100);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${domainName}</strong></td>
+                <td>${blueprintWeights[domainName] || 0}%</td>
+                <td style="font-weight: bold; color: ${rate >= 75 ? 'var(--success)' : 'var(--danger)'};">${stats.correct}/${stats.total} (${rate}%)</td>
+            `;
+            tableBody.appendChild(tr);
+        }
+
+        // Add remediation section header
+        const headerCard = document.createElement('div');
+        headerCard.className = 'card';
+        if(finalPercentage === 100) {
+            headerCard.innerHTML = `<h2 style="color: var(--success); margin:0;">Perfect Score! Excellent work.</h2><p style="margin:5px 0 0 0;">You demonstrated mastery across all 11 blueprint domains.</p>`;
+        } else {
+            headerCard.innerHTML = `<h2 style="color: var(--primary); margin:0;">Custom Study & Remediation Plan</h2><p style="margin:5px 0 0 0;">Review the references below for the ${75 - scoreCount} questions answered incorrectly to improve your understanding.</p>`;
+        }
+        remHeaderZone.appendChild(headerCard);
+
+        // Toggle layouts and reset viewport scroll position
+        document.getElementById('quiz-interface').style.display = 'none';
+        document.getElementById('results-dashboard').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    // Execute application load sequence
+    window.onload = buildQuizInterface;
+</script>
+
+</body>
+</html>
