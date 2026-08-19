@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Practice Exams | GISP-E Prep</title><link rel="stylesheet" href="../assets/site.css"></head><body>
+<header class="site"><div class="wrap"><div class="topline"><div class="brand"><div><h1>GISP-E / PreGISP Preparation Program</h1><p>Student Portal • Practice Exams</p></div></div><button class="btn secondary" onclick="logout()">Sign out</button></div>
+<div class="nav"><a href="portal.html">My Progress</a><a href="practice-exams.html">Practice Exams</a><a href="workshops.html">Workshops</a><a href="coverage.html">BoK Coverage</a></div></div></header>
+<main><div class="wrap"><section class="hero"><h2>Six Practice Examinations</h2><p>Each exam contains 75 applied GIS/geospatial questions. Exam 1 is recommended as the baseline. Results are saved automatically to your central student record when you submit.</p></section><div class="grid">
+<div class="card"><h3>Practice Exam 1</h3><p>Recommended baseline diagnostic.</p><a class="btn" href="exams/PreGISP_GISP-E_Practice_Exam_Version_1.html">Open Exam 1</a></div>
+<div class="card"><h3>Practice Exam 2</h3><p>Use after additional study/workshops to measure progress.</p><a class="btn" href="exams/PreGISP_GISP-E_Practice_Exam_Version_2.html">Open Exam 2</a></div>
+<div class="card"><h3>Practice Exam 3</h3><p>Use after additional study/workshops to measure progress.</p><a class="btn" href="exams/PreGISP_GISP-E_Practice_Exam_Version_3.html">Open Exam 3</a></div>
+<div class="card"><h3>Practice Exam 4</h3><p>Use after additional study/workshops to measure progress.</p><a class="btn" href="exams/PreGISP_GISP-E_Practice_Exam_Version_4.html">Open Exam 4</a></div>
+<div class="card"><h3>Practice Exam 5</h3><p>Use after additional study/workshops to measure progress.</p><a class="btn" href="exams/PreGISP_GISP-E_Practice_Exam_Version_5.html">Open Exam 5</a></div>
+<div class="card"><h3>Practice Exam 6</h3><p>Use after additional study/workshops to measure progress.</p><a class="btn" href="exams/PreGISP_GISP-E_Practice_Exam_Version_6.html">Open Exam 6</a></div>
+</div></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/config.js"></script><script src="../assets/db.js"></script>
+<script>async function init(){if(!(await GISPEDB.studentProfile()))location.href='login.html'}async function logout(){await GISPEDB.studentLogout();location.href='login.html'}init();</script></body></html>

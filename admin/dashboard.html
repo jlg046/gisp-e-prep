@@ -1,0 +1,58 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Administrator Dashboard | GISP-E Prep</title><link rel="stylesheet" href="../assets/site.css"></head><body>
+<header class="site"><div class="wrap"><div class="topline"><div class="brand"><div><h1>GISP-E / PreGISP Preparation Program</h1><p>Administrator Portal</p></div></div><button class="btn secondary" onclick="logout()">Sign out</button></div>
+<div class="nav"><a href="dashboard.html">Cohort Dashboard</a><a href="workshops.html">Workshop Materials</a><a href="coverage.html">BoK Coverage</a></div></div></header>
+<main><div class="wrap"><section class="hero"><div class="topline"><div><h2>Administrator Progress & Mastery Tracker</h2><p>Student submissions are read directly from the central database. The dashboard refreshes automatically every 20 seconds.</p></div><div><span class="status-dot"></span><span id="refreshStatus" class="small">Loading…</span></div></div></section>
+
+<section class="card"><h3>Create student login</h3><div class="input-row">
+<label>Student name<input id="newName" placeholder="Jane Smith"></label>
+<label>Username<input id="newUser" placeholder="jsmith01"></label>
+<label>PIN<input id="newPin" placeholder="e.g., 483921"></label>
+<label>Cohort<input id="newCohort" placeholder="Fall 2026"></label>
+<button class="btn" onclick="createStudent()">Create student</button></div><p id="createMsg"></p>
+<p class="small">Give the student the username and PIN you create here. The PIN is stored only as a hash in the database.</p></section>
+
+<div class="kpi-grid"><div class="kpi"><span class="small">Active students</span><b id="studentCount">—</b></div><div class="kpi"><span class="small">Students with baseline</span><b id="baselineCount">—</b></div><div class="kpi"><span class="small">Total exam attempts</span><b id="attemptCount">—</b></div><div class="kpi"><span class="small">Cohort weighted mastery</span><b id="cohortMastery">—</b></div></div>
+
+<section class="card"><h3>Cohort support priorities</h3><div id="priorities">Loading…</div></section>
+
+<section class="card"><h3>Student progress overview</h3><div class="table-wrap"><table><thead><tr>
+<th>Student</th><th>Cohort</th><th>Attempts</th><th>Baseline</th><th>Latest</th><th>Change</th><th>Weighted mastery</th><th>Lowest domain</th><th>Manage</th>
+</tr></thead><tbody id="studentRows"></tbody></table></div></section>
+
+<section class="card"><h3>Student-by-domain mastery matrix</h3><div class="table-wrap"><table><thead><tr><th>Student</th>
+<th>Analytical Methods & GeoComputation</th><th>Conceptual Foundations</th><th>Data Modeling</th><th>Geospatial Data</th><th>Cartography & Visualization</th><th>Platforms, Sensors, Physics & Image Processing</th><th>Design of Systems</th><th>Organizational & Institutional Aspects</th><th>Thematic & Application Domains</th><th>GI & Society</th><th>Web-Based GIS</th>
+</tr></thead><tbody id="matrixRows"></tbody></table></div></section>
+
+<section class="card"><h3>Recent submissions</h3><div class="table-wrap"><table><thead><tr><th>Student</th><th>Exam</th><th>Submitted</th><th>Raw</th><th>Weighted</th><th>Missed items</th></tr></thead><tbody id="recentRows"></tbody></table></div></section>
+</div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/config.js"></script><script src="../assets/db.js"></script><script src="../assets/data.js"></script>
+<script>
+let STUDENTS=[],ATTEMPTS=[],timer=null;
+function cls(p){return p>=80?'mastery-high':p>=70?'mastery-mid':'mastery-low'}
+function domainAverages(atts){const d={};PREGISP_DOMAINS.forEach(x=>{const vals=atts.map(a=>Number(a.domains?.[x.name]?.percent)).filter(Number.isFinite);d[x.name]=vals.length?vals.reduce((s,v)=>s+v,0)/vals.length:null});return d}
+function summarize(s){const atts=ATTEMPTS.filter(a=>a.student_id===s.id).sort((a,b)=>new Date(a.completed_at)-new Date(b.completed_at));const base=atts.find(a=>a.exam_version===1), latest=atts.at(-1);const ds=domainAverages(atts);let wm=0,n=0;PREGISP_DOMAINS.forEach(d=>{if(ds[d.name]!=null){wm+=d.weight*(ds[d.name]/100);n++}});const weakest=Object.entries(ds).filter(x=>x[1]!=null).sort((a,b)=>a[1]-b[1])[0];return {s,atts,base,latest,ds,wm:atts.length?wm:null,weakest}}
+async function init(){if(!(await GISPEDB.adminValid())){location.href='login.html';return}await refresh();timer=setInterval(refresh,20000)}
+async function refresh(){try{refreshStatus.textContent='Refreshing…';[STUDENTS,ATTEMPTS]=await Promise.all([GISPEDB.adminStudents(),GISPEDB.adminAttempts()]);render();refreshStatus.textContent='Updated '+new Date().toLocaleTimeString()}catch(e){refreshStatus.textContent='Refresh failed: '+e.message}}
+function render(){
+ const active=STUDENTS.filter(s=>s.active);const sums=active.map(summarize);
+ studentCount.textContent=active.length;baselineCount.textContent=sums.filter(x=>x.base).length;attemptCount.textContent=ATTEMPTS.length;
+ const valid=sums.filter(x=>x.wm!=null);cohortMastery.textContent=valid.length?(valid.reduce((a,b)=>a+b.wm,0)/valid.length).toFixed(1)+'%':'—';
+ studentRows.innerHTML=sums.length?'':'<tr><td colspan="9">No students created yet.</td></tr>';
+ matrixRows.innerHTML=sums.length?'':'<tr><td colspan="12">No students created yet.</td></tr>';
+ sums.forEach(x=>{
+   const b=x.base?Number(x.base.weighted_score):null,l=x.latest?Number(x.latest.weighted_score):null,delta=b!=null&&l!=null?l-b:null;
+   studentRows.innerHTML+=`<tr><td><strong>${x.s.display_name}</strong><br><span class="small">${x.s.username}</span></td><td>${x.s.cohort||'—'}</td><td>${x.atts.length}</td><td>${b==null?'—':b.toFixed(1)+'%'}</td><td>${l==null?'—':l.toFixed(1)+'%'}</td><td>${delta==null?'—':(delta>=0?'+':'')+delta.toFixed(1)+' pts'}</td><td class="${x.wm==null?'':cls(x.wm)}">${x.wm==null?'—':x.wm.toFixed(1)+'%'}</td><td>${x.weakest?x.weakest[0]+' ('+x.weakest[1].toFixed(0)+'%)':'—'}</td><td><button class="btn secondary" onclick="resetPin('${x.s.id}','${String(x.s.display_name).replaceAll("'","")}')">Reset PIN</button> <button class="btn danger" onclick="toggleActive('${x.s.id}',false)">Deactivate</button></td></tr>`;
+   matrixRows.innerHTML+=`<tr><td><strong>${x.s.display_name}</strong></td>${PREGISP_DOMAINS.map(d=>`<td class="${x.ds[d.name]==null?'':cls(x.ds[d.name])}">${x.ds[d.name]==null?'—':x.ds[d.name].toFixed(0)+'%'}</td>`).join('')}</tr>`;
+ });
+ let da=PREGISP_DOMAINS.map(d=>{const vals=sums.map(x=>x.ds[d.name]).filter(v=>v!=null);return {name:d.name,weight:d.weight,p:vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null,n:vals.length}}).filter(x=>x.p!=null).sort((a,b)=>(a.p-a.weight*.15)-(b.p-b.weight*.15));
+ priorities.innerHTML=da.length?'<ol>'+da.map(x=>`<li><strong>${x.name}</strong>: ${x.p.toFixed(1)}% cohort average across ${x.n} assessed student(s); ${x.weight}% blueprint weight.</li>`).join('')+'</ol>':'<p>No exam results yet.</p>';
+ const byId=Object.fromEntries(STUDENTS.map(s=>[s.id,s]));const rec=[...ATTEMPTS].sort((a,b)=>new Date(b.completed_at)-new Date(a.completed_at)).slice(0,25);
+ recentRows.innerHTML=rec.length?'':'<tr><td colspan="6">No submissions yet.</td></tr>';
+ rec.forEach(a=>{const s=byId[a.student_id];recentRows.innerHTML+=`<tr><td>${s?.display_name||'Unknown'}</td><td>Exam ${a.exam_version}</td><td>${new Date(a.completed_at).toLocaleString()}</td><td>${Number(a.raw_percent).toFixed(1)}%</td><td><strong>${Number(a.weighted_score).toFixed(1)}%</strong></td><td>${Array.isArray(a.remediation)?a.remediation.length:0}</td></tr>`})
+}
+async function createStudent(){createMsg.textContent='';try{const r=await GISPEDB.adminCreateStudent({displayName:newName.value.trim(),username:newUser.value.trim(),pin:newPin.value,cohort:newCohort.value.trim()});if(!r?.ok)throw new Error(r?.message||'Could not create student');createMsg.className='success';createMsg.textContent='Student created. Give them username '+newUser.value.trim()+' and the PIN you entered.';newName.value=newUser.value=newPin.value='';await refresh()}catch(e){createMsg.className='error';createMsg.textContent=e.message}}
+async function resetPin(id,name){const p=prompt('Enter a new PIN for '+name+':');if(!p)return;await GISPEDB.adminResetPin(id,p);alert('PIN reset. Existing student browser sessions were invalidated.')}
+async function toggleActive(id,active){if(!confirm('Deactivate this student login? Existing sessions will stop working.'))return;await GISPEDB.adminSetActive(id,active);await refresh()}
+function logout(){GISPEDB.adminLogout();location.href='login.html'}init().catch(e=>{document.querySelector('main .wrap').innerHTML='<section class="card"><h2>Unable to load administrator portal</h2><p class="error">'+e.message+'</p></section>'});
+</script></body></html>

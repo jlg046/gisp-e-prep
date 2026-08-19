@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Student Login | GISP-E Prep</title><link rel="stylesheet" href="../assets/site.css"></head><body>
+<header class="site"><div class="wrap"><div class="brand"><div><h1>GISP-E / PreGISP Preparation Program</h1><p>Student Portal</p></div></div></div></header>
+<main><div class="wrap"><div class="login-shell"><div class="login-card"><h2>Student login</h2><p>Use the username and PIN provided by your program administrator.</p>
+<label>Username</label><input id="username" autocomplete="username">
+<label>PIN</label><input id="pin" type="password" autocomplete="current-password">
+<p><button class="btn" id="loginBtn" onclick="login()">Sign in</button></p><p id="msg"></p>
+<div class="notice small">Your scores are stored centrally, so after signing in you can use a different browser or computer and still see your prior results.</div></div></div></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/config.js"></script><script src="../assets/db.js"></script>
+<script>
+async function login(){msg.textContent='';loginBtn.disabled=true;try{await GISPEDB.studentLogin(username.value.trim(),pin.value);const next=new URLSearchParams(location.search).get('next');location.href=next||'portal.html'}catch(e){msg.className='error';msg.textContent=e.message}finally{loginBtn.disabled=false}}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+</script></body></html>
