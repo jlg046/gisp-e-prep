@@ -42,6 +42,9 @@
     return await rpc('student_save_attempt',{
       p_token:token,
       p_exam_version:payload.version,
+      p_exam_set:payload.examSet || Math.ceil(payload.version/3),
+      p_difficulty:payload.difficulty || 'Standard',
+      p_difficulty_code:payload.difficultyCode || 'A',
       p_completed_at:payload.completedAt,
       p_raw_correct:payload.rawCorrect,
       p_raw_percent:payload.rawPercent,

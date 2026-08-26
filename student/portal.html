@@ -1,9 +1,9 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Student Portal | GISP-E Prep</title><link rel="stylesheet" href="../assets/site.css"></head><body>
 <header class="site"><div class="wrap"><div class="topline"><div class="brand"><div><h1>GISP-E / PreGISP Preparation Program</h1><p>Student Portal • <span id="who">Loading…</span></p></div></div><button class="btn secondary" onclick="logout()">Sign out</button></div>
-<div class="nav"><a href="portal.html">My Progress</a><a href="practice-exams.html">Practice Exams</a><a href="workshops.html">Workshops</a><a href="coverage.html">BoK Coverage</a></div></div></header>
+<div class="nav"><a href="portal.html">My Progress</a><a href="practice-exams.html">Practice Exams</a><a href="workshops.html">Workshops</a><a href="esri-training.html">Esri Training</a><a href="coverage.html">GIS Book of Knowledge</a></div></div></header>
 <main><div class="wrap"><section class="hero"><h2>My Progress & Mastery</h2><p>Your results are loaded from the central program database. Overall mastery averages your domain performance across submitted exams and applies the program blueprint weights.</p></section>
-<div class="kpi-grid"><div class="kpi"><span class="small">Submitted attempts</span><b id="attemptCount">—</b></div><div class="kpi"><span class="small">Baseline (Exam 1)</span><b id="baseline">—</b></div><div class="kpi"><span class="small">Latest weighted score</span><b id="latest">—</b></div><div class="kpi"><span class="small">Change from baseline</span><b id="delta">—</b></div><div class="kpi"><span class="small">Overall weighted mastery</span><b id="mastery">—</b></div></div>
+<div class="kpi-grid"><div class="kpi"><span class="small">Submitted attempts</span><b id="attemptCount">—</b></div><div class="kpi"><span class="small">Baseline (Exam 1A)</span><b id="baseline">—</b></div><div class="kpi"><span class="small">Latest weighted score</span><b id="latest">—</b></div><div class="kpi"><span class="small">Change from baseline</span><b id="delta">—</b></div><div class="kpi"><span class="small">Overall weighted mastery</span><b id="mastery">—</b></div></div><section class="card"><h3>Performance by difficulty level</h3><div class="kpi-grid"><div class="kpi"><span class="small">Standard (A)</span><b id="levelA">—</b></div><div class="kpi"><span class="small">More Challenging (B)</span><b id="levelB">—</b></div><div class="kpi"><span class="small">Difficult (C)</span><b id="levelC">—</b></div></div><p class="small">Scores are shown separately by difficulty so moving to a harder tier does not make a student look as though mastery has declined.</p></section>
 <section class="card"><h3>Recommended focus</h3><div id="focus">Loading…</div></section>
 <section class="card"><h3>Domain mastery</h3><div class="table-wrap"><table><thead><tr><th>Domain</th><th>Blueprint weight</th><th>Average</th><th>Progress</th><th>Status</th></tr></thead><tbody id="domains"></tbody></table></div><p class="small">Preparation thresholds used here: 80%+ = mastery; 70–79.9% = developing; below 70% = priority review. These are program study thresholds, not official GISCI passing standards.</p></section>
 <section class="card"><h3>Exam history</h3><div class="table-wrap"><table><thead><tr><th>Exam</th><th>Submitted</th><th>Raw accuracy</th><th>Weighted score</th><th>Remediation</th></tr></thead><tbody id="attempts"></tbody></table></div></section>
@@ -15,15 +15,15 @@ let ATTEMPTS=[];
 function pct(v){return Number.isFinite(Number(v))?Number(v):null}
 function cls(p){return p>=80?'mastery-high':p>=70?'mastery-mid':'mastery-low'}
 function status(p){return p>=80?'Mastery':p>=70?'Developing':'Priority review'}
-function normalizeAttempt(x){return {id:x.id,version:x.exam_version,completedAt:x.completed_at,rawCorrect:Number(x.raw_correct),rawPercent:Number(x.raw_percent),weightedScore:Number(x.weighted_score),domains:x.domains||{},remediation:x.remediation||[]}}
+function normalizeAttempt(x){return {id:x.id,version:x.exam_version,examSet:x.exam_set||x.exam_version,difficulty:x.difficulty||'Standard',difficultyCode:x.difficulty_code||'A',completedAt:x.completed_at,rawCorrect:Number(x.raw_correct),rawPercent:Number(x.raw_percent),weightedScore:Number(x.weighted_score),domains:x.domains||{},remediation:x.remediation||[]}}
 async function init(){
  const profile=await GISPEDB.studentProfile(); if(!profile){location.href='login.html';return}
  who.textContent=profile.display_name+' ('+profile.username+')';
  ATTEMPTS=(await GISPEDB.studentAttempts()).map(normalizeAttempt).sort((a,b)=>new Date(a.completedAt)-new Date(b.completedAt)); render();
 }
 function render(){
- attemptCount.textContent=ATTEMPTS.length;
- const b=ATTEMPTS.find(x=>x.version===1), l=ATTEMPTS.at(-1);
+ attemptCount.textContent=ATTEMPTS.length; ['A','B','C'].forEach(c=>{const xs=ATTEMPTS.filter(x=>x.difficultyCode===c).map(x=>x.weightedScore);document.getElementById('level'+c).textContent=xs.length?(xs.reduce((a,b)=>a+b,0)/xs.length).toFixed(1)+'%':'—'});
+ const b=ATTEMPTS.find(x=>x.examSet===1 && x.difficultyCode==='A'), l=ATTEMPTS.at(-1);
  baseline.textContent=b?b.weightedScore.toFixed(1)+'%':'—'; latest.textContent=l?l.weightedScore.toFixed(1)+'%':'—';
  delta.textContent=(b&&l)?((l.weightedScore-b.weightedScore)>=0?'+':'')+(l.weightedScore-b.weightedScore).toFixed(1)+' pts':'—';
  let wm=0, priorities=[];domains.innerHTML='';
@@ -35,10 +35,10 @@ function render(){
  else if(!priorities.length) focus.innerHTML='<p class="mastery-high">All assessed domains average at least 80%. Use the next exam to confirm consistent mastery.</p>';
  else focus.innerHTML='<ol>'+priorities.slice(0,4).map(x=>`<li><strong>${x.name}</strong>: ${x.p.toFixed(0)}% average; ${x.weight}% of the blueprint. Review the corresponding workshop and missed-item references.</li>`).join('')+'</ol>';
  attempts.innerHTML=ATTEMPTS.length?'':'<tr><td colspan="5">No submitted exams yet.</td></tr>';
- ATTEMPTS.forEach((x,i)=>{attempts.innerHTML+=`<tr><td><strong>Exam ${x.version}</strong>${x.version===1?' <span class="badge">Baseline</span>':''}</td><td>${new Date(x.completedAt).toLocaleString()}</td><td>${x.rawPercent.toFixed(1)}%</td><td><strong>${x.weightedScore.toFixed(1)}%</strong></td><td><button class="btn secondary" onclick="showRem(${i})">${x.remediation.length} missed item(s)</button></td></tr>`});
+ ATTEMPTS.forEach((x,i)=>{attempts.innerHTML+=`<tr><td><strong>Exam ${x.examSet}${x.difficultyCode}</strong> <span class="badge">${x.difficulty}</span>${x.examSet===1&&x.difficultyCode==='A'?' <span class="badge">Baseline</span>':''}</td><td>${new Date(x.completedAt).toLocaleString()}</td><td>${x.rawPercent.toFixed(1)}%</td><td><strong>${x.weightedScore.toFixed(1)}%</strong></td><td><button class="btn secondary" onclick="showRem(${i})">${x.remediation.length} missed item(s)</button></td></tr>`});
 }
 function showRem(i){const x=ATTEMPTS[i]; if(!x.remediation?.length){remediation.innerHTML='<p class="mastery-high">No missed items were stored for this attempt.</p>';return}
- remediation.innerHTML=`<h4>Exam ${x.version} — ${new Date(x.completedAt).toLocaleString()}</h4>`+x.remediation.map(r=>`<div class="card remediation-card"><strong>${r.domain||''} — Item ${r.id||''}</strong><p>${r.question||''}</p><p><strong>Your answer:</strong> ${r.selected||'—'} &nbsp; <strong>Correct:</strong> ${r.correct||'—'}</p><div class="muted-box">${r.explanation||''}<br><span class="small">${linkify(r.reference||'')}</span></div></div>`).join('');
+ remediation.innerHTML=`<h4>Exam ${x.examSet}${x.difficultyCode} — ${x.difficulty} — ${new Date(x.completedAt).toLocaleString()}</h4>`+x.remediation.map(r=>`<div class="card remediation-card"><strong>${r.domain||''} — Item ${r.id||''}</strong><p>${r.question||''}</p><p><strong>Your answer:</strong> ${r.selected||'—'} &nbsp; <strong>Correct:</strong> ${r.correct||'—'}</p><div class="muted-box">${r.explanation||''}<br><span class="small">${linkify(r.reference||'')}</span></div></div>`).join('');
  remediation.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function linkify(s){return String(s).replace(/(https?:\/\/[^\s|<]+)/g,'<a target="_blank" rel="noopener" href="$1">$1</a>')}

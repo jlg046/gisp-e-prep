@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreGISP / GISP-E Practice Exam 5C — Difficult</title>
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --primary-dark: #114154;
+            --primary-light: #f0f5f7;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --border: #dcdde1;
+            --card-bg: #ffffff;
+            --body-bg: #f5f7fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.3rem;
+        }
+
+        header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .domain-tag {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .question-num {
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .action-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        #results-dashboard {
+            display: none;
+        }
+
+        .score-summary {
+            text-align: center;
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .score-big {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin: 15px 0;
+        }
+
+        .pass-status {
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .remediation-item {
+            border-left: 5px solid var(--danger);
+            background-color: #fffafb;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 18px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 0.98rem;
+        }
+
+        .ref-tag {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: bold;
+            background-color: var(--primary-light);
+            padding: 6px 12px;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .badge-wrong { color: var(--danger); font-weight: bold; background: #fde8e8; padding: 2px 8px; border-radius: 4px; }
+        .badge-correct { color: var(--success); font-weight: bold; background: #e1f7e3; padding: 2px 8px; border-radius: 4px; }
+        
+        .domain-breakdown {
+            margin-top: 20px;
+            text-align: left;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .domain-breakdown th, .domain-breakdown td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .domain-breakdown th { background-color: var(--primary-light); color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+      <a href="../portal.html" style="color:var(--primary);font-weight:700;text-decoration:none">← Return to Student Portal</a>
+      <span id="student-identity" style="color:var(--text-light);font-weight:600"></span>
+    </div>
+    <header>
+        <h1>PreGISP® / GISP-E Practice Exam 5C — Difficult</h1>
+        <p>Applied GIS & Geospatial Knowledge Diagnostic</p>
+    </header>
+
+    <!-- Quiz Test Taking Interface -->
+    <div id="quiz-interface">
+        <div class="card" style="background-color: var(--primary-light); border-left: 5px solid var(--primary);">
+            <strong>Exam 5C — Difficult.</strong> Difficult: mastery challenge with multiple plausible GIS alternatives; intentionally somewhat harder than the expected certification level.<br><strong>Exam Instructions:</strong> Answer all 75 applied GIS/geospatial questions. These items test methods, analysis, calculations, interpretation, data modeling, data quality, remote sensing, cartography, systems, applications, and professional judgment—not recognition of GIS&T BoK topic names. Submit the exam for a blueprint-weighted score and targeted remediation.
+        </div>
+        <form id="exam-form">
+            <div id="questions-container"></div>
+            <div class="action-container">
+                <button type="button" class="btn" onclick="scoreExam()">Submit and Score Exam</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results & Remediation Dashboard Interface -->
+    <div id="results-dashboard">
+        <div class="card score-summary" id="score-card">
+            <h2>Your Evaluation Summary</h2><p><strong>Blueprint-weighted diagnostic score</strong></p>
+            <div class="score-big" id="score-percent">0%</div>
+            <p id="score-raw" style="font-size: 1.2rem; font-weight: 600;">0 out of 75 Questions Correct</p><p id="save-status" style="font-weight:600;color:var(--text-light);">Result not yet saved.</p>
+            <div class="pass-status" id="pass-label">STATUS</div>
+            
+            <h3 style="margin-top:30px;">Domain-Specific Performance</h3>
+            <table class="domain-breakdown">
+                <thead>
+                    <tr>
+                        <th>Knowledge Domain</th>
+                        <th>Weight</th>
+                        <th>Your Performance</th>
+                    </tr>
+                </thead>
+                <tbody id="domain-breakdown-body"></tbody>
+            </table>
+        </div>
+
+        <div id="remediation-header-zone"></div>
+        <div id="remediation-container"></div>
+        
+        <div class="action-container">
+            <button type="button" class="btn" onclick="window.scrollTo(0,0); location.reload();">Reset & Retake Exam</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../assets/config.js"></script>
+<script src="../../assets/db.js"></script>
+<script>
+    // Centralized Data Model Architecture storing all 75 platform-neutral blueprint questions
+    const blueprintWeights = {"Analytical Methods & GeoComputation": 18, "Conceptual Foundations": 14, "Data Modeling": 12, "Geospatial Data": 11, "Cartography & Visualization": 10, "Platforms, Sensors, Physics & Image Processing": 10, "Design of Systems": 8, "Organizational & Institutional Aspects": 7, "Thematic & Application Domains": 5, "GI & Society": 3, "Web-Based GIS": 2};
+    const examQuestions = [
+        {
+            id: 1,
+            domain: "Design of Systems",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? In this context, which statement most accurately describes horizontal scaling?",
+            options: ["A) It distributes requests across servers to improve capacity and resilience", "B) Adding more servers or instances to distribute load", "C) Elastic scaling", "D) Increasing CPU, memory, or other resources on an existing server"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CP-01-008] Spatial Cloud Computing \u2014 https://gistbok-topics.ucgis.org/CP-01-008 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 2,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. In GWR, the coefficient for distance to downtown is strongly negative in the core but near zero in outer suburbs. What does this demonstrate?",
+            options: ["A) Geographically Weighted Regression (GWR)", "B) Spatial nonstationarity in the relationship", "C) Check variance inflation factors (VIF)", "D) Ordinary Least Squares (OLS)"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-034] The Geographically Weighted Regression Framework \u2014 https://gistbok-topics.ucgis.org/AM-03-034 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 3,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? An OLS model of house prices has spatially autocorrelated residuals. Why is that a concern?",
+            options: ["A) Check variance inflation factors (VIF)", "B) The independence assumption is violated and spatial structure remains unexplained", "C) Geographically Weighted Regression (GWR)", "D) Ordinary Least Squares (OLS)"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-063] Regression Fundamentals \u2014 https://gistbok-topics.ucgis.org/AM-03-063 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 4,
+            domain: "Design of Systems",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. In this context, which statement most accurately describes a REST API?",
+            options: ["A) A web interface exposing resources and actions through HTTP requests and structured responses", "B) It distributes requests across servers to improve capacity and resilience", "C) Increasing CPU, memory, or other resources on an existing server", "D) Control and verify access to protected services or resources"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [PD-03-019] GIS APIs \u2014 https://gistbok-topics.ucgis.org/PD-03-018 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 5,
+            domain: "Thematic & Application Domains",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? A wildlife biologist wants to model movement through fragmented habitat. Which GIS approach is suitable?",
+            options: ["A) Resistance surfaces and least-cost, circuit, or connectivity analysis", "B) Cost-distance or connectivity modeling using landscape resistance", "C) Hydrologic analysis of elevation and flow surfaces tied to inlet locations", "D) Precision agriculture with spatially variable-rate management"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-05-044] Modelling Accessibility \u2014 https://gistbok-topics.ucgis.org/AM-05-044 | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 6,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. Road right-of-way polygons and wetlands must be overlaid to return only shared geometry. Which operation is correct?",
+            options: ["A) Intersect", "B) Identity", "C) Union", "D) Clip"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-02-004] Overlay \u2014 https://gistbok-topics.ucgis.org/AM-02-004 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 7,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? All else equal, what advantage does a 12-bit sensor have over an 8-bit sensor?",
+            options: ["A) Spectral resolution", "B) Temporal resolution", "C) Spatial resolution", "D) More quantization levels and finer radiometric discrimination"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-03-016] Nature of Multispectral Image Data \u2014 https://gistbok-topics.ucgis.org/DC-03-016 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 8,
+            domain: "Cartography & Visualization",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. Which map type uses one dot to represent a specified quantity and shows distribution within zones?",
+            options: ["A) Qualitative color scheme", "B) Dot-density map", "C) Sequential color scheme", "D) Diverging color scheme"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-04-011] Common Thematic Map Types \u2014 https://gistbok-topics.ucgis.org/CV-04-011 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 9,
+            domain: "Organizational & Institutional Aspects",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? Why should end users be involved in requirements gathering?",
+            options: ["A) Capacity must handle periods of highest realistic demand", "B) Linking requirements to design, implementation, and tests so each is addressed", "C) Department teams can retain domain expertise and respond quickly to local needs", "D) They understand operational needs and help ensure the system solves real tasks"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [KE-04-001] The process of GIS&T design \u2014 https://gistbok-topics.ucgis.org/KE-04-001 | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 10,
+            domain: "Cartography & Visualization",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. A narrative web map combines maps, text, images, and sequence to guide the reader. What design approach is this?",
+            options: ["A) Qualitative color scheme", "B) Sequential color scheme", "C) Storytelling or story-map narrative", "D) Diverging color scheme"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-04-033] Narrative and Storytelling \u2014 https://gistbok-topics.ucgis.org/CV-04-033 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 11,
+            domain: "Design of Systems",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? In this context, which statement most accurately describes infrastructure-as-code useful for?",
+            options: ["A) Elastic scaling", "B) Adding more servers or instances to distribute load", "C) It distributes requests across servers to improve capacity and resilience", "D) Repeatable, versioned provisioning of servers and cloud resources"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CP-01-013] Cyberinfrastructure \u2014 https://gistbok-topics.ucgis.org/CP-01-013 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 12,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. A DEM contains many artificial depressions that interrupt modeled drainage. What preprocessing step is commonly used before flow-direction analysis?",
+            options: ["A) Flow direction", "B) Flow accumulation", "C) Fill sinks/depressions where appropriate", "D) Fill sinks/depressions"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-04-066] Watersheds and Drainage Networks \u2014 https://gistbok-topics.ucgis.org/AM-04-066 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 13,
+            domain: "Cartography & Visualization",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? A highly skewed dataset mapped with equal interval places most observations in one class. Which alternative often reveals rank differences better?",
+            options: ["A) Qualitative color scheme", "B) Sequential color scheme", "C) Quantile classification", "D) Diverging color scheme"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-03-005] Statistical Mapping (Enumeration, Normalization, Classification) \u2014 https://gistbok-topics.ucgis.org/CV-03-005 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 14,
+            domain: "Conceptual Foundations",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. For the same extent, changing raster resolution from 30 m to 1 m generally has what storage effect?",
+            options: ["A) The smallest spatial detail or ground sampling dimension represented", "B) Many more cells and much greater data volume", "C) It can represent finer spatial detail", "D) The MAUP zoning effect"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-05-021] Resolution \u2014 https://gistbok-topics.ucgis.org/FC-05-021 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 15,
+            domain: "Organizational & Institutional Aspects",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? Why is continuing professional development important in GIS&T?",
+            options: ["A) Shared data and standards with reduced duplication across neighboring governments", "B) Tools, standards, data sources, analytical methods, and ethical expectations evolve", "C) They support networking, standards, education, publications, ethics, and community development", "D) Documented competence or experience against defined professional standards"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [KE-01-023] GIS&T Workforce Development \u2014 https://gistbok-topics.ucgis.org/KE-01-023 | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 16,
+            domain: "Conceptual Foundations",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. GNSS commonly produces ellipsoidal height. To estimate orthometric height, what additional quantity is needed?",
+            options: ["A) Conformal projection", "B) Equal-area projection", "C) Equidistant projection for the stated origin/lines", "D) Geoid separation/undulation"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 17,
+            domain: "Data Modeling",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? A very large spatial database has slow full-table scans. Which combination is most likely to improve performance?",
+            options: ["A) Foreign key", "B) Primary key", "C) One-to-many relationship", "D) Appropriate indexing, partitioning, and query optimization"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-01-070] Problems of Large Spatial Databases \u2014 https://gistbok-topics.ucgis.org/DM-01-070 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 18,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. A predictor in an OLS model has a variance inflation factor of 18. What problem does this suggest?",
+            options: ["A) Severe multicollinearity", "B) Ordinary Least Squares (OLS)", "C) Check variance inflation factors (VIF)", "D) Geographically Weighted Regression (GWR)"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-063] Regression Fundamentals \u2014 https://gistbok-topics.ucgis.org/AM-03-063 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 19,
+            domain: "Conceptual Foundations",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? Why can different classification schemes change the apparent pattern of a choropleth map?",
+            options: ["A) The MAUP zoning effect", "B) A semantic mismatch", "C) 1:24,000", "D) Class boundaries determine which values receive the same symbol"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-03-004] Perception and Cognitive Processing of Geographic Phenomena: a Choropleth Map Case Study \u2014 https://gistbok-topics.ucgis.org/FC-03-004 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 20,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. A strongly negative NDVI value commonly indicates what kind of surface?",
+            options: ["A) Spatial resolution", "B) Water, snow, cloud, or another non-vegetated surface depending on context", "C) Spectral resolution", "D) Temporal resolution"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 21,
+            domain: "Web-Based GIS",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? A web map needs server-rendered map images but does not require raw feature geometry. Which service type is designed for this?",
+            options: ["A) Web Map Service (WMS)", "B) Cached raster tiles", "C) Vector tiles", "D) Web Feature Service (WFS) / feature service"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CP-04-014] Web GIS \u2014 https://gistbok-topics.ucgis.org/CP-04-014 | Blueprint domain resource: https://geospacebok.eu/WB"
+        },
+        {
+            id: 22,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. What does spatial resolution describe in remote sensing?",
+            options: ["A) Spectral resolution", "B) The ground area represented by a pixel", "C) Temporal resolution", "D) Spatial resolution"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-03-016] Nature of Multispectral Image Data \u2014 https://gistbok-topics.ucgis.org/DC-03-016 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 23,
+            domain: "Analytical Methods & GeoComputation",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? A viewshed analysis returns which locations?",
+            options: ["A) Flow direction", "B) Fill sinks/depressions", "C) Locations visible from one or more observers given terrain and geometry", "D) Flow accumulation"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-04-017] Intervisibility, Line-of-Sight, and Viewsheds \u2014 https://gistbok-topics.ucgis.org/AM-04-017 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 24,
+            domain: "Organizational & Institutional Aspects",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. Why is risk management part of GIS project planning?",
+            options: ["A) Scope creep", "B) Potential technical, schedule, cost, data, and staffing problems should be identified and mitigated", "C) The sequence of dependent tasks that determines the shortest possible project duration", "D) Helping people, workflows, roles, and policies adapt to new technology and processes"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [KE-04-012] GIS&T Project Planning and Management \u2014 https://gistbok-topics.ucgis.org/KE-04-012 | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 25,
+            domain: "Cartography & Visualization",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? Why are local roads often omitted from small-scale maps?",
+            options: ["A) Diverging color scheme", "B) Qualitative color scheme", "C) Sequential color scheme", "D) To reduce clutter and match the lower display/detail capacity"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-03-004] Scale and Generalization \u2014 https://gistbok-topics.ucgis.org/CV-03-004 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 26,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. A Monte Carlo uncertainty analysis repeatedly perturbs uncertain model inputs and reruns the model. What is its main purpose?",
+            options: ["A) Estimate how input uncertainty propagates to a distribution of outputs", "B) Rate stabilization/smoothing and population-at-risk uncertainty", "C) Uncertainty or expected error around the estimate", "D) The result is sensitive to positional uncertainty"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-09-105] Monte Carlo Simulation \u2014 https://gistbok-topics.ucgis.org/AM-09-105 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 27,
+            domain: "Conceptual Foundations",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? Two datasets use different horizontal datums but are displayed as though the datums were identical. What can result?",
+            options: ["A) A systematic positional offset", "B) Conformal projection", "C) Equal-area projection", "D) Equidistant projection for the stated origin/lines"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 28,
+            domain: "Conceptual Foundations",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. Two polygons share a boundary but their interiors do not overlap. Which relation best describes them?",
+            options: ["A) Two polygons share a boundary", "B) A topological rule violation", "C) Touches/adjacency", "D) Crosses/intersects"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-03-075] Defining and Designing Spatial Queries \u2014 https://gistbok-topics.ucgis.org/DM-03-075 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 29,
+            domain: "Cartography & Visualization",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? Quantile classification places approximately what in each class?",
+            options: ["A) Diverging color scheme", "B) An equal number of observations", "C) Sequential color scheme", "D) Qualitative color scheme"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-03-005] Statistical Mapping (Enumeration, Normalization, Classification) \u2014 https://gistbok-topics.ucgis.org/CV-03-005 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 30,
+            domain: "Data Modeling",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. Students can enroll in many courses and each course can contain many students. Which database structure usually resolves this relationship?",
+            options: ["A) An associative/junction table", "B) Foreign key", "C) Primary key", "D) One-to-many relationship"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-01-003] Relational DBMS and their Spatial Extensions \u2014 https://gistbok-topics.ucgis.org/DM-01-003 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 31,
+            domain: "Cartography & Visualization",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? A reader sees a dark color on a choropleth. What should be checked before interpreting it as high?",
+            options: ["A) Sequential color scheme", "B) Qualitative color scheme", "C) Diverging color scheme", "D) The legend and classification scheme"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-06-022] Map Interpretation \u2014 https://gistbok-topics.ucgis.org/CV-06-022 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 32,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. A land-cover machine-learning classifier performs extremely well on training data but poorly on held-out imagery. What is the most likely problem?",
+            options: ["A) Overfitting", "B) The result is sensitive to positional uncertainty", "C) Many pixels mapped as that class are actually other classes, a commission-error problem", "D) Many reference pixels of that class were omitted/misclassified"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-08-094] Machine Learning Approaches \u2014 https://gistbok-topics.ucgis.org/AM-08-094 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 33,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? Why should training and validation samples be independent?",
+            options: ["A) Spatial resolution", "B) Temporal resolution", "C) Spectral resolution", "D) Reusing the same samples can overestimate classification accuracy"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-04-019] Ground Verification and Accuracy Assessment \u2014 https://gistbok-topics.ucgis.org/DC-04-019 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 34,
+            domain: "Geospatial Data",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. Why can a geocoded address be inaccurate even when the street and address range match?",
+            options: ["A) Addresses can change, be duplicated, or represent locations differently over time", "B) Linear interpolation along the segment", "C) Detailed visual inventory of roadside features and built-environment conditions", "D) The interpolated street position may not equal the actual building or entrance"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-02-037] Texts \u2014 https://gistbok-topics.ucgis.org/DC-02-037 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 35,
+            domain: "Conceptual Foundations",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? A line enters and exits a polygon, passing through its interior. Which spatial relation best describes this?",
+            options: ["A) Containment/within", "B) Line/polyline", "C) Touches/adjacency", "D) Crosses/intersects"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-03-075] Defining and Designing Spatial Queries \u2014 https://gistbok-topics.ucgis.org/DM-03-075 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 36,
+            domain: "Conceptual Foundations",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. Two agencies each use a field called class, but one means road class and the other land-cover class. What problem is this?",
+            options: ["A) A geographic field", "B) The codes are category labels without quantitative magnitude", "C) Class boundaries determine which values receive the same symbol", "D) A semantic mismatch"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-03-032] Semantic Information Elicitation \u2014 https://gistbok-topics.ucgis.org/FC-03-032 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 37,
+            domain: "Geospatial Data",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? For hydrographic surveying, what instrument commonly measures water depth using sound travel time?",
+            options: ["A) False precision", "B) Echo sounder or sonar", "C) Signal travel time between transmitters and receivers", "D) Linear interpolation along the segment"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-05-041] Ocean Surveying \u2014 https://gistbok-topics.ucgis.org/DC-05-041 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 38,
+            domain: "Conceptual Foundations",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. Why can Euclidean straight-line distance be misleading in accessibility analysis?",
+            options: ["A) 1 km", "B) Network/Manhattan-style distance", "C) Travel may be constrained by networks, barriers, and impedance", "D) Interaction or similarity often decreases as distance increases"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-05-017] Proximity and Distance Decay \u2014 https://gistbok-topics.ucgis.org/FC-05-017 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 39,
+            domain: "Geospatial Data",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? A road dataset is geometrically current but its speed-limit attributes are years out of date. Which quality dimension is most problematic?",
+            options: ["A) Thematic accuracy", "B) Integrated georeferenced data capture at the source", "C) Temporal currency of attributes", "D) Completeness, positional/thematic accuracy, provenance, and update patterns"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-07-057] Data Evaluation, Metadata, and Data Quality \u2014 https://gistbok-topics.ucgis.org/DM-07-057 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 40,
+            domain: "Data Modeling",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. One parcel can have many inspection records. What relationship cardinality is this?",
+            options: ["A) Foreign key", "B) One-to-many relationship", "C) Primary key", "D) One-to-many"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-01-003] Relational DBMS and their Spatial Extensions \u2014 https://gistbok-topics.ucgis.org/DM-01-003 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 41,
+            domain: "Conceptual Foundations",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? In this context, which statement most accurately describes the primary role of a horizontal geodetic datum?",
+            options: ["A) Equal-area projection", "B) Define how a reference ellipsoid is positioned and oriented relative to Earth", "C) Conformal projection", "D) Equidistant projection for the stated origin/lines"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 42,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. In an agent-based evacuation model, what is an agent?",
+            options: ["A) Local-rule dynamic simulation", "B) Feature importance or local-attribution information showing why predictions were made", "C) It should increase", "D) An individual decision-making entity with behavior rules and interactions"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-07-079] Agent-based Modeling \u2014 https://gistbok-topics.ucgis.org/AM-07-079 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 43,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? A Moran\u2019s I value is strongly positive and statistically significant. What is the most likely interpretation?",
+            options: ["A) Similar values tend to occur near one another", "B) Getis-Ord Gi*", "C) Global Moran\u2019s I", "D) Anselin Local Moran\u2019s I"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-05-037] Spatial Autocorrelation \u2014 https://gistbok-topics.ucgis.org/FC-05-037 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 44,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. Why is Landsat especially valuable for environmental change analysis?",
+            options: ["A) It provides a long, consistent Earth-observation record", "B) Spatial resolution", "C) Spectral resolution", "D) Temporal resolution"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-03-032] Landsat \u2014 https://gistbok-topics.ucgis.org/DC-03-032 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 45,
+            domain: "GI & Society",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? A client asks a GIS professional to omit neighborhoods that weaken the client argument. What is the best professional response?",
+            options: ["A) Different groupings can change representation, compactness, community grouping, and political outcomes", "B) Misleading cartographic framing despite technically correct data", "C) Document the concern and avoid misleading representation while communicating limitations and ethical implications", "D) Re-identification and location privacy"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [GS-02-011] Professional and Practical Ethics of GIS&T \u2014 https://gistbok-topics.ucgis.org/GS-02-011 | Blueprint domain resource: https://geospacebok.eu/GS"
+        },
+        {
+            id: 46,
+            domain: "Data Modeling",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. A semantic query asks for schools near major roads. Why is this more complex than simple equality matching?",
+            options: ["A) Foreign key", "B) Terms such as near and major require spatial and semantic definitions", "C) One-to-many relationship", "D) Primary key"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-04-078] Geospatial Semantic Queries \u2014 https://gistbok-topics.ucgis.org/DM-04-078 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 47,
+            domain: "Design of Systems",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? Why are reproducible environments and locked dependencies important?",
+            options: ["A) They reduce failures caused by different library versions across machines", "B) Increasing CPU, memory, or other resources on an existing server", "C) Intermittent connectivity, battery, touch UI, sensors, and offline synchronization", "D) Distribute large spatial processing tasks across computing nodes using map/reduce patterns"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [PD-01-009] Modern Programming Libraries and Infrastructures for Raster Data Analysis \u2014 https://gistbok-topics.ucgis.org/PD-01-009 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 48,
+            domain: "Conceptual Foundations",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. Why is time often modeled differently from ordinary spatial dimensions?",
+            options: ["A) The smallest spatial detail or ground sampling dimension represented", "B) Time has directional/order relations such as before and after", "C) Whether data correctly represent the relevant time or update state", "D) Spatiotemporal data"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-06-102] Volumes and Space-Time Volumes \u2014 https://gistbok-topics.ucgis.org/AM-06-102 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 49,
+            domain: "Data Modeling",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? Which resampling method is usually safest for categorical land-cover classes?",
+            options: ["A) Foreign key", "B) One-to-many relationship", "C) Nearest neighbor", "D) Primary key"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-06-087] Raster resampling \u2014 https://gistbok-topics.ucgis.org/DM-06-087 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 50,
+            domain: "Geospatial Data",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. In this context, which statement most accurately describes a primary geospatial data source?",
+            options: ["A) Whether expected geographic features or records are present", "B) Data collected directly for the observation task, such as field GNSS measurements", "C) Integrated georeferenced data capture at the source", "D) Existing data collected previously by another process and reused"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 51,
+            domain: "Geospatial Data",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? Control points for georeferencing should ideally be what?",
+            options: ["A) Well-distributed, clearly identifiable, stable locations visible in both source and reference data", "B) Georeference it using control points tied to known coordinates", "C) Control-point distribution or transformation choice may be inadequate despite low local residuals", "D) It provides observations against which mapped classes can be compared"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-01-030] Georeferencing and Georectification \u2014 https://gistbok-topics.ucgis.org/DC-01-030 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 52,
+            domain: "Thematic & Application Domains",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. An architect evaluates solar exposure, land use, transit access, and neighborhood context before site design. What is GIS contributing?",
+            options: ["A) Travel impedance plus reachable opportunities, not distance alone", "B) Business site-selection and multi-criteria location analysis", "C) Combine crash data with traffic or exposure measures and appropriate spatial/statistical analysis", "D) Site and context analysis integrating spatial constraints and opportunities"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DA-003] GIS&T in Architecture \u2014 https://gistbok-topics.ucgis.org/DA-003 | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 53,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? Why are ground control points used in UAS photogrammetry?",
+            options: ["A) Spectral resolution", "B) Improve georeferencing and absolute positional accuracy of reconstructed products", "C) Temporal resolution", "D) Spatial resolution"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-04-038] Structure from Motion Photogrammetry \u2014 https://gistbok-topics.ucgis.org/DC-04-038 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 54,
+            domain: "Data Modeling",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. Why can a hexagonal grid be advantageous for neighborhood analysis?",
+            options: ["A) Each cell has six equidistant edge-sharing neighbors", "B) Foreign key", "C) One-to-many relationship", "D) Primary key"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-02-009] The Hexagonal Model \u2014 https://gistbok-topics.ucgis.org/DM-02-009 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 55,
+            domain: "Data Modeling",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? A TIN represents terrain using what geometric structure?",
+            options: ["A) Primary key", "B) Foreign key", "C) Connected non-overlapping triangles with elevation at vertices", "D) One-to-many relationship"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: GIS&T BoK | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 56,
+            domain: "Thematic & Application Domains",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. A conservation planner wants to identify habitat corridors between protected areas. Which analysis is most appropriate?",
+            options: ["A) Cost-distance or connectivity modeling using landscape resistance", "B) Pedestrian network analysis", "C) Resistance surfaces and least-cost, circuit, or connectivity analysis", "D) Combine crash data with traffic or exposure measures and appropriate spatial/statistical analysis"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DA-001] GIS&T and Agriculture \u2014 https://gistbok-topics.ucgis.org/DA-001 | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 57,
+            domain: "Organizational & Institutional Aspects",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? What does a work breakdown structure do?",
+            options: ["A) The sequence of dependent tasks that determines the shortest possible project duration", "B) Define objectives, deliverables, boundaries, assumptions, and major constraints", "C) Decomposes project deliverables into manageable tasks or work packages", "D) Benefits or value gained relative to costs invested"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [KE-04-012] GIS&T Project Planning and Management \u2014 https://gistbok-topics.ucgis.org/KE-04-012 | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 58,
+            domain: "Organizational & Institutional Aspects",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. Why should enterprise GIS architecture consider peak concurrent users rather than average users alone?",
+            options: ["A) Users need skills to use systems correctly and consistently", "B) They define expected availability, support, performance, and responsibilities", "C) Capacity must handle periods of highest realistic demand", "D) Organizational mission, business processes, users, data, and long-term priorities"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [KE-04-017] The Benefits and Costs of Enterprise GIS Implementations \u2014 https://gistbok-topics.ucgis.org/KE-04-017 | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 59,
+            domain: "Data Modeling",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? Which data model is usually most natural for an elevation surface sampled on a regular grid?",
+            options: ["A) One-to-many relationship", "B) Foreign key", "C) Primary key", "D) Raster"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-02-007] The Raster Data Model \u2014 https://gistbok-topics.ucgis.org/DM-02-007 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 60,
+            domain: "Conceptual Foundations",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. A flood model reports a probability surface rather than a binary flood/no-flood surface. What advantage does that provide?",
+            options: ["A) It can represent finer spatial detail", "B) It communicates graded uncertainty or risk instead of false certainty", "C) A geographic field", "D) Uncertainty describes lack of certainty; error is a difference from a reference or true value"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [FC-07-024] Conceptual Models of Error and Uncertainty \u2014 https://gistbok-topics.ucgis.org/FC-07-024 | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 61,
+            domain: "Design of Systems",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? What does validation ask in software or model development?",
+            options: ["A) Integrated computing, data, networks, software, and collaboration for data-intensive science", "B) Does the system adequately represent or solve the intended real-world problem?", "C) Did we build the system correctly according to specifications?", "D) Tracked history, collaboration, branching, and rollback of code and configuration"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [PD-02-025] Verification & Validation of Applied GIS Research \u2014 https://gistbok-topics.ucgis.org/PD-02-025 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 62,
+            domain: "Design of Systems",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. In this context, which statement most accurately describes the purpose of API authentication?",
+            options: ["A) Components work correctly together across interfaces", "B) A web interface exposing resources and actions through HTTP requests and structured responses", "C) Small components or functions behave as expected in isolation", "D) Control and verify access to protected services or resources"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [PD-03-019] GIS APIs \u2014 https://gistbok-topics.ucgis.org/PD-03-018 | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 63,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? In aerial photo interpretation, which cue refers to differences in image brightness?",
+            options: ["A) Temporal resolution", "B) Spatial resolution", "C) Tone", "D) Spectral resolution"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-04-012] Fundamentals of Aerial Photo Interpretation \u2014 https://gistbok-topics.ucgis.org/DC-04-012 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 64,
+            domain: "Geospatial Data",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. Mobile-phone location data can support movement analysis but raise what major concern?",
+            options: ["A) Probability-based random sampling", "B) Privacy plus sampling and representation bias", "C) Historical sources can embody selective representation and institutional bias", "D) It ensures representation of important subgroups or regions and can reduce variance"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-02-005] Mobile Applications and Technologies \u2014 https://gistbok-topics.ucgis.org/DC-02-005 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 65,
+            domain: "GI & Society",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? In this context, which statement most accurately describes a central goal of Public Participation GIS?",
+            options: ["A) Meaningfully involve communities in creating, interpreting, or using geographic information for decisions", "B) Balance public value and access with legitimate security and privacy risks", "C) A resource can be nearby yet difficult for some groups to reach or use", "D) Participants may differ in access, voice, time, technical skill, and influence over decisions"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [GS-02-06] Public Participation GIS \u2014 https://gistbok-topics.ucgis.org/GS-02-06 | Blueprint domain resource: https://geospacebok.eu/GS"
+        },
+        {
+            id: 66,
+            domain: "Geospatial Data",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. Time-of-arrival localization estimates location using what basic measurement?",
+            options: ["A) A signal reaches the receiver by reflected paths as well as the direct path", "B) Echo sounder or sonar", "C) Addresses can change, be duplicated, or represent locations differently over time", "D) Signal travel time between transmitters and receivers"],
+            correct: "D",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-02-039] Time-of-Arrival (TOA) Localization for Indoor GIS \u2014 https://gistbok-topics.ucgis.org/DC-02-039 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 67,
+            domain: "Cartography & Visualization",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? Geovisual analytics combines interactive visualization with what?",
+            options: ["A) Analytical computation to support exploratory reasoning", "B) Diverging color scheme", "C) Sequential color scheme", "D) Qualitative color scheme"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-05-036] Geovisual Analytics \u2014 https://gistbok-topics.ucgis.org/CV-05-036 | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 68,
+            domain: "Data Modeling",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. In this context, which statement most accurately describes one unavoidable consequence of converting precise vector boundaries to a raster grid?",
+            options: ["A) Primary key", "B) Foreign key", "C) Boundaries are represented at finite cell resolution", "D) One-to-many relationship"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DM-06-086] Vector-to-Raster and Raster-to-Vector Conversions \u2014 https://gistbok-topics.ucgis.org/DM-06-086 | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 69,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? A land-cover classification has 90% overall accuracy but one rare class has very low producer\u2019s accuracy. What does the low producer\u2019s accuracy indicate?",
+            options: ["A) Overfitting", "B) Many reference pixels of that class were omitted/misclassified", "C) The result is sensitive to positional uncertainty", "D) Many pixels mapped as that class are actually other classes, a commission-error problem"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-09-104] Thematic Accuracy Assessment \u2014 https://gistbok-topics.ucgis.org/AM-09-104 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 70,
+            domain: "Thematic & Application Domains",
+            question: "A project team is documenting a defensible professional workflow. Several choices could produce related outputs; choose the one that most directly answers the question. A retail analyst compares candidate stores using demographics, competitors, and drive-time trade areas. What type of analysis is this?",
+            options: ["A) Multi-criteria suitability analysis", "B) Business site-selection and multi-criteria location analysis", "C) Site and context analysis integrating spatial constraints and opportunities", "D) Network service areas intersected with population data"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-05-046] Location-allocation modeling \u2014 https://gistbok-topics.ucgis.org/AM-05-046 | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 71,
+            domain: "Analytical Methods & GeoComputation",
+            question: "The analyst wants to avoid a method that is merely convenient but does not exactly match the stated spatial or statistical objective. Which answer is best? Compared with a fixed-resolution raster DEM, how can a TIN allocate more detail to complex terrain?",
+            options: ["A) Use denser vertices/triangles in complex areas and fewer in simple areas", "B) Flow accumulation", "C) Fill sinks/depressions", "D) Flow direction"],
+            correct: "A",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-04-072] TIN-based Models and Terrain Metrics \u2014 https://gistbok-topics.ucgis.org/AM-04-072 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 72,
+            domain: "Geospatial Data",
+            question: "Choose the most appropriate method given the stated assumptions and intended interpretation, not simply a method that could produce a visually similar result. Why can GNSS accuracy degrade in an urban canyon?",
+            options: ["A) A signal reaches the receiver by reflected paths as well as the direct path", "B) Satellite signals are often weak or unavailable indoors", "C) Buildings block and reflect signals, causing poor geometry and multipath", "D) Poor satellite geometry and potentially less precise positioning"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-02-003] Global Navigation Satellite Systems \u2014 https://gistbok-topics.ucgis.org/DC-02-003 | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 73,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Which option would be the strongest methodological choice for this GIS task, recognizing that the alternatives are also legitimate GIS techniques? A Getis-Ord Gi* z-score is large and positive with a very small p-value. How should the feature be interpreted?",
+            options: ["A) Anselin Local Moran\u2019s I", "B) Global Moran\u2019s I", "C) It is part of a statistically significant cluster of high values", "D) Getis-Ord Gi*"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [AM-03-058] Hot Spots and Getis-Ord Gi* Analysis \u2014 https://gistbok-topics.ucgis.org/AM-03-058 | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 74,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A GIS analyst must choose among several technically plausible approaches. Select the best option for the stated objective. Why can two surfaces at the same temperature have different thermal radiance?",
+            options: ["A) Temporal resolution", "B) Spatial resolution", "C) They can have different emissivity", "D) Spectral resolution"],
+            correct: "C",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [DC-03-034] Multispectral and Thermal Imagery: RGB and LWIR Sensors \u2014 https://gistbok-topics.ucgis.org/DC-03-034 | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 75,
+            domain: "Cartography & Visualization",
+            question: "Assume the input data are valid and appropriately projected unless stated otherwise. Which approach best satisfies the analytical requirement? An animated map is especially useful for showing what?",
+            options: ["A) Diverging color scheme", "B) Temporal change or movement through sequential states", "C) Sequential color scheme", "D) Qualitative color scheme"],
+            correct: "B",
+            explanation: "The correct answer follows the GIS/geospatial principle or workflow described in this scenario.",
+            reference: "GIS&T BoK remediation: [CV-04-017] Spatiotemporal Representation \u2014 https://gistbok-topics.ucgis.org/CV-04-017 | Blueprint domain resource: https://geospacebok.eu/CV"
+        }
+    ];
+
+    // Dynamic Interface Builder: Injects the 75 questions into the DOM framework
+    function buildQuizInterface() {
+        const target = document.getElementById('questions-container');
+        target.innerHTML = '';
+
+        examQuestions.forEach((q) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'card';
+            
+            let choicesHTML = '';
+            q.options.forEach((choice) => {
+                const choiceLetter = choice.trim().charAt(0); // Extracts A, B, C, or D
+                choicesHTML += `
+                    <label class="option-label">
+                        <input type="radio" name="item-${q.id}" value="${choiceLetter}" required>
+                        ${choice}
+                    </label>
+                `;
+            });
+
+            wrapper.innerHTML = `
+                <div class="question-header">
+                    <span class="question-num">Question ${q.id} of ${examQuestions.length}</span>
+                    <span class="domain-tag">${q.domain}</span>
+                </div>
+                <div class="question-text">${q.id}. ${q.question}</div>
+                <div class="options-container">
+                    ${choicesHTML}
+                </div>
+            `;
+            target.appendChild(wrapper);
+        });
+    }
+
+    // Performance Metric Processor: Scores inputs and builds the remediation report
+    async function scoreExam() {
+        const form = document.getElementById('exam-form');
+        if (!form.checkValidity()) {
+            alert("Validation Error: Please review the test form. You must select an answer for all 75 questions prior to submitting.");
+            return;
+        }
+
+        let scoreCount = 0;
+        const remContainer = document.getElementById('remediation-container');
+        const remHeaderZone = document.getElementById('remediation-header-zone');
+        
+        remContainer.innerHTML = ''; // Clear prior runs
+        remHeaderZone.innerHTML = '';
+        const remediationPayload = [];
+
+        // Tracker dictionary mapping errors across domains
+        const statisticsTracker = {};
+        examQuestions.forEach(q => {
+            if(!statisticsTracker[q.domain]) {
+                statisticsTracker[q.domain] = { total: 0, correct: 0 };
+            }
+            statisticsTracker[q.domain].total++;
+        });
+
+        // Evaluate choices
+        examQuestions.forEach((q) => {
+            const picked = document.querySelector(`input[name="item-${q.id}"]:checked`).value;
+            
+            if (picked === q.correct) {
+                scoreCount++;
+                statisticsTracker[q.domain].correct++;
+            } else {
+                // Compile targeted remediation entry for wrong response
+                const block = document.createElement('div');
+                block.className = 'card remediation-item';
+                block.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-num" style="color: var(--danger);">Study Required — Item ${q.id}</span>
+                        <span class="domain-tag">${q.domain}</span>
+                    </div>
+                    <div class="question-text">${q.question}</div>
+                    <p><strong>Your Selection:</strong> <span class="badge-wrong">${picked}</span></p>
+                    <p><strong>Validated Target Answer:</strong> <span class="badge-correct">${q.correct}</span></p>
+                    <div class="feedback-box">
+                        <strong>Structural Explanation:</strong> ${q.explanation}
+                        <br>
+                        <div class="ref-tag">Course Framework Reference: ${q.reference}</div>
+                    </div>
+                `;
+                remContainer.appendChild(block);
+                const selectedText = q.options.find(o => o.trim().startsWith(picked + ')')) || picked;
+                const correctText = q.options.find(o => o.trim().startsWith(q.correct + ')')) || q.correct;
+                remediationPayload.push({
+                    id: q.id,
+                    domain: q.domain,
+                    question: q.question,
+                    selected: selectedText,
+                    correct: correctText,
+                    explanation: q.explanation,
+                    reference: q.reference
+                });
+            }
+        });
+
+        // Compute scores
+        const rawPercentage = Math.round((scoreCount / examQuestions.length) * 100);
+        let weightedTotal = 0;
+        Object.entries(statisticsTracker).forEach(([domainName, stats]) => {
+            const accuracy = stats.total ? stats.correct / stats.total : 0;
+            weightedTotal += accuracy * (blueprintWeights[domainName] || 0);
+        });
+        const finalPercentage = Math.round(weightedTotal * 10) / 10;
+        const completedAt = new Date().toISOString();
+        const savedResult = {
+            version: 15,
+            examSet: 5,
+            difficulty: "Difficult",
+            difficultyCode: "C",
+            completedAt,
+            weightedScore: finalPercentage,
+            rawCorrect: scoreCount,
+            rawPercent: rawPercentage,
+            domains: Object.fromEntries(Object.entries(statisticsTracker).map(([d,s]) => [d, {
+                correct: s.correct,
+                total: s.total,
+                percent: s.total ? Math.round((s.correct/s.total)*1000)/10 : 0,
+                weight: blueprintWeights[d] || 0
+            }])),
+            remediation: remediationPayload
+        };
+        try {
+            document.getElementById('save-status').textContent = 'Saving result to your student record…';
+            await GISPEDB.saveAttempt(savedResult);
+            document.getElementById('save-status').textContent = '✓ Result saved to your student portal.';
+            document.getElementById('save-status').style.color = 'var(--success)';
+        } catch(e) {
+            document.getElementById('save-status').textContent = 'Result could not be saved: ' + e.message;
+            document.getElementById('save-status').style.color = 'var(--danger)';
+        }
+        document.getElementById('score-percent').innerText = finalPercentage + "%";
+        document.getElementById('score-raw').innerText = `${scoreCount} out of ${examQuestions.length} Questions Correct (raw ${rawPercentage}%)`;
+        
+        const cardRef = document.getElementById('score-card');
+        const labelRef = document.getElementById('pass-label');
+        
+        if (finalPercentage >= 75) {
+            cardRef.style.borderTop = "10px solid var(--success)";
+            labelRef.innerText = "PASSED: Competency Standard Satisfied";
+            labelRef.style.color = "var(--success)";
+        } else {
+            cardRef.style.borderTop = "10px solid var(--danger)";
+            labelRef.innerText = "REMEDIATION NEEDED: Below 75% Target Threshold";
+            labelRef.style.color = "var(--danger)";
+        }
+
+        // Build dynamic domain statistics reporting table
+        const tableBody = document.getElementById('domain-breakdown-body');
+        tableBody.innerHTML = '';
+        for (const [domainName, stats] of Object.entries(statisticsTracker)) {
+            const rate = Math.round((stats.correct / stats.total) * 100);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${domainName}</strong></td>
+                <td>${blueprintWeights[domainName] || 0}%</td>
+                <td style="font-weight: bold; color: ${rate >= 75 ? 'var(--success)' : 'var(--danger)'};">${stats.correct}/${stats.total} (${rate}%)</td>
+            `;
+            tableBody.appendChild(tr);
+        }
+
+        // Add remediation section header
+        const headerCard = document.createElement('div');
+        headerCard.className = 'card';
+        if(finalPercentage === 100) {
+            headerCard.innerHTML = `<h2 style="color: var(--success); margin:0;">Perfect Score! Excellent work.</h2><p style="margin:5px 0 0 0;">You demonstrated mastery across all 11 blueprint domains.</p>`;
+        } else {
+            headerCard.innerHTML = `<h2 style="color: var(--primary); margin:0;">Custom Study & Remediation Plan</h2><p style="margin:5px 0 0 0;">Review the references below for the ${75 - scoreCount} questions answered incorrectly to improve your understanding.</p>`;
+        }
+        remHeaderZone.appendChild(headerCard);
+
+        // Toggle layouts and reset viewport scroll position
+        document.getElementById('quiz-interface').style.display = 'none';
+        document.getElementById('results-dashboard').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    // Execute application load sequence
+    window.onload = async function() {
+        try {
+            const profile = await GISPEDB.studentProfile();
+            if(!profile) {
+                location.href = '../login.html?next=' + encodeURIComponent('exams/PreGISP_GISP-E_Practice_Exam_Version_5.html');
+                return;
+            }
+            document.getElementById('student-identity').textContent = profile.display_name + ' • Exam 5C — Difficult';
+            buildQuizInterface();
+        } catch(e) {
+            alert('Unable to load your student session: ' + e.message);
+            location.href = '../login.html';
+        }
+    };
+</script>
+
+</body>
+</html>
