@@ -1,0 +1,8 @@
+BUCKNELL GISP-E BRANDING AND COLOR UPDATE
+
+Visible program title: Bucknell GISP-E / PreGISP Preparation Program
+Main-page subtitle: Practice • Diagnose • Remediate • Master
+
+Official colors: Bucknell Blue #003865; Bucknell Orange #E87722; White #FFFFFF; Cool Gray 1 #D9D9D6; Cool Gray 6 #A7A8AA.
+
+Upload the CONTENTS of this folder into the same GitHub directory that contains the live index.html. Allow GitHub to replace files with matching names. This patch contains HTML only and does not alter assets/config.js, Supabase, database files, student accounts, exam history, or the website URL.
