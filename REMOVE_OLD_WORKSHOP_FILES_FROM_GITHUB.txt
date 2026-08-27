@@ -1,0 +1,1 @@
+After uploading this update, delete student/workshops.html, admin/workshops.html, and the top-level workshops folder from GitHub. They are retired and no current page links to them. Your existing assets/config.js must remain in place.

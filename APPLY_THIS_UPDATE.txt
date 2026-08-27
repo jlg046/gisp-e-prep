@@ -1,7 +1,8 @@
-BUCKNELL GISP-E COMPLETE WEBSITE UPDATE
+BUCKNELL GISP-E TEXTBOOK PATHWAY UPDATE
 
-This package contains the consolidated content, calendar, countdown, ESRI remediation, Recommended Focus repair, and workshop-material updates.
-
-IMPORTANT: assets/config.js is intentionally excluded. Leave the existing configured assets/config.js in GitHub. Do not delete the live site before uploading this update. No Supabase SQL or database migration is required.
-
-Upload the CONTENTS of Bucknell_GISPE_Complete_Website_Update into the same GitHub directory that contains the live index.html, allow matching files to be replaced, commit, wait for GitHub Pages to deploy, then use Ctrl+F5. Test student login, Recommended Focus, Missed Items, workshop downloads, ESRI Training, countdown and admin login.
+1. Unzip this package.
+2. Upload the CONTENTS of Bucknell_GISPE_Complete_Website_Update to the root of your GitHub Pages repository, preserving folders.
+3. Keep your existing assets/config.js file; this package intentionally does not include or replace it.
+4. Delete student/workshops.html, admin/workshops.html, and the top-level workshops folder from GitHub because that pathway is retired.
+5. Commit the upload, wait for GitHub Pages to deploy, then use Ctrl+F5.
+6. Test student login, Recommended Focus, Missed Items, Textbook Pathway, chapter review downloads, ESRI Training, calendar, countdown, and admin login.
