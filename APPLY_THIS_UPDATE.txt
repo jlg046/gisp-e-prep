@@ -1,13 +1,7 @@
-BUCKNELL GISP-E WEBSITE CONTENT UPDATE
-Launch date: September 7, 2026
+BUCKNELL GISP-E COMPLETE WEBSITE UPDATE
 
-This is a full website-content package EXCEPT assets/config.js. That file is intentionally excluded so this update cannot overwrite your working Supabase URL and publishable key.
+This package contains the consolidated content, calendar, countdown, ESRI remediation, Recommended Focus repair, and workshop-material updates.
 
-Deployment:
-1. Back up the current GitHub repository.
-2. Upload/replace the files and folders in this package in the same repository.
-3. Leave the existing assets/config.js file in place.
-4. Do not rerun database_setup.sql or MIGRATE_TO_18_EXAMS.sql. No database change is required.
-5. After GitHub Pages finishes deploying, test student login, one workshop guide, Esri Training, both GIS Book of Knowledge sort modes, and the admin portal.
+IMPORTANT: assets/config.js is intentionally excluded. Leave the existing configured assets/config.js in GitHub. Do not delete the live site before uploading this update. No Supabase SQL or database migration is required.
 
-The package adds 12 workshop guides, repairs workshop links, adds student/admin Esri Training pages, shifts the calendar to the September 7 launch, and renames/enhances the coverage pages.
+Upload the CONTENTS of Bucknell_GISPE_Complete_Website_Update into the same GitHub directory that contains the live index.html, allow matching files to be replaced, commit, wait for GitHub Pages to deploy, then use Ctrl+F5. Test student login, Recommended Focus, Missed Items, workshop downloads, ESRI Training, countdown and admin login.

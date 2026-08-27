@@ -19,3 +19,5 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 .btn:hover{box-shadow:inset 0 -4px 0 var(--orange)}
 th{border-bottom:2px solid var(--cool-gray-6)}
 .card,.hero,.kpi,.login-card{box-shadow:0 1px 2px rgba(0,56,101,.06)}
+
+.countdown-card{background:var(--navy);color:var(--white);border-left:7px solid var(--orange);border-radius:10px;padding:18px 22px;margin-bottom:20px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.countdown-card strong{font-size:1.35rem}.countdown-card span{font-weight:600}.focus-domain{border-left:5px solid var(--orange)}.focus-domain h4{margin:0 0 6px;color:var(--navy)}.resource-list li{margin-bottom:6px}.plan-step{margin:8px 0;padding-left:4px}

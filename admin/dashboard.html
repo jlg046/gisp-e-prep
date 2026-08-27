@@ -1,8 +1,8 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Administrator Dashboard | GISP-E Prep</title><link rel="stylesheet" href="../assets/site.css"></head><body>
 <header class="site"><div class="wrap"><div class="topline"><div class="brand"><div><h1>Bucknell GISP-E / PreGISP Preparation Program</h1><p>Administrator Portal</p></div></div><button class="btn secondary" onclick="logout()">Sign out</button></div>
-<div class="nav"><a href="dashboard.html">Cohort Dashboard</a><a href="workshops.html">Workshop Materials</a><a href="esri-training.html">Esri Training</a><a href="coverage.html">GIS Book of Knowledge</a></div></div></header>
-<main><div class="wrap"><section class="hero"><div class="topline"><div><h2>Administrator Progress & Mastery Tracker</h2><p>Student submissions are read directly from the central database. The dashboard refreshes automatically every 20 seconds.</p></div><div><span class="status-dot"></span><span id="refreshStatus" class="small">Loading…</span></div></div></section>
+<div class="nav"><a href="dashboard.html">Cohort Dashboard</a><a href="workshops.html">Workshop Materials</a><a href="esri-training.html">ESRI Training</a><a href="coverage.html">GIS Book of Knowledge</a></div></div></header>
+<main><div class="wrap"><section class="countdown-card" id="examCountdown" aria-live="polite"></section><section class="hero"><div class="topline"><div><h2>Administrator Progress & Mastery Tracker</h2><p>Student submissions are read directly from the central database. The dashboard refreshes automatically every 20 seconds.</p></div><div><span class="status-dot"></span><span id="refreshStatus" class="small">Loading…</span></div></div></section>
 
 <section class="card"><h3>Create student login</h3><div class="input-row">
 <label>Student name<input id="newName" placeholder="Jane Smith"></label>
@@ -55,4 +55,4 @@ async function createStudent(){createMsg.textContent='';try{const r=await GISPED
 async function resetPin(id,name){const p=prompt('Enter a new PIN for '+name+':');if(!p)return;await GISPEDB.adminResetPin(id,p);alert('PIN reset. Existing student browser sessions were invalidated.')}
 async function toggleActive(id,active){if(!confirm('Deactivate this student login? Existing sessions will stop working.'))return;await GISPEDB.adminSetActive(id,active);await refresh()}
 function logout(){GISPEDB.adminLogout();location.href='login.html'}init().catch(e=>{document.querySelector('main .wrap').innerHTML='<section class="card"><h2>Unable to load administrator portal</h2><p class="error">'+e.message+'</p></section>'});
-</script></body></html>
+</script><script src="../assets/countdown.js"></script></body></html>
