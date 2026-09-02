@@ -4,7 +4,7 @@
 <div class="nav"><a href="dashboard.html">Cohort Dashboard</a><a href="calendar.html">Fall 2026 Calendar</a><a href="textbook.html">Textbook Pathway</a><a href="esri-training.html">ESRI Training Pathway</a><a href="coverage.html">GIS Book of Knowledge Pathway</a></div></div></header>
 <main><div class="wrap"><section class="countdown-card" id="examCountdown" aria-live="polite"></section><section class="hero"><div class="topline"><div><h2>Administrator Progress & Mastery Tracker</h2><p>Student submissions are read directly from the central database. The dashboard refreshes automatically every 20 seconds.</p></div><div><span class="status-dot"></span><span id="refreshStatus" class="small">Loading…</span></div></div></section>
 
-<section class="card"><div class="topline"><div><h3>Dashboard cohort</h3><p class="small">Choose one cohort to evaluate it independently, or choose All Cohorts for program-wide results and cohort comparison.</p></div><label>Cohort <select id="cohortFilter" onchange="render()"><option value="ALL">All Cohorts</option></select></label></div></section>
+<section class="card"><div class="topline"><div><h3>Dashboard filters</h3><p class="small">Choose a cohort for cohort-specific analytics. Use Student status to show active students, inactive students, or everyone in the student management table.</p></div><div class="input-row"><label>Cohort <select id="cohortFilter" onchange="render()"><option value="ALL">All Cohorts</option></select></label><label>Student status <select id="statusFilter" onchange="render()"><option value="ACTIVE">Active Students</option><option value="INACTIVE">Inactive Students</option><option value="ALL">All Students</option></select></label></div></div></section>
 
 <section class="card"><h3>Create student login</h3><div class="input-row">
 <label>Student name<input id="newName" placeholder="Jane Smith"></label>
@@ -20,8 +20,8 @@
 
 <section class="card"><h3>Cohort support priorities</h3><div id="priorities">Loading…</div></section>
 
-<section class="card"><h3>Student progress overview</h3><div class="table-wrap"><table><thead><tr>
-<th>Student</th><th>Cohort</th><th>Attempts</th><th>Baseline</th><th>Latest</th><th>Change</th><th>Weighted mastery</th><th>Lowest domain</th><th>Manage</th>
+<section class="card"><h3>Student progress &amp; login management</h3><p class="small">The Student status filter controls this table. Inactive students retain their account and exam history and can be reactivated here.</p><div class="table-wrap"><table><thead><tr>
+<th>Student</th><th>Status</th><th>Cohort</th><th>Attempts</th><th>Baseline</th><th>Latest</th><th>Change</th><th>Weighted mastery</th><th>Lowest domain</th><th>Manage</th>
 </tr></thead><tbody id="studentRows"></tbody></table></div></section>
 
 <section class="card"><h3>Student-by-domain mastery matrix</h3><div class="table-wrap"><table><thead><tr><th>Student</th>
@@ -65,15 +65,22 @@ function renderCohortComparison(){
 }
 function render(){
  const selected=document.getElementById('cohortFilter')?.value||'ALL';
+ const status=document.getElementById('statusFilter')?.value||'ACTIVE';
+ // Cohort analytics intentionally remain based on ACTIVE students only.
  const active=STUDENTS.filter(s=>s.active&&(selected==='ALL'||cohortName(s)===selected));const sums=active.map(summarize);
  const studentIds=new Set(active.map(s=>s.id));const filteredAttempts=ATTEMPTS.filter(a=>studentIds.has(a.student_id));
  studentCount.textContent=active.length;baselineCount.textContent=sums.filter(x=>x.base).length;attemptCount.textContent=filteredAttempts.length;
  const valid=sums.filter(x=>x.wm!=null);cohortMastery.textContent=valid.length?(valid.reduce((a,b)=>a+b.wm,0)/valid.length).toFixed(1)+'%':'—';
- studentRows.innerHTML=sums.length?'':'<tr><td colspan="9">No active students in this cohort.</td></tr>';
+ const managedStudents=STUDENTS.filter(s=>(selected==='ALL'||cohortName(s)===selected)&&(status==='ALL'||(status==='ACTIVE'&&s.active)||(status==='INACTIVE'&&!s.active))).map(summarize);
+ studentRows.innerHTML=managedStudents.length?'':'<tr><td colspan="10">No students match the selected cohort and status filters.</td></tr>';
  matrixRows.innerHTML=sums.length?'':'<tr><td colspan="12">No active students in this cohort.</td></tr>';
- sums.forEach(x=>{
+ managedStudents.forEach(x=>{
    const b=x.base?Number(x.base.weighted_score):null,l=x.latest?Number(x.latest.weighted_score):null,delta=b!=null&&l!=null?l-b:null;
-   studentRows.innerHTML+=`<tr><td><strong>${escapeHtml(x.s.display_name)}</strong><br><span class="small">${escapeHtml(x.s.username)}</span></td><td>${escapeHtml(cohortName(x.s))}</td><td>${x.atts.length}</td><td>${b==null?'—':b.toFixed(1)+'%'}</td><td>${l==null?'—':l.toFixed(1)+'%'}</td><td>${delta==null?'—':(delta>=0?'+':'')+delta.toFixed(1)+' pts'}</td><td class="${x.wm==null?'':cls(x.wm)}">${x.wm==null?'—':x.wm.toFixed(1)+'%'}</td><td>${x.weakest?escapeHtml(x.weakest[0])+' ('+x.weakest[1].toFixed(0)+'%)':'—'}</td><td><button class="btn secondary" onclick='changeCohort(${JSON.stringify(x.s.id)},${JSON.stringify(x.s.display_name)},${JSON.stringify(x.s.cohort||"")})'>Change cohort</button> <button class="btn secondary" onclick='resetPin(${JSON.stringify(x.s.id)},${JSON.stringify(x.s.display_name)})'>Reset PIN</button> <button class="btn danger" onclick="toggleActive('${x.s.id}',false)">Deactivate</button></td></tr>`;
+   const statusText=x.s.active?'Active':'Inactive';
+   const statusAction=x.s.active?`<button class="btn danger" onclick='toggleActive(${JSON.stringify(x.s.id)},false,${JSON.stringify(x.s.display_name)})'>Deactivate</button>`:`<button class="btn" onclick='toggleActive(${JSON.stringify(x.s.id)},true,${JSON.stringify(x.s.display_name)})'>Reactivate Student</button>`;
+   studentRows.innerHTML+=`<tr><td><strong>${escapeHtml(x.s.display_name)}</strong><br><span class="small">${escapeHtml(x.s.username)}</span></td><td><strong>${statusText}</strong></td><td>${escapeHtml(cohortName(x.s))}</td><td>${x.atts.length}</td><td>${b==null?'—':b.toFixed(1)+'%'}</td><td>${l==null?'—':l.toFixed(1)+'%'}</td><td>${delta==null?'—':(delta>=0?'+':'')+delta.toFixed(1)+' pts'}</td><td class="${x.wm==null?'':cls(x.wm)}">${x.wm==null?'—':x.wm.toFixed(1)+'%'}</td><td>${x.weakest?escapeHtml(x.weakest[0])+' ('+x.weakest[1].toFixed(0)+'%)':'—'}</td><td><button class="btn secondary" onclick='changeCohort(${JSON.stringify(x.s.id)},${JSON.stringify(x.s.display_name)},${JSON.stringify(x.s.cohort||"")})'>Change cohort</button> <button class="btn secondary" onclick='resetPin(${JSON.stringify(x.s.id)},${JSON.stringify(x.s.display_name)})'>Reset PIN</button> ${statusAction}</td></tr>`;
+ });
+ sums.forEach(x=>{
    matrixRows.innerHTML+=`<tr><td><strong>${escapeHtml(x.s.display_name)}</strong></td>${PREGISP_DOMAINS.map(d=>`<td class="${x.ds[d.name]==null?'':cls(x.ds[d.name])}">${x.ds[d.name]==null?'—':x.ds[d.name].toFixed(0)+'%'}</td>`).join('')}</tr>`;
  });
  let da=PREGISP_DOMAINS.map(d=>{const vals=sums.map(x=>x.ds[d.name]).filter(v=>v!=null);return {name:d.name,weight:d.weight,p:vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null,n:vals.length}}).filter(x=>x.p!=null).sort((a,b)=>(a.p-a.weight*.15)-(b.p-b.weight*.15));
@@ -92,6 +99,12 @@ async function changeCohort(id,name,current){
  const r=await GISPEDB.adminUpdateCohort(id,cohort);if(r && r.ok===false)throw new Error(r.message||'Could not change cohort');await refresh();
 }
 async function resetPin(id,name){const p=prompt('Enter a new PIN for '+name+':');if(!p)return;await GISPEDB.adminResetPin(id,p);alert('PIN reset. Existing student browser sessions were invalidated.')}
-async function toggleActive(id,active){if(!confirm('Deactivate this student login? Existing sessions will stop working.'))return;await GISPEDB.adminSetActive(id,active);await refresh()}
+async function toggleActive(id,active,name){
+ const action=active?'Reactivate':'Deactivate';
+ const detail=active?'Their existing username, cohort, PIN, and exam history will be retained.':'Existing login sessions will stop working, but the student record and exam history will be retained.';
+ if(!confirm(action+' '+(name||'this student')+'?\n\n'+detail))return;
+ const r=await GISPEDB.adminSetActive(id,active);if(r&&r.ok===false)throw new Error(r.message||'Could not update student status');
+ await refresh();
+}
 function logout(){GISPEDB.adminLogout();location.href='login.html'}init().catch(e=>{document.querySelector('main .wrap').innerHTML='<section class="card"><h2>Unable to load administrator portal</h2><p class="error">'+e.message+'</p></section>'});
 </script><script src="../assets/countdown.js"></script></body></html>
