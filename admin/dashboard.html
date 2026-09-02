@@ -28,7 +28,7 @@
 <th>Analytical Methods & GeoComputation</th><th>Conceptual Foundations</th><th>Data Modeling</th><th>Geospatial Data</th><th>Cartography & Visualization</th><th>Platforms, Sensors, Physics & Image Processing</th><th>Design of Systems</th><th>Organizational & Institutional Aspects</th><th>Thematic & Application Domains</th><th>GI & Society</th><th>Web-Based GIS</th>
 </tr></thead><tbody id="matrixRows"></tbody></table></div></section>
 
-<section class="card"><div class="topline"><h3>Recent submissions</h3><label>Difficulty filter <select id="tierFilter" onchange="render()"><option value="ALL">All levels</option><option value="A">Standard (A)</option><option value="B">More Challenging (B)</option><option value="C">Difficult (C)</option></select></label></div><div class="table-wrap"><table><thead><tr><th>Student</th><th>Exam</th><th>Submitted</th><th>Raw</th><th>Weighted</th><th>Missed items</th></tr></thead><tbody id="recentRows"></tbody></table></div></section>
+<section class="card"><div class="topline"><div><h3>Exam submissions</h3><p class="small">Administrators can permanently delete an individual submission when it was a test, duplicate, or accidental early submission. Deleting an attempt does not delete the student or any other attempts.</p></div><label>Difficulty filter <select id="tierFilter" onchange="render()"><option value="ALL">All levels</option><option value="A">Standard (A)</option><option value="B">More Challenging (B)</option><option value="C">Difficult (C)</option></select></label></div><div class="table-wrap"><table><thead><tr><th>Student</th><th>Exam</th><th>Submitted</th><th>Raw</th><th>Weighted</th><th>Missed items</th><th>Admin action</th></tr></thead><tbody id="recentRows"></tbody></table></div></section>
 </div></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/config.js"></script><script src="../assets/db.js"></script><script src="../assets/data.js"></script>
 <script>
@@ -85,9 +85,9 @@ function render(){
  });
  let da=PREGISP_DOMAINS.map(d=>{const vals=sums.map(x=>x.ds[d.name]).filter(v=>v!=null);return {name:d.name,weight:d.weight,p:vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null,n:vals.length}}).filter(x=>x.p!=null).sort((a,b)=>(a.p-a.weight*.15)-(b.p-b.weight*.15));
  priorities.innerHTML=da.length?'<ol>'+da.map(x=>`<li><strong>${escapeHtml(x.name)}</strong>: ${x.p.toFixed(1)}% cohort average across ${x.n} assessed student(s); ${x.weight}% blueprint weight.</li>`).join('')+'</ol>':'<p>No exam results for this cohort yet.</p>';
- const byId=Object.fromEntries(STUDENTS.map(s=>[s.id,s]));const tf=document.getElementById('tierFilter')?.value||'ALL';const rec=[...filteredAttempts].filter(a=>tf==='ALL'||(a.difficulty_code||'A')===tf).sort((a,b)=>new Date(b.completed_at)-new Date(a.completed_at)).slice(0,25);
- recentRows.innerHTML=rec.length?'':'<tr><td colspan="6">No submissions for this cohort yet.</td></tr>';
- rec.forEach(a=>{const s=byId[a.student_id];recentRows.innerHTML+=`<tr><td>${escapeHtml(s?.display_name||'Unknown')}</td><td>Exam ${a.exam_set||a.exam_version}${a.difficulty_code||'A'}<br><span class="small">${escapeHtml(a.difficulty||'Standard')}</span></td><td>${new Date(a.completed_at).toLocaleString()}</td><td>${Number(a.raw_percent).toFixed(1)}%</td><td><strong>${Number(a.weighted_score).toFixed(1)}%</strong></td><td>${Array.isArray(a.remediation)?a.remediation.length:0}</td></tr>`});
+ const byId=Object.fromEntries(STUDENTS.map(s=>[s.id,s]));const tf=document.getElementById('tierFilter')?.value||'ALL';const rec=[...filteredAttempts].filter(a=>tf==='ALL'||(a.difficulty_code||'A')===tf).sort((a,b)=>new Date(b.completed_at)-new Date(a.completed_at));
+ recentRows.innerHTML=rec.length?'':'<tr><td colspan="7">No submissions for this cohort yet.</td></tr>';
+ rec.forEach(a=>{const s=byId[a.student_id];const studentName=s?.display_name||'Unknown';const examLabel='Exam '+(a.exam_set||a.exam_version)+(a.difficulty_code||'A');recentRows.innerHTML+=`<tr><td>${escapeHtml(studentName)}</td><td>${escapeHtml(examLabel)}<br><span class="small">${escapeHtml(a.difficulty||'Standard')}</span></td><td>${new Date(a.completed_at).toLocaleString()}</td><td>${Number(a.raw_percent).toFixed(1)}%</td><td><strong>${Number(a.weighted_score).toFixed(1)}%</strong></td><td>${Array.isArray(a.remediation)?a.remediation.length:0}</td><td><button class="btn danger" onclick='deleteAttempt(${JSON.stringify(a.id)},${JSON.stringify(studentName)},${JSON.stringify(examLabel)},${JSON.stringify(a.completed_at)},${JSON.stringify(Number(a.weighted_score))})'>Delete Test</button></td></tr>`});
  renderCohortComparison();
 }
 async function createStudent(){createMsg.textContent='';try{const r=await GISPEDB.adminCreateStudent({displayName:newName.value.trim(),username:newUser.value.trim(),pin:newPin.value,cohort:newCohort.value.trim()});if(!r?.ok)throw new Error(r?.message||'Could not create student');createMsg.className='success';createMsg.textContent='Student created. Give them username '+newUser.value.trim()+' and the PIN you entered.';newName.value=newUser.value=newPin.value='';await refresh()}catch(e){createMsg.className='error';createMsg.textContent=e.message}}
@@ -105,6 +105,19 @@ async function toggleActive(id,active,name){
  if(!confirm(action+' '+(name||'this student')+'?\n\n'+detail))return;
  const r=await GISPEDB.adminSetActive(id,active);if(r&&r.ok===false)throw new Error(r.message||'Could not update student status');
  await refresh();
+}
+
+async function deleteAttempt(id,studentName,examLabel,completedAt,weightedScore){
+ const when=new Date(completedAt).toLocaleString();
+ const score=Number.isFinite(Number(weightedScore))?Number(weightedScore).toFixed(1)+'%':'—';
+ const message='Permanently delete this exam attempt?\n\nStudent: '+studentName+'\nExam: '+examLabel+'\nSubmitted: '+when+'\nWeighted score: '+score+'\n\nThis cannot be undone. The student account and all other exam attempts will remain unchanged.';
+ if(!confirm(message))return;
+ try{
+   const r=await GISPEDB.adminDeleteAttempt(id);
+   if(r&&r.ok===false)throw new Error(r.message||'Could not delete exam attempt');
+   alert('Exam attempt deleted. Dashboard metrics will now recalculate without this submission.');
+   await refresh();
+ }catch(e){alert('Delete failed: '+e.message)}
 }
 function logout(){GISPEDB.adminLogout();location.href='login.html'}init().catch(e=>{document.querySelector('main .wrap').innerHTML='<section class="card"><h2>Unable to load administrator portal</h2><p class="error">'+e.message+'</p></section>'});
 </script><script src="../assets/countdown.js"></script></body></html>
