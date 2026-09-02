@@ -1,0 +1,11 @@
+ORDER 39 DEPLOYMENT
+
+SUPABASE
+Run once: 39_ADD_ADMIN_DELETE_ATTEMPT_FUNCTION.sql
+
+GITHUB
+Replace only:
+- assets/db.js
+- admin/dashboard.html
+
+Do not replace assets/config.js.

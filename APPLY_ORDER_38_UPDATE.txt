@@ -1,0 +1,11 @@
+ORDER 38 DEPLOYMENT
+1. In GitHub, open admin/.
+2. Upload the Order 38 admin/dashboard.html over the existing dashboard.html.
+3. Commit the change.
+4. No Supabase SQL is required.
+5. Hard refresh the live Administrator Dashboard.
+6. Set Student status to Inactive Students.
+7. Click Reactivate Student for the student you want to restore.
+8. Confirm the student returns under Active Students and their prior exam history remains visible.
+
+Do not replace assets/config.js.
