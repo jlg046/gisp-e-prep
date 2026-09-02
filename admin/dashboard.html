@@ -4,6 +4,8 @@
 <div class="nav"><a href="dashboard.html">Cohort Dashboard</a><a href="calendar.html">Fall 2026 Calendar</a><a href="textbook.html">Textbook Pathway</a><a href="esri-training.html">ESRI Training Pathway</a><a href="coverage.html">GIS Book of Knowledge Pathway</a></div></div></header>
 <main><div class="wrap"><section class="countdown-card" id="examCountdown" aria-live="polite"></section><section class="hero"><div class="topline"><div><h2>Administrator Progress & Mastery Tracker</h2><p>Student submissions are read directly from the central database. The dashboard refreshes automatically every 20 seconds.</p></div><div><span class="status-dot"></span><span id="refreshStatus" class="small">Loading…</span></div></div></section>
 
+<section class="card"><div class="topline"><div><h3>Dashboard cohort</h3><p class="small">Choose one cohort to evaluate it independently, or choose All Cohorts for program-wide results and cohort comparison.</p></div><label>Cohort <select id="cohortFilter" onchange="render()"><option value="ALL">All Cohorts</option></select></label></div></section>
+
 <section class="card"><h3>Create student login</h3><div class="input-row">
 <label>Student name<input id="newName" placeholder="Jane Smith"></label>
 <label>Username<input id="newUser" placeholder="jsmith01"></label>
@@ -13,6 +15,8 @@
 <p class="small">Give the student the username and PIN you create here. The PIN is stored only as a hash in the database.</p></section>
 
 <div class="kpi-grid"><div class="kpi"><span class="small">Active students</span><b id="studentCount">—</b></div><div class="kpi"><span class="small">Students with 1A baseline</span><b id="baselineCount">—</b></div><div class="kpi"><span class="small">Total exam attempts</span><b id="attemptCount">—</b></div><div class="kpi"><span class="small">Cohort weighted mastery</span><b id="cohortMastery">—</b></div></div>
+
+<section class="card" id="cohortComparisonCard"><h3>Cohort comparison</h3><p class="small">Shown when All Cohorts is selected. Baseline is Exam 1A; Latest is each student's most recent submission.</p><div class="table-wrap"><table><thead><tr><th>Cohort</th><th>Active students</th><th>Students with baseline</th><th>Baseline avg.</th><th>Latest avg.</th><th>Avg. change</th><th>Weighted mastery</th><th>Attempts</th></tr></thead><tbody id="cohortComparisonRows"></tbody></table></div></section>
 
 <section class="card"><h3>Cohort support priorities</h3><div id="priorities">Loading…</div></section>
 
@@ -33,25 +37,60 @@ function cls(p){return p>=80?'mastery-high':p>=70?'mastery-mid':'mastery-low'}
 function domainAverages(atts){const d={};PREGISP_DOMAINS.forEach(x=>{const vals=atts.map(a=>Number(a.domains?.[x.name]?.percent)).filter(Number.isFinite);d[x.name]=vals.length?vals.reduce((s,v)=>s+v,0)/vals.length:null});return d}
 function summarize(s){const atts=ATTEMPTS.filter(a=>a.student_id===s.id).sort((a,b)=>new Date(a.completed_at)-new Date(b.completed_at));const base=atts.find(a=>(a.exam_set||a.exam_version)===1 && (a.difficulty_code||'A')==='A'), latest=atts.at(-1);const ds=domainAverages(atts);let wm=0,n=0;PREGISP_DOMAINS.forEach(d=>{if(ds[d.name]!=null){wm+=d.weight*(ds[d.name]/100);n++}});const weakest=Object.entries(ds).filter(x=>x[1]!=null).sort((a,b)=>a[1]-b[1])[0];return {s,atts,base,latest,ds,wm:atts.length?wm:null,weakest}}
 async function init(){if(!(await GISPEDB.adminValid())){location.href='login.html';return}await refresh();timer=setInterval(refresh,20000)}
-async function refresh(){try{refreshStatus.textContent='Refreshing…';[STUDENTS,ATTEMPTS]=await Promise.all([GISPEDB.adminStudents(),GISPEDB.adminAttempts()]);render();refreshStatus.textContent='Updated '+new Date().toLocaleTimeString()}catch(e){refreshStatus.textContent='Refresh failed: '+e.message}}
+async function refresh(){try{refreshStatus.textContent='Refreshing…';[STUDENTS,ATTEMPTS]=await Promise.all([GISPEDB.adminStudents(),GISPEDB.adminAttempts()]);populateCohortFilter();render();refreshStatus.textContent='Updated '+new Date().toLocaleTimeString()}catch(e){refreshStatus.textContent='Refresh failed: '+e.message}}
+function cohortName(s){return String(s.cohort||'').trim()||'Unassigned'}
+function populateCohortFilter(){
+ const sel=document.getElementById('cohortFilter');if(!sel)return;const current=sel.value||'ALL';
+ const cohorts=[...new Set(STUDENTS.map(cohortName))].sort((a,b)=>a.localeCompare(b));
+ sel.innerHTML='<option value="ALL">All Cohorts</option>'+cohorts.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+ if(current==='ALL'||cohorts.includes(current))sel.value=current;else sel.value='ALL';
+}
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function avg(nums){const v=nums.filter(Number.isFinite);return v.length?v.reduce((a,b)=>a+b,0)/v.length:null}
+function cohortSummary(label,students){
+ const activeStudents=students.filter(s=>s.active),sums=activeStudents.map(summarize),activeIds=new Set(activeStudents.map(s=>s.id)),attempts=ATTEMPTS.filter(a=>activeIds.has(a.student_id));
+ const baselines=sums.map(x=>x.base?Number(x.base.weighted_score):null).filter(Number.isFinite);
+ const latest=sums.map(x=>x.latest?Number(x.latest.weighted_score):null).filter(Number.isFinite);
+ const changes=sums.map(x=>x.base&&x.latest?Number(x.latest.weighted_score)-Number(x.base.weighted_score):null).filter(Number.isFinite);
+ const mastery=sums.map(x=>x.wm).filter(Number.isFinite);
+ return {label,students:sums.length,baselineCount:baselines.length,baselineAvg:avg(baselines),latestAvg:avg(latest),changeAvg:avg(changes),masteryAvg:avg(mastery),attempts:attempts.length};
+}
+function renderCohortComparison(){
+ const selected=document.getElementById('cohortFilter')?.value||'ALL';const card=document.getElementById('cohortComparisonCard');if(!card)return;
+ card.style.display=selected==='ALL'?'':'none';if(selected!=='ALL')return;
+ const groups={};STUDENTS.forEach(s=>{const c=cohortName(s);(groups[c]??=[]).push(s)});
+ const rows=Object.keys(groups).sort((a,b)=>a.localeCompare(b)).map(c=>cohortSummary(c,groups[c]));
+ cohortComparisonRows.innerHTML=rows.length?'':'<tr><td colspan="8">No cohorts created yet.</td></tr>';
+ rows.forEach(x=>{cohortComparisonRows.innerHTML+=`<tr><td><strong>${escapeHtml(x.label)}</strong></td><td>${x.students}</td><td>${x.baselineCount}</td><td>${x.baselineAvg==null?'—':x.baselineAvg.toFixed(1)+'%'}</td><td>${x.latestAvg==null?'—':x.latestAvg.toFixed(1)+'%'}</td><td>${x.changeAvg==null?'—':(x.changeAvg>=0?'+':'')+x.changeAvg.toFixed(1)+' pts'}</td><td>${x.masteryAvg==null?'—':x.masteryAvg.toFixed(1)+'%'}</td><td>${x.attempts}</td></tr>`});
+}
 function render(){
- const active=STUDENTS.filter(s=>s.active);const sums=active.map(summarize);
- studentCount.textContent=active.length;baselineCount.textContent=sums.filter(x=>x.base).length;attemptCount.textContent=ATTEMPTS.length;
+ const selected=document.getElementById('cohortFilter')?.value||'ALL';
+ const active=STUDENTS.filter(s=>s.active&&(selected==='ALL'||cohortName(s)===selected));const sums=active.map(summarize);
+ const studentIds=new Set(active.map(s=>s.id));const filteredAttempts=ATTEMPTS.filter(a=>studentIds.has(a.student_id));
+ studentCount.textContent=active.length;baselineCount.textContent=sums.filter(x=>x.base).length;attemptCount.textContent=filteredAttempts.length;
  const valid=sums.filter(x=>x.wm!=null);cohortMastery.textContent=valid.length?(valid.reduce((a,b)=>a+b.wm,0)/valid.length).toFixed(1)+'%':'—';
- studentRows.innerHTML=sums.length?'':'<tr><td colspan="9">No students created yet.</td></tr>';
- matrixRows.innerHTML=sums.length?'':'<tr><td colspan="12">No students created yet.</td></tr>';
+ studentRows.innerHTML=sums.length?'':'<tr><td colspan="9">No active students in this cohort.</td></tr>';
+ matrixRows.innerHTML=sums.length?'':'<tr><td colspan="12">No active students in this cohort.</td></tr>';
  sums.forEach(x=>{
    const b=x.base?Number(x.base.weighted_score):null,l=x.latest?Number(x.latest.weighted_score):null,delta=b!=null&&l!=null?l-b:null;
-   studentRows.innerHTML+=`<tr><td><strong>${x.s.display_name}</strong><br><span class="small">${x.s.username}</span></td><td>${x.s.cohort||'—'}</td><td>${x.atts.length}</td><td>${b==null?'—':b.toFixed(1)+'%'}</td><td>${l==null?'—':l.toFixed(1)+'%'}</td><td>${delta==null?'—':(delta>=0?'+':'')+delta.toFixed(1)+' pts'}</td><td class="${x.wm==null?'':cls(x.wm)}">${x.wm==null?'—':x.wm.toFixed(1)+'%'}</td><td>${x.weakest?x.weakest[0]+' ('+x.weakest[1].toFixed(0)+'%)':'—'}</td><td><button class="btn secondary" onclick="resetPin('${x.s.id}','${String(x.s.display_name).replaceAll("'","")}')">Reset PIN</button> <button class="btn danger" onclick="toggleActive('${x.s.id}',false)">Deactivate</button></td></tr>`;
-   matrixRows.innerHTML+=`<tr><td><strong>${x.s.display_name}</strong></td>${PREGISP_DOMAINS.map(d=>`<td class="${x.ds[d.name]==null?'':cls(x.ds[d.name])}">${x.ds[d.name]==null?'—':x.ds[d.name].toFixed(0)+'%'}</td>`).join('')}</tr>`;
+   studentRows.innerHTML+=`<tr><td><strong>${escapeHtml(x.s.display_name)}</strong><br><span class="small">${escapeHtml(x.s.username)}</span></td><td>${escapeHtml(cohortName(x.s))}</td><td>${x.atts.length}</td><td>${b==null?'—':b.toFixed(1)+'%'}</td><td>${l==null?'—':l.toFixed(1)+'%'}</td><td>${delta==null?'—':(delta>=0?'+':'')+delta.toFixed(1)+' pts'}</td><td class="${x.wm==null?'':cls(x.wm)}">${x.wm==null?'—':x.wm.toFixed(1)+'%'}</td><td>${x.weakest?escapeHtml(x.weakest[0])+' ('+x.weakest[1].toFixed(0)+'%)':'—'}</td><td><button class="btn secondary" onclick='changeCohort(${JSON.stringify(x.s.id)},${JSON.stringify(x.s.display_name)},${JSON.stringify(x.s.cohort||"")})'>Change cohort</button> <button class="btn secondary" onclick='resetPin(${JSON.stringify(x.s.id)},${JSON.stringify(x.s.display_name)})'>Reset PIN</button> <button class="btn danger" onclick="toggleActive('${x.s.id}',false)">Deactivate</button></td></tr>`;
+   matrixRows.innerHTML+=`<tr><td><strong>${escapeHtml(x.s.display_name)}</strong></td>${PREGISP_DOMAINS.map(d=>`<td class="${x.ds[d.name]==null?'':cls(x.ds[d.name])}">${x.ds[d.name]==null?'—':x.ds[d.name].toFixed(0)+'%'}</td>`).join('')}</tr>`;
  });
  let da=PREGISP_DOMAINS.map(d=>{const vals=sums.map(x=>x.ds[d.name]).filter(v=>v!=null);return {name:d.name,weight:d.weight,p:vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null,n:vals.length}}).filter(x=>x.p!=null).sort((a,b)=>(a.p-a.weight*.15)-(b.p-b.weight*.15));
- priorities.innerHTML=da.length?'<ol>'+da.map(x=>`<li><strong>${x.name}</strong>: ${x.p.toFixed(1)}% cohort average across ${x.n} assessed student(s); ${x.weight}% blueprint weight.</li>`).join('')+'</ol>':'<p>No exam results yet.</p>';
- const byId=Object.fromEntries(STUDENTS.map(s=>[s.id,s]));const tf=document.getElementById('tierFilter')?.value||'ALL';const rec=[...ATTEMPTS].filter(a=>tf==='ALL'||(a.difficulty_code||'A')===tf).sort((a,b)=>new Date(b.completed_at)-new Date(a.completed_at)).slice(0,25);
- recentRows.innerHTML=rec.length?'':'<tr><td colspan="6">No submissions yet.</td></tr>';
- rec.forEach(a=>{const s=byId[a.student_id];recentRows.innerHTML+=`<tr><td>${s?.display_name||'Unknown'}</td><td>Exam ${a.exam_set||a.exam_version}${a.difficulty_code||'A'}<br><span class="small">${a.difficulty||'Standard'}</span></td><td>${new Date(a.completed_at).toLocaleString()}</td><td>${Number(a.raw_percent).toFixed(1)}%</td><td><strong>${Number(a.weighted_score).toFixed(1)}%</strong></td><td>${Array.isArray(a.remediation)?a.remediation.length:0}</td></tr>`})
+ priorities.innerHTML=da.length?'<ol>'+da.map(x=>`<li><strong>${escapeHtml(x.name)}</strong>: ${x.p.toFixed(1)}% cohort average across ${x.n} assessed student(s); ${x.weight}% blueprint weight.</li>`).join('')+'</ol>':'<p>No exam results for this cohort yet.</p>';
+ const byId=Object.fromEntries(STUDENTS.map(s=>[s.id,s]));const tf=document.getElementById('tierFilter')?.value||'ALL';const rec=[...filteredAttempts].filter(a=>tf==='ALL'||(a.difficulty_code||'A')===tf).sort((a,b)=>new Date(b.completed_at)-new Date(a.completed_at)).slice(0,25);
+ recentRows.innerHTML=rec.length?'':'<tr><td colspan="6">No submissions for this cohort yet.</td></tr>';
+ rec.forEach(a=>{const s=byId[a.student_id];recentRows.innerHTML+=`<tr><td>${escapeHtml(s?.display_name||'Unknown')}</td><td>Exam ${a.exam_set||a.exam_version}${a.difficulty_code||'A'}<br><span class="small">${escapeHtml(a.difficulty||'Standard')}</span></td><td>${new Date(a.completed_at).toLocaleString()}</td><td>${Number(a.raw_percent).toFixed(1)}%</td><td><strong>${Number(a.weighted_score).toFixed(1)}%</strong></td><td>${Array.isArray(a.remediation)?a.remediation.length:0}</td></tr>`});
+ renderCohortComparison();
 }
 async function createStudent(){createMsg.textContent='';try{const r=await GISPEDB.adminCreateStudent({displayName:newName.value.trim(),username:newUser.value.trim(),pin:newPin.value,cohort:newCohort.value.trim()});if(!r?.ok)throw new Error(r?.message||'Could not create student');createMsg.className='success';createMsg.textContent='Student created. Give them username '+newUser.value.trim()+' and the PIN you entered.';newName.value=newUser.value=newPin.value='';await refresh()}catch(e){createMsg.className='error';createMsg.textContent=e.message}}
+async function changeCohort(id,name,current){
+ const existing=[...new Set(STUDENTS.map(cohortName).filter(c=>c!=='Unassigned'))].sort().join(', ');
+ const promptText='Enter the cohort for '+name+'.\n\nExisting cohorts: '+(existing||'none yet')+'\n\nChanging cohort preserves this student\'s existing exam history.';
+ const next=prompt(promptText,current||'');if(next===null)return;
+ const cohort=next.trim();if(!confirm('Move '+name+' to '+(cohort||'Unassigned')+'? Their prior exam attempts will remain attached to this student.'))return;
+ const r=await GISPEDB.adminUpdateCohort(id,cohort);if(r && r.ok===false)throw new Error(r.message||'Could not change cohort');await refresh();
+}
 async function resetPin(id,name){const p=prompt('Enter a new PIN for '+name+':');if(!p)return;await GISPEDB.adminResetPin(id,p);alert('PIN reset. Existing student browser sessions were invalidated.')}
 async function toggleActive(id,active){if(!confirm('Deactivate this student login? Existing sessions will stop working.'))return;await GISPEDB.adminSetActive(id,active);await refresh()}
 function logout(){GISPEDB.adminLogout();location.href='login.html'}init().catch(e=>{document.querySelector('main .wrap').innerHTML='<section class="card"><h2>Unable to load administrator portal</h2><p class="error">'+e.message+'</p></section>'});
