@@ -78,6 +78,7 @@
   async function adminCreateStudent(x){return await rpc('admin_create_student',{p_token:localStorage.getItem(ADMIN_TOKEN_KEY),p_username:x.username,p_pin:x.pin,p_display_name:x.displayName,p_cohort:x.cohort||''})}
   async function adminResetPin(studentId,newPin){return await rpc('admin_reset_student_pin',{p_token:localStorage.getItem(ADMIN_TOKEN_KEY),p_student_id:studentId,p_new_pin:newPin})}
   async function adminSetActive(studentId,active){return await rpc('admin_set_student_active',{p_token:localStorage.getItem(ADMIN_TOKEN_KEY),p_student_id:studentId,p_active:active})}
+  async function adminUpdateCohort(studentId,cohort){return await rpc('admin_update_student_cohort',{p_token:localStorage.getItem(ADMIN_TOKEN_KEY),p_student_id:studentId,p_cohort:cohort||''})}
   function adminLogout(){localStorage.removeItem(ADMIN_TOKEN_KEY)}
-  window.GISPEDB={configured,studentLogin,studentProfile,studentAttempts,saveAttempt,studentLogout,adminLogin,adminValid,adminStudents,adminAttempts,adminCreateStudent,adminResetPin,adminSetActive,adminLogout};
+  window.GISPEDB={configured,studentLogin,studentProfile,studentAttempts,saveAttempt,studentLogout,adminLogin,adminValid,adminStudents,adminAttempts,adminCreateStudent,adminResetPin,adminSetActive,adminUpdateCohort,adminLogout};
 })();
