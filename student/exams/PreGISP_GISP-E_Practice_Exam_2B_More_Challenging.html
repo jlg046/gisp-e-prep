@@ -223,7 +223,11 @@
     <!-- Quiz Test Taking Interface -->
     <div id="quiz-interface">
         <div class="card" style="background-color: var(--primary-light); border-left: 5px solid var(--primary);">
-            <strong>Exam 2B — More Challenging.</strong> More Challenging: slightly stronger distractors and modestly more applied reasoning.<br><strong>Exam Instructions:</strong> Answer all 75 applied GIS/geospatial questions. These items test methods, analysis, calculations, interpretation, data modeling, data quality, remote sensing, cartography, systems, applications, and professional judgment—not recognition of GIS&T BoK topic names. Submit the exam for a blueprint-weighted score and targeted remediation.
+            <strong>Exam 2B — More Challenging.</strong> More Challenging: slightly stronger distractors and modestly more applied reasoning.<br><strong>Exam Instructions:</strong> You have 120 minutes for 75 applied GIS/geospatial questions. You may skip questions and return to them while time remains. Any question left unanswered when you submit—or when time expires—will be scored as incorrect. These items test methods, analysis, calculations, interpretation, data modeling, data quality, remote sensing, cartography, systems, applications, and professional judgment—not recognition of GIS&T BoK topic names. Submit the exam for a blueprint-weighted score and targeted remediation.
+        </div>
+        <div id="exam-timer" class="card" style="position:sticky;top:8px;z-index:50;border:2px solid var(--primary);background:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 4px 12px rgba(0,0,0,.10);">
+            <div><strong>Timed Practice Exam:</strong> 120-minute limit</div>
+            <div style="font-size:1.25rem;font-weight:800;">Time Remaining: <span id="timer-display">120:00</span></div>
         </div>
         <form id="exam-form">
             <div id="questions-container"></div>
@@ -961,7 +965,7 @@
                 const choiceLetter = choice.trim().charAt(0); // Extracts A, B, C, or D
                 choicesHTML += `
                     <label class="option-label">
-                        <input type="radio" name="item-${q.id}" value="${choiceLetter}" required>
+                        <input type="radio" name="item-${q.id}" value="${choiceLetter}">
                         ${choice}
                     </label>
                 `;
@@ -981,13 +985,74 @@
         });
     }
 
-    // Performance Metric Processor: Scores inputs and builds the remediation report
-    async function scoreExam() {
-        const form = document.getElementById('exam-form');
-        if (!form.checkValidity()) {
-            alert("Validation Error: Please review the test form. You must select an answer for all 75 questions prior to submitting.");
-            return;
+    // Timed exam controller: 120 minutes, persisted within this browser tab/session.
+    const EXAM_DURATION_SECONDS = 120 * 60;
+    const examTimerStorageKey = 'gispe_exam_deadline_' + window.location.pathname;
+    let examTimerInterval = null;
+    let examSubmitted = false;
+
+    function formatExamTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function startExamTimer() {
+        let deadline = Number(sessionStorage.getItem(examTimerStorageKey));
+        if (!Number.isFinite(deadline) || deadline <= 0) {
+            deadline = Date.now() + (EXAM_DURATION_SECONDS * 1000);
+            sessionStorage.setItem(examTimerStorageKey, String(deadline));
         }
+
+        const updateTimer = () => {
+            const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+            const display = document.getElementById('timer-display');
+            const timerCard = document.getElementById('exam-timer');
+            if (display) display.textContent = formatExamTime(remaining);
+            if (timerCard && remaining <= 600) {
+                timerCard.style.borderColor = 'var(--danger)';
+            }
+            if (display && remaining <= 300) {
+                display.style.color = 'var(--danger)';
+            }
+
+            if (remaining <= 0) {
+                clearInterval(examTimerInterval);
+                examTimerInterval = null;
+                if (!examSubmitted) {
+                    alert('Time has expired. Your exam will now be submitted. Any unanswered questions will be scored as incorrect.');
+                    scoreExam(true);
+                }
+            }
+        };
+
+        updateTimer();
+        if (!examSubmitted && examTimerInterval === null) {
+            examTimerInterval = setInterval(updateTimer, 1000);
+        }
+    }
+
+    // Performance Metric Processor: Scores inputs and builds the remediation report
+    async function scoreExam(autoSubmit = false) {
+        if (examSubmitted) return;
+
+        const unansweredCount = examQuestions.reduce((count, q) => {
+            return count + (document.querySelector(`input[name="item-${q.id}"]:checked`) ? 0 : 1);
+        }, 0);
+
+        if (!autoSubmit) {
+            const confirmationMessage = unansweredCount > 0
+                ? `You have ${unansweredCount} unanswered question${unansweredCount === 1 ? '' : 's'}. Unanswered questions will be scored as incorrect.\n\nSubmit exam anyway?`
+                : 'You have answered all 75 questions. Submit exam now?';
+            if (!confirm(confirmationMessage)) return;
+        }
+
+        examSubmitted = true;
+        if (examTimerInterval !== null) {
+            clearInterval(examTimerInterval);
+            examTimerInterval = null;
+        }
+        sessionStorage.removeItem(examTimerStorageKey);
 
         let scoreCount = 0;
         const remContainer = document.getElementById('remediation-container');
@@ -1008,7 +1073,8 @@
 
         // Evaluate choices
         examQuestions.forEach((q) => {
-            const picked = document.querySelector(`input[name="item-${q.id}"]:checked`).value;
+            const pickedInput = document.querySelector(`input[name="item-${q.id}"]:checked`);
+            const picked = pickedInput ? pickedInput.value : null;
             
             if (picked === q.correct) {
                 scoreCount++;
@@ -1023,7 +1089,7 @@
                         <span class="domain-tag">${q.domain}</span>
                     </div>
                     <div class="question-text">${q.question}</div>
-                    <p><strong>Your Selection:</strong> <span class="badge-wrong">${picked}</span></p>
+                    <p><strong>Your Selection:</strong> <span class="badge-wrong">${picked || 'Unanswered'}</span></p>
                     <p><strong>Validated Target Answer:</strong> <span class="badge-correct">${q.correct}</span></p>
                     <div class="feedback-box">
                         <strong>Structural Explanation:</strong> ${q.explanation}
@@ -1032,7 +1098,7 @@
                     </div>
                 `;
                 remContainer.appendChild(block);
-                const selectedText = q.options.find(o => o.trim().startsWith(picked + ')')) || picked;
+                const selectedText = picked ? (q.options.find(o => o.trim().startsWith(picked + ')')) || picked) : 'Unanswered';
                 const correctText = q.options.find(o => o.trim().startsWith(q.correct + ')')) || q.correct;
                 remediationPayload.push({
                     id: q.id,
@@ -1117,7 +1183,7 @@
         if(finalPercentage === 100) {
             headerCard.innerHTML = `<h2 style="color: var(--success); margin:0;">Perfect Score! Excellent work.</h2><p style="margin:5px 0 0 0;">You demonstrated mastery across all 11 blueprint domains.</p>`;
         } else {
-            headerCard.innerHTML = `<h2 style="color: var(--primary); margin:0;">Custom Study & Remediation Plan</h2><p style="margin:5px 0 0 0;">Review the references below for the ${75 - scoreCount} questions answered incorrectly to improve your understanding.</p>`;
+            headerCard.innerHTML = `<h2 style="color: var(--primary); margin:0;">Custom Study & Remediation Plan</h2><p style="margin:5px 0 0 0;">Review the references below for the ${examQuestions.length - scoreCount} questions answered incorrectly or left unanswered to improve your understanding.</p>`;
         }
         remHeaderZone.appendChild(headerCard);
 
@@ -1137,6 +1203,7 @@
             }
             document.getElementById('student-identity').textContent = profile.display_name + ' • Exam 2B — More Challenging';
             buildQuizInterface();
+            startExamTimer();
         } catch(e) {
             alert('Unable to load your student session: ' + e.message);
             location.href = '../login.html';
