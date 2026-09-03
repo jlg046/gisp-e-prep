@@ -1,33 +1,27 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Administrator Dashboard | GISP-E Prep</title><link rel="stylesheet" href="../assets/site.css"></head><body>
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Administrator Dashboard | GISP-E Prep</title><link href="../assets/site.css" rel="stylesheet"/></head><body>
 <header class="site"><div class="wrap"><div class="topline"><div class="brand"><div><h1>Bucknell GISP-E / PreGISP Preparation Program</h1><p>Administrator Portal</p></div></div><button class="btn secondary" onclick="logout()">Sign out</button></div>
-<div class="nav"><a href="dashboard.html">Cohort Dashboard</a><a href="calendar.html">Fall 2026 Calendar</a><a href="blueprint-study-guide.html">Exam Blueprint &amp; Study Guide</a><a href="textbook.html">Textbook Pathway</a><a href="esri-training.html">ESRI Training Pathway</a><a href="coverage.html">GIS Book of Knowledge Pathway</a></div></div></header>
-<main><div class="wrap"><section class="countdown-card" id="examCountdown" aria-live="polite"></section><section class="hero"><div class="topline"><div><h2>Administrator Progress & Mastery Tracker</h2><p>Student submissions are read directly from the central database. The dashboard refreshes automatically every 20 seconds.</p></div><div><span class="status-dot"></span><span id="refreshStatus" class="small">Loading…</span></div></div></section>
-
+<div class="nav"><a href="calendar.html">Fall 2026 Calendar</a><a href="dashboard.html">Cohort Dashboard</a><a href="blueprint-study-guide.html">Exam Blueprint &amp; Study Guide</a><a href="textbook.html">Textbook Pathway</a><a href="esri-training.html">ESRI Training Pathway</a><a href="coverage.html">GIS BoK</a></div></div></header>
+<main><div class="wrap"><section aria-live="polite" class="countdown-card" id="examCountdown"></section><section class="hero"><div class="topline"><div><h2>Administrator Progress &amp; Mastery Tracker</h2><p>Student submissions are read directly from the central database. The dashboard refreshes automatically every 20 seconds.</p></div><div><span class="status-dot"></span><span class="small" id="refreshStatus">Loading…</span></div></div></section>
 <section class="card"><div class="topline"><div><h3>Dashboard filters</h3><p class="small">Choose a cohort for cohort-specific analytics. Use Student status to show active students, inactive students, or everyone in the student management table.</p></div><div class="input-row"><label>Cohort <select id="cohortFilter" onchange="render()"><option value="ALL">All Cohorts</option></select></label><label>Student status <select id="statusFilter" onchange="render()"><option value="ACTIVE">Active Students</option><option value="INACTIVE">Inactive Students</option><option value="ALL">All Students</option></select></label></div></div></section>
-
 <section class="card"><h3>Create student login</h3><div class="input-row">
-<label>Student name<input id="newName" placeholder="Jane Smith"></label>
-<label>Username<input id="newUser" placeholder="jsmith01"></label>
-<label>PIN<input id="newPin" placeholder="e.g., 483921"></label>
-<label>Cohort<input id="newCohort" placeholder="Fall 2026"></label>
+<label>Student name<input id="newName" placeholder="Jane Smith"/></label>
+<label>Username<input id="newUser" placeholder="jsmith01"/></label>
+<label>PIN<input id="newPin" placeholder="e.g., 483921"/></label>
+<label>Cohort<input id="newCohort" placeholder="Fall 2026"/></label>
 <button class="btn" onclick="createStudent()">Create student</button></div><p id="createMsg"></p>
 <p class="small">Give the student the username and PIN you create here. The PIN is stored only as a hash in the database.</p></section>
-
 <div class="kpi-grid"><div class="kpi"><span class="small">Active students</span><b id="studentCount">—</b></div><div class="kpi"><span class="small">Students with 1A baseline</span><b id="baselineCount">—</b></div><div class="kpi"><span class="small">Total exam attempts</span><b id="attemptCount">—</b></div><div class="kpi"><span class="small">Cohort weighted mastery</span><b id="cohortMastery">—</b></div></div>
-
 <section class="card" id="cohortComparisonCard"><h3>Cohort comparison</h3><p class="small">Shown when All Cohorts is selected. Baseline is Exam 1A; Latest is each student's most recent submission.</p><div class="table-wrap"><table><thead><tr><th>Cohort</th><th>Active students</th><th>Students with baseline</th><th>Baseline avg.</th><th>Latest avg.</th><th>Avg. change</th><th>Weighted mastery</th><th>Attempts</th></tr></thead><tbody id="cohortComparisonRows"></tbody></table></div></section>
-
 <section class="card"><h3>Cohort support priorities</h3><div id="priorities">Loading…</div></section>
-
 <section class="card"><h3>Student progress &amp; login management</h3><p class="small">The Student status filter controls this table. Inactive students retain their account and exam history and can be reactivated here.</p><div class="table-wrap"><table><thead><tr>
 <th>Student</th><th>Status</th><th>Cohort</th><th>Attempts</th><th>Baseline</th><th>Latest</th><th>Change</th><th>Weighted mastery</th><th>Lowest domain</th><th>Manage</th>
 </tr></thead><tbody id="studentRows"></tbody></table></div></section>
-
 <section class="card"><h3>Student-by-domain mastery matrix</h3><div class="table-wrap"><table><thead><tr><th>Student</th>
-<th>Analytical Methods & GeoComputation</th><th>Conceptual Foundations</th><th>Data Modeling</th><th>Geospatial Data</th><th>Cartography & Visualization</th><th>Platforms, Sensors, Physics & Image Processing</th><th>Design of Systems</th><th>Organizational & Institutional Aspects</th><th>Thematic & Application Domains</th><th>GI & Society</th><th>Web-Based GIS</th>
+<th>Analytical Methods &amp; GeoComputation</th><th>Conceptual Foundations</th><th>Data Modeling</th><th>Geospatial Data</th><th>Cartography &amp; Visualization</th><th>Platforms, Sensors, Physics &amp; Image Processing</th><th>Design of Systems</th><th>Organizational &amp; Institutional Aspects</th><th>Thematic &amp; Application Domains</th><th>GI &amp; Society</th><th>Web-Based GIS</th>
 </tr></thead><tbody id="matrixRows"></tbody></table></div></section>
-
 <section class="card"><div class="topline"><div><h3>Exam submissions</h3><p class="small">Administrators can permanently delete an individual submission when it was a test, duplicate, or accidental early submission. Deleting an attempt does not delete the student or any other attempts.</p></div><label>Difficulty filter <select id="tierFilter" onchange="render()"><option value="ALL">All levels</option><option value="A">Standard (A)</option><option value="B">More Challenging (B)</option><option value="C">Difficult (C)</option></select></label></div><div class="table-wrap"><table><thead><tr><th>Student</th><th>Exam</th><th>Submitted</th><th>Raw</th><th>Weighted</th><th>Missed items</th><th>Admin action</th></tr></thead><tbody id="recentRows"></tbody></table></div></section>
 </div></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/config.js"></script><script src="../assets/db.js?v=40"></script><script src="../assets/data.js"></script>
