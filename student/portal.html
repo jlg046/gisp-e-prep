@@ -13,6 +13,17 @@
 <section class="card"><h3>Saved remediation</h3><p class="small">Choose an exam above to revisit the items you missed.</p><div id="remediation"><p>No exam selected.</p></div></section></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/config.js"></script><script src="../assets/db.js"></script><script src="../assets/data.js"></script><script src="../assets/esri-training-data.js"></script><script src="../assets/textbook-data.js"></script>
 <script>
 
+const CHAPTER_LINKS={
+  1:'https://drive.google.com/file/d/1QOsG-MzvMsr4084i7PaLY2pH8nCeKOPG/view?usp=drivesdk',
+  2:'https://drive.google.com/file/d/1EP13rKl6Q2iIptHMkK-iCGCRKsMdvFed/view?usp=drivesdk',
+  3:'https://drive.google.com/file/d/1i_da61kGUe9frloOi5TpF_LzhpdGLqn1/view?usp=drivesdk',
+  4:'https://drive.google.com/file/d/1061YH5FqAHY0cJBBI1iGdkWW0Dysk4rO/view?usp=drivesdk',
+  5:'https://drive.google.com/file/d/1BY6ziRsDzJMLAK-xC46JwB7kykPeUsu7/view?usp=drivesdk',
+  6:'https://drive.google.com/file/d/19XFuXuBA0FxoL-niyytlL3SjZgjztvxM/view?usp=drivesdk',
+  7:'https://drive.google.com/file/d/1P4bkpRejM0D19FEZj5g8zhPtvwKibsWN/view?usp=drivesdk',
+  8:'https://drive.google.com/file/d/1xhco5IJ_RmEdp-0YA9SSFZ1WBjZo-8yY/view?usp=drivesdk'
+};
+
 const PREP_WEEKS=[
  {start:'2026-09-06',end:'2026-09-12',label:'Sept 6–12',chapter:1,title:'Introducing GIS',assessment:'Baseline test',exam:'exams/PreGISP_GISP-E_Practice_Exam_1A_Standard.html',review:null,focus:['Conceptual Foundations','Geospatial Data','Cartography & Visualization'],note:'Program launch. Establish your baseline, then use the result to begin targeted remediation.'},
  {start:'2026-09-13',end:'2026-09-19',label:'Sept 13–19',chapter:2,title:'A first look at ArcGIS Pro',assessment:null,review:null,focus:['Conceptual Foundations','Cartography & Visualization','Design of Systems'],note:'Build familiarity with GIS environments while keeping the concepts software-agnostic.'},
