@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreGISP / GISP-E GISCI Companion Advanced Practice Exam 1</title>
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --primary-dark: #114154;
+            --primary-light: #f0f5f7;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --border: #dcdde1;
+            --card-bg: #ffffff;
+            --body-bg: #f5f7fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.3rem;
+        }
+
+        header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .domain-tag {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .question-num {
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .action-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        #results-dashboard {
+            display: none;
+        }
+
+        .score-summary {
+            text-align: center;
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .score-big {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin: 15px 0;
+        }
+
+        .pass-status {
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .remediation-item {
+            border-left: 5px solid var(--danger);
+            background-color: #fffafb;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 18px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 0.98rem;
+        }
+
+        .ref-tag {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: bold;
+            background-color: var(--primary-light);
+            padding: 6px 12px;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .badge-wrong { color: var(--danger); font-weight: bold; background: #fde8e8; padding: 2px 8px; border-radius: 4px; }
+        .badge-correct { color: var(--success); font-weight: bold; background: #e1f7e3; padding: 2px 8px; border-radius: 4px; }
+        
+        .domain-breakdown {
+            margin-top: 20px;
+            text-align: left;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .domain-breakdown th, .domain-breakdown td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .domain-breakdown th { background-color: var(--primary-light); color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+      <a href="../portal.html" style="color:var(--primary);font-weight:700;text-decoration:none">← Return to Student Portal</a>
+      <span id="student-identity" style="color:var(--text-light);font-weight:600"></span>
+    </div>
+    <header>
+        <h1>PreGISP® / GISP-E GISCI Companion Advanced Practice Exam 1</h1>
+        <p>GISCI Companion–Based Full-Length Practice Exam</p>
+    </header>
+
+    <!-- Quiz Test Taking Interface -->
+    <div id="quiz-interface">
+        <div class="card" style="background-color: var(--primary-light); border-left: 5px solid var(--primary);">
+            <strong>Advanced / Over-Preparation Practice Exam 1.</strong> Advanced / Over-Preparation: all content remains within the GISCI GISP-E Companion scope, but questions use stronger distractors, more scenario reasoning, assumptions, limitations, misconception checks, and cross-domain judgment.<br><strong>Exam Instructions:</strong> You have 120 minutes for 75 multiple-choice questions. You may skip questions and return to them while time remains. Any unanswered question is scored as incorrect. Submit the exam for a blueprint-weighted score, domain analysis, and targeted remediation.
+        </div>
+        <div id="exam-timer" class="card" style="position:sticky;top:8px;z-index:50;border:2px solid var(--primary);background:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 4px 12px rgba(0,0,0,.10);">
+            <div><strong>Timed Practice Exam:</strong> 120-minute limit</div>
+            <div style="font-size:1.25rem;font-weight:800;">Time Remaining: <span id="timer-display">120:00</span></div>
+        </div>
+        <form id="exam-form">
+            <div id="questions-container"></div>
+            <div class="action-container">
+                <button type="button" class="btn" onclick="scoreExam()">Submit and Score Exam</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results & Remediation Dashboard Interface -->
+    <div id="results-dashboard">
+        <div class="card score-summary" id="score-card">
+            <h2>Your Evaluation Summary</h2><p><strong>Blueprint-weighted diagnostic score</strong></p>
+            <div class="score-big" id="score-percent">0%</div>
+            <p id="score-raw" style="font-size: 1.2rem; font-weight: 600;">0 out of 75 Questions Correct</p><p id="save-status" style="font-weight:600;color:var(--text-light);">Result not yet saved.</p>
+            <div class="pass-status" id="pass-label">STATUS</div>
+            
+            <h3 style="margin-top:30px;">Domain-Specific Performance</h3>
+            <table class="domain-breakdown">
+                <thead>
+                    <tr>
+                        <th>Knowledge Domain</th>
+                        <th>Weight</th>
+                        <th>Your Performance</th>
+                    </tr>
+                </thead>
+                <tbody id="domain-breakdown-body"></tbody>
+            </table>
+        </div>
+
+        <div id="remediation-header-zone"></div>
+        <div id="remediation-container"></div>
+        
+        <div class="action-container">
+            <button type="button" class="btn" onclick="window.scrollTo(0,0); location.reload();">Reset & Retake Exam</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../assets/config.js"></script>
+<script src="../../assets/db.js"></script>
+<script>
+    // Centralized Data Model Architecture storing all 75 platform-neutral blueprint questions
+    const blueprintWeights = {"Analytical Methods & GeoComputation": 18, "Conceptual Foundations": 14, "Data Modeling": 12, "Geospatial Data": 11, "Cartography & Visualization": 10, "Platforms, Sensors, Physics & Image Processing": 10, "Design of Systems": 8, "Organizational & Institutional Aspects": 7, "Thematic & Application Domains": 5, "GI & Society": 3, "Web-Based GIS": 2};
+    const examQuestions = [
+        {
+            id: 1,
+            domain: "Organizational & Institutional Aspects",
+            question: "Three departments in a metropolitan transit authority maintain different 'authoritative' address layers and cannot agree which one should drive emergency response. What is the most appropriate organizational response?",
+            options: ["A) Establish governance that defines ownership, stewardship, standards, and decision rights for the shared address data", "B) Let every department continue independently and merge layers only when a crisis occurs", "C) Choose whichever layer has the most features without reviewing quality", "D) Solve the disagreement by changing map colors"],
+            correct: "A",
+            explanation: "Governance clarifies authority, stewardship, standards, and accountability for shared organizational GIS resources.",
+            reference: "GISCI Companion focus: Organizational governance | Misconception check: Technology alone resolves organizational inconsistency. | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 2,
+            domain: "Cartography & Visualization",
+            question: "A statewide open-data program is using the same evacuation data for engineers, emergency managers, and the public. Which design strategy is best?",
+            options: ["A) Use decorative elements to make the public version more attractive", "B) Create audience-specific maps that emphasize the information each group needs", "C) Use one maximally detailed map for all audiences", "D) Remove labels from all versions so the data remain objective"],
+            correct: "B",
+            explanation: "Effective cartography is purpose- and audience-driven; different users often need different detail and emphasis.",
+            reference: "GISCI Companion focus: Map purpose and audience | Misconception check: One map should contain maximum information for every audience. | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 3,
+            domain: "Data Modeling",
+            question: "A city enterprise GIS program is designing a new asset GIS. Managers first describe the real-world things they must track and how those things relate, without choosing tables or software. Which modeling level are they working on?",
+            options: ["A) Cartographic layout", "B) Web service architecture", "C) Conceptual data model", "D) Physical data model"],
+            correct: "C",
+            explanation: "A conceptual model describes real-world entities and relationships without implementation details.",
+            reference: "GISCI Companion focus: Conceptual, logical, and physical data models | Misconception check: A data model is only the final database schema. | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 4,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A multi-county emergency management consortium needs observations of Earth's surface without physically contacting every feature. Which broad approach is being used?",
+            options: ["A) Topology", "B) Normalization", "C) Geocoding", "D) Remote sensing"],
+            correct: "D",
+            explanation: "Remote sensing acquires information about the Earth's surface from a distance using sensors/platforms.",
+            reference: "GISCI Companion focus: What remote sensing is | Misconception check: Remote sensing is limited to satellite photography. | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 5,
+            domain: "Thematic & Application Domains",
+            question: "A transportation agency studies crash clusters, a health department studies access to clinics, and a conservation group studies habitat connectivity. What do these projects most clearly have in common?",
+            options: ["A) They apply common GIS foundations—data, spatial analysis, interpretation, and visualization—to different domain problems", "B) They require entirely different geographic principles", "C) They can all be solved by cartography alone", "D) They require the same datasets because all GIS projects use identical information"],
+            correct: "A",
+            explanation: "GISCI emphasizes that application areas differ in mission and data, but the underlying GIS foundations transfer across disciplines.",
+            reference: "GISCI Companion focus: How GIS foundations transfer across disciplines | Misconception check: Each industry requires an entirely different GIS. | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 6,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A countywide 911 modernization project wants to determine which neighborhoods in Stonebridge can be reached by an ambulance within eight minutes. The team has a routable street network with speed limits, one-way restrictions, and bridge closures. Which analytical approach best matches the question?",
+            options: ["A) Create equal-distance buffers around ambulance stations", "B) Calculate service areas using travel time on the road network", "C) Interpolate response times from station locations", "D) Dissolve station points into a single feature"],
+            correct: "B",
+            explanation: "Travel time is constrained by the road network and its impedance/restrictions, so network service-area analysis best represents accessibility.",
+            reference: "GISCI Companion focus: When network analysis is preferable to straight-line distance | Misconception check: Straight-line distance is always an adequate proxy for accessibility. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 7,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A rapidly growing metropolitan planning organization maps a 300-meter protected-area buffer around streams before evaluating proposed development sites. Later, staff discover that the stream layer was digitized from a generalized small-scale source. Which statement is most defensible?",
+            options: ["A) The only important issue is whether the buffer polygons overlap", "B) The buffer distance guarantees that the output is accurate", "C) The buffer is useful, but the reliability of the result still depends on the quality and scale of the stream data", "D) Buffering converts inaccurate input data into accurate output geometry"],
+            correct: "C",
+            explanation: "A buffer can correctly apply a distance rule while still inheriting limitations from the source data; input quality and scale affect result reliability.",
+            reference: "GISCI Companion focus: Why buffering is useful and what affects analytical reliability | Misconception check: Running an analysis automatically produces a correct answer. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 8,
+            domain: "Design of Systems",
+            question: "A multi-county emergency management consortium says, 'We need a new GIS platform because our maps are not helping staff make decisions.' What should the project team do first?",
+            options: ["A) Purchase the newest GIS software immediately", "B) Collect every available dataset before defining requirements", "C) Design the final dashboard before interviewing users", "D) Clarify the business problems, users, workflows, and information needs before selecting technology"],
+            correct: "D",
+            explanation: "GISCI emphasizes that successful system design starts with organizational needs, stakeholders, and workflows rather than technology.",
+            reference: "GISCI Companion focus: Planning before implementing GIS | Misconception check: Buying the newest GIS software creates an effective GIS. | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 9,
+            domain: "Data Modeling",
+            question: "A natural-hazards research group stores road-inspection records in a separate table from road features because each road can have many inspections over time. What is the main benefit?",
+            options: ["A) The relationship avoids repeating road geometry and supports multiple inspection records per road", "B) The design guarantees that all inspection values are accurate", "C) The separate table removes the need for keys", "D) The design converts the road layer from vector to raster"],
+            correct: "A",
+            explanation: "Separating repeating inspection records supports a one-to-many relationship and reduces unnecessary duplication.",
+            reference: "GISCI Companion focus: Relationships and reducing duplication | Misconception check: Copying all information into every table is always better. | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 10,
+            domain: "Data Modeling",
+            question: "Editors at a metropolitan transit authority repeatedly enter road-surface values such as 'Asphalt', 'asphalt', 'ASP', and misspelled variants. Which database design choice most directly improves consistency?",
+            options: ["A) Store the road layer as an image", "B) Apply a coded-value domain to the surface-type field", "C) Increase map scale", "D) Add more decimal places to the field"],
+            correct: "B",
+            explanation: "A coded-value domain restricts entries to an approved set and improves attribute consistency.",
+            reference: "GISCI Companion focus: Domains and attribute validation | Misconception check: Free text provides the same validation as a domain. | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 11,
+            domain: "GI & Society",
+            question: "A regional electric utility plans to publish exact household locations associated with sensitive health outcomes. The map could support planning, but individual households might be identifiable. What is the most responsible response?",
+            options: ["A) Remove metadata but keep exact locations", "B) Use brighter symbols so the sensitive records are easier to interpret", "C) Reduce disclosure risk through aggregation/generalization or controlled access while preserving the planning purpose", "D) Publish exact locations because the data support a public benefit"],
+            correct: "C",
+            explanation: "GIS professionals must balance useful geographic information with privacy and confidentiality, sometimes limiting spatial detail or access.",
+            reference: "GISCI Companion focus: Privacy and responsible use | Misconception check: More detailed public information is always better. | Blueprint domain resource: https://geospacebok.eu/GS"
+        },
+        {
+            id: 12,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A public health surveillance team needs a sensor that can actively transmit energy and measure the return from the surface. Which type best fits?",
+            options: ["A) A passive sensor", "B) A metadata service", "C) A cartographic classifier", "D) An active sensor"],
+            correct: "D",
+            explanation: "Active sensors emit their own energy and measure the returned signal.",
+            reference: "GISCI Companion focus: Active versus passive sensors | Misconception check: All sensors depend on reflected sunlight. | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 13,
+            domain: "Geospatial Data",
+            question: "A city enterprise GIS program is mapping individual fire hydrants and a continuous air-temperature surface. Which representation is most appropriate?",
+            options: ["A) Hydrants as vector points; temperature as raster", "B) Hydrants as raster only; temperature as vector points only", "C) Both as text tables with no location", "D) Both as topology rules"],
+            correct: "A",
+            explanation: "Discrete hydrants are naturally represented as points, while a continuous temperature field is naturally represented as raster.",
+            reference: "GISCI Companion focus: Vector versus raster data | Misconception check: Vector is always more accurate than raster. | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 14,
+            domain: "Web-Based GIS",
+            question: "A natural-hazards research group maintains one authoritative road dataset that feeds a public map, an internal dashboard, and a field app through shared services. What Web GIS principle does this best illustrate?",
+            options: ["A) Web GIS replaces the need for data management", "B) A Web GIS ecosystem can deliver the same authoritative information through services to different applications and users", "C) Web GIS is simply a static image placed on a webpage", "D) Each application must maintain a separate unrelated copy of the road data"],
+            correct: "B",
+            explanation: "Web GIS connects data, services, applications, and users so authoritative information can be shared and reused in multiple contexts.",
+            reference: "GISCI Companion focus: What Web-Based GIS is | Misconception check: Web GIS simply means placing a map on a website. | Blueprint domain resource: https://geospacebok.eu/WB"
+        },
+        {
+            id: 15,
+            domain: "Thematic & Application Domains",
+            question: "A manager at a natural-hazards research group asks for 'a map showing our biggest problem areas' but does not explain what decision the map must support. What should the GIS analyst do first?",
+            options: ["A) Use every available analytical tool to avoid missing something", "B) Copy a map used by a different industry", "C) Clarify the user's objective and decision criteria before selecting data or methods", "D) Choose the most detailed dataset available and begin mapping"],
+            correct: "C",
+            explanation: "Successful GIS solutions begin by understanding the problem and the user's objectives; those needs should drive data and method selection.",
+            reference: "GISCI Companion focus: Understanding the geographic problem and user objectives | Misconception check: The available dataset should define the problem. | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 16,
+            domain: "Cartography & Visualization",
+            question: "A risk map produced by a metropolitan transit authority uses large bright symbols for low-priority features and small muted symbols for the highest-risk locations. What is the primary cartographic problem?",
+            options: ["A) The map uses vector data", "B) The map includes a legend", "C) The data are projected", "D) The visual hierarchy conflicts with the intended message"],
+            correct: "D",
+            explanation: "Visual hierarchy should make the most important information most prominent.",
+            reference: "GISCI Companion focus: Visual hierarchy | Misconception check: Layer order alone defines intellectual importance. | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 17,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "After a storm, a multi-county emergency management consortium needs broad regional coverage within hours and very detailed imagery of a few damaged buildings later the same day. Which combination is most defensible?",
+            options: ["A) Satellite imagery for broad coverage and drone imagery for detailed local inspection", "B) Drone imagery for the entire region and no other platform", "C) GNSS alone for regional surface imaging", "D) LiDAR can only be used for attribute tables, so avoid it entirely"],
+            correct: "A",
+            explanation: "Satellites are well suited to broad coverage, while drones can provide detailed local observations.",
+            reference: "GISCI Companion focus: Advantages of different sensing platforms | Misconception check: The highest-detail platform is always best. | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 18,
+            domain: "Data Modeling",
+            question: "A city enterprise GIS program finds the same owner's mailing address copied into thousands of parcel records. One address change requires edits in many places and often leaves conflicting values. Which design principle best addresses the problem?",
+            options: ["A) Remove identifiers because keys create redundancy", "B) Normalize the data so repeated owner information is stored once and linked by a key", "C) Add more copies of the address field so users can choose among them", "D) Convert parcel polygons to points"],
+            correct: "B",
+            explanation: "Normalization reduces unnecessary duplication and update anomalies by separating repeated information and linking records through keys.",
+            reference: "GISCI Companion focus: Normalization and duplicate information | Misconception check: Duplicated attributes improve convenience without tradeoffs. | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 19,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A regional electric utility must identify land that is simultaneously outside flood-prone areas, inside designated growth zones, and within 1 kilometer of a major road. The inputs include both polygon constraints and a road layer. Which workflow is most appropriate?",
+            options: ["A) Use only a network route calculation", "B) Change the map projection until the desired areas visually align", "C) Use overlay to combine the polygon constraints and a road-proximity layer", "D) Interpolate all input layers to create a single continuous surface"],
+            correct: "C",
+            explanation: "Overlay is designed to combine spatial constraints, while road proximity can be represented with a buffer or distance layer before overlay.",
+            reference: "GISCI Companion focus: How complementary analytical methods combine in a workflow | Misconception check: There is always one universally correct analytical workflow. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 20,
+            domain: "Cartography & Visualization",
+            question: "A watershed restoration collaborative maps neighborhood income with four class intervals. Changing the classification method causes several neighborhoods to switch categories and changes the apparent pattern. What does this demonstrate?",
+            options: ["A) The underlying income values changed when the map was reclassified", "B) Classification affects only aesthetics, not interpretation", "C) All classification methods are equivalent if the colors are the same", "D) Classification choices can influence how quantitative patterns are perceived"],
+            correct: "D",
+            explanation: "Class boundaries determine how continuous quantitative values are grouped and can substantially affect perceived spatial patterns.",
+            reference: "GISCI Companion focus: Classification methods and interpretation | Misconception check: Classification is cosmetic and cannot influence interpretation. | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 21,
+            domain: "Geospatial Data",
+            question: "A countywide 911 modernization project must study land-use change from 1990 to 2025. Which data choice is most defensible?",
+            options: ["A) Use appropriately documented datasets from both time periods, even though the 1990 data are older", "B) Discard the 1990 data because the newest data are always best", "C) Use only today's imagery and infer 1990 conditions from current patterns", "D) Choose whichever dataset has the smallest file size"],
+            correct: "A",
+            explanation: "Historical research requires data appropriate to each time period; currency is judged relative to the purpose of the study.",
+            reference: "GISCI Companion focus: Data currency and fitness for purpose | Misconception check: Newer data are always better. | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 22,
+            domain: "Design of Systems",
+            question: "A planning director tells a regional electric utility, 'Inspectors must be able to update field observations within one hour of a site visit.' Which statement best distinguishes the business and technical sides of this need?",
+            options: ["A) Business and technical requirements are interchangeable", "B) The timely field-update capability is a business requirement; connectivity, devices, and application architecture are technical requirements", "C) The device model is the business requirement and the inspection need is technical", "D) Both statements are only cartographic requirements"],
+            correct: "B",
+            explanation: "Business requirements describe desired outcomes/capabilities; technical requirements define how technology must support them.",
+            reference: "GISCI Companion focus: Business versus technical requirements | Misconception check: A request for a technology brand is the same as a business need. | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 23,
+            domain: "Web-Based GIS",
+            question: "Analysts at a regional conservation alliance perform complex data editing and spatial analysis on desktop GIS, then publish selected results to a web map for field staff and the public. Which statement is best?",
+            options: ["A) Desktop GIS cannot contribute data to web applications", "B) Web GIS is only for public users, never internal staff", "C) Desktop and Web GIS can play complementary roles in one workflow", "D) Web GIS makes desktop GIS obsolete"],
+            correct: "C",
+            explanation: "GISCI describes desktop and Web GIS as complementary: desktop often supports advanced analysis/management, while Web GIS supports sharing and collaboration.",
+            reference: "GISCI Companion focus: How Web GIS differs from and complements desktop GIS | Misconception check: Web GIS replaces desktop GIS. | Blueprint domain resource: https://geospacebok.eu/WB"
+        },
+        {
+            id: 24,
+            domain: "Conceptual Foundations",
+            question: "A coastal resilience partnership needs to calculate parcel areas for a local land-use study. The data are currently stored in latitude/longitude. Which action is most appropriate before making area measurements?",
+            options: ["A) Keep latitude/longitude because angular coordinates are best for area", "B) Convert the parcels to points", "C) Change only the map symbols", "D) Use a suitable projected coordinate system for the study area"],
+            correct: "D",
+            explanation: "Projected coordinate systems provide planar units appropriate for local distance and area measurement.",
+            reference: "GISCI Companion focus: Geographic versus projected coordinate systems | Misconception check: Coordinate system choice is merely a display preference. | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 25,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A regional electric utility wants to distinguish healthy vegetation from stressed vegetation. Why can information outside the visible spectrum be useful?",
+            options: ["A) Different materials have characteristic responses across wavelengths, creating useful spectral signatures", "B) Only visible wavelengths interact with vegetation", "C) Nonvisible bands automatically have higher spatial resolution", "D) Spectral information eliminates the need for validation"],
+            correct: "A",
+            explanation: "Materials reflect/emit energy differently across wavelengths; those spectral patterns can help discriminate vegetation conditions and other surface materials.",
+            reference: "GISCI Companion focus: Electromagnetic spectrum and spectral signatures | Misconception check: Visible bands contain all useful land-cover information. | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 26,
+            domain: "Geospatial Data",
+            question: "A countywide 911 modernization project can download a free road dataset immediately, but its metadata are incomplete and its last update date is unknown. What should the team do before using it for emergency routing?",
+            options: ["A) Assume the data are current because they are online", "B) Evaluate completeness, positional quality, currency, documentation, and fitness for the routing task", "C) Use it because open data are inherently suitable for public-sector work", "D) Use it only if the file opens without errors"],
+            correct: "B",
+            explanation: "Availability does not establish fitness for purpose; emergency routing requires evaluation of quality, completeness, currency, and documentation.",
+            reference: "GISCI Companion focus: Evaluating whether a dataset is appropriate | Misconception check: Open/public data can be used without evaluation. | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 27,
+            domain: "Geospatial Data",
+            question: "A parcel layer has highly precise coordinates but omits 8% of recently created parcels. For an analysis of current tax-base coverage, which data-quality issue is most direct?",
+            options: ["A) Cartographic hierarchy", "B) Network impedance", "C) Completeness and currency", "D) Radiometric resolution"],
+            correct: "C",
+            explanation: "Missing recent parcels indicate incomplete and potentially out-of-date data.",
+            reference: "GISCI Companion focus: Completeness, consistency, and currency | Misconception check: High precision means the dataset is high quality in every respect. | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 28,
+            domain: "Conceptual Foundations",
+            question: "A statewide equal-area map is being redesigned by a regional electric utility for a navigation-focused application. Which statement best reflects projection tradeoffs?",
+            options: ["A) Changing projection changes the real-world location of features", "B) Projection choice matters only for printed maps, not GIS analysis", "C) One projection can preserve area, shape, distance, and direction everywhere", "D) Projection choice should reflect which properties matter most for the intended use because every flat projection distorts something"],
+            correct: "D",
+            explanation: "All flat map projections involve distortion; the appropriate choice depends on the properties most important to the task.",
+            reference: "GISCI Companion focus: Why projections involve tradeoffs | Misconception check: One projection can preserve every property. | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 29,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Researchers working with a rapidly growing metropolitan planning organization have temperature readings from 42 weather stations and need an estimated temperature surface across North Valley. Station spacing is uneven, with large gaps in the western portion of the study area. Which interpretation is best?",
+            options: ["A) Interpolation can estimate values between stations, but confidence should be lower where sampling is sparse", "B) Interpolation converts every estimated cell into an observed measurement", "C) A polygon overlay will estimate the temperature at unsampled locations", "D) The highest-resolution output raster will eliminate uncertainty caused by sparse sampling"],
+            correct: "A",
+            explanation: "Interpolation estimates a continuous phenomenon from discrete samples, and sparse sampling reduces confidence in unsampled areas.",
+            reference: "GISCI Companion focus: Why interpolation is appropriate and what limits its reliability | Misconception check: Interpolated values are equivalent to direct observations. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 30,
+            domain: "Conceptual Foundations",
+            question: "A statewide open-data program combines a generalized 1:250,000 road dataset with parcel boundaries digitized from large-scale local mapping. The team wants to identify road-centerline offsets of a few meters. What is the main concern?",
+            options: ["A) The two datasets cannot be displayed together in GIS", "B) The source datasets were created at different scales and may not support the same level of positional detail", "C) The parcel dataset has too many attributes", "D) The roads should be converted to raster before comparison"],
+            correct: "B",
+            explanation: "Scale and generalization affect the detail and positional use of data; a regional generalized road layer may not support meter-level parcel comparisons.",
+            reference: "GISCI Companion focus: How scale influences detail and analysis | Misconception check: Digital data can be used at any scale without consequence. | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 31,
+            domain: "Conceptual Foundations",
+            question: "During quality review, a multi-county emergency management consortium finds road segments that stop just short of intersections and parcel polygons that overlap neighboring parcels. Which concept most directly addresses these errors?",
+            options: ["A) Interpolation", "B) Temporal currency", "C) Topology", "D) Color theory"],
+            correct: "C",
+            explanation: "Topology defines and checks spatial relationship rules such as connectivity, gaps, and overlaps.",
+            reference: "GISCI Companion focus: Topology and data integrity | Misconception check: Topology is only a display setting. | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 32,
+            domain: "Cartography & Visualization",
+            question: "A public web map uses red and green categories with low contrast and tiny labels. Which improvement most directly addresses accessibility?",
+            options: ["A) Add more categories to provide greater detail", "B) Remove the legend", "C) Use more decorative background imagery", "D) Use a color scheme distinguishable for common color-vision deficiencies and increase label legibility"],
+            correct: "D",
+            explanation: "Accessible cartography considers color-vision deficiencies, contrast, and legibility at the intended viewing environment.",
+            reference: "GISCI Companion focus: Color, typography, and accessibility | Misconception check: Accessibility is secondary to appearance. | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 33,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A watershed restoration collaborative is creating a habitat-suitability model using slope, distance from roads, land cover, and protected-area status. One analyst proposes adding every available environmental layer because 'more variables must improve the model.' Which response best follows GISCI's guidance?",
+            options: ["A) Select criteria that are relevant to the decision, document assumptions, and evaluate how each criterion affects the result", "B) Avoid weighting or standardizing criteria because those choices introduce judgment", "C) Include every available layer because additional criteria always improve suitability models", "D) Use only the easiest variables to calculate so the workflow remains simple"],
+            correct: "A",
+            explanation: "Suitability modeling should be driven by the problem and relevant criteria; assumptions and weighting choices should be documented and interpreted.",
+            reference: "GISCI Companion focus: How suitability models should be designed and interpreted | Misconception check: More variables always improve an analytical model. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 34,
+            domain: "Organizational & Institutional Aspects",
+            question: "A natural-hazards research group is combining data from five partner agencies. Each uses different field names and classifications for the same road attributes. Which action best supports collaboration?",
+            options: ["A) Convert all attributes to free text", "B) Agree on shared standards and documented translation rules before routine exchange", "C) Require every partner to abandon its own mission-specific data needs", "D) Ignore the differences because GIS can display all fields"],
+            correct: "B",
+            explanation: "Standards and documented procedures improve consistency and interoperability while still allowing organizations to manage legitimate local needs.",
+            reference: "GISCI Companion focus: Policies, standards, and procedures | Misconception check: Standards only reduce flexibility and do not improve quality. | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 35,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A watershed restoration collaborative is comparing two candidate routes across steep terrain. Which dataset and analysis combination best supports identifying sections with the greatest change in elevation?",
+            options: ["A) A road network and shortest-path analysis alone", "B) A set of address points and interpolation", "C) A DEM and slope analysis", "D) A parcel polygon layer and dissolve operation"],
+            correct: "C",
+            explanation: "A DEM represents a continuous elevation surface, and slope analysis derives the rate of elevation change.",
+            reference: "GISCI Companion focus: What questions surface and terrain analysis can answer | Misconception check: Every elevation problem can be solved with any spatial model. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 36,
+            domain: "Design of Systems",
+            question: "After launch, users at a regional conservation alliance avoid a new GIS because key workflows were designed without consulting field staff. Which design activity was most clearly missing?",
+            options: ["A) Increasing map color saturation", "B) Collecting higher-resolution imagery for every layer", "C) Adding more database fields", "D) Stakeholder involvement and workflow analysis"],
+            correct: "D",
+            explanation: "Stakeholders and workflow analysis help ensure systems actually support how people work and improve adoption.",
+            reference: "GISCI Companion focus: Why stakeholder involvement matters | Misconception check: Technical staff alone can define all requirements. | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 37,
+            domain: "Thematic & Application Domains",
+            question: "A countywide 911 modernization project completes a technically correct analysis but presents the result to elected officials using a highly technical map with unexplained jargon. What is the main weakness?",
+            options: ["A) The communication is not adapted to the audience and may not support the intended decision", "B) The analysis must be wrong because the map is technical", "C) All professional audiences should receive identical visualizations", "D) The solution is to add more technical detail"],
+            correct: "A",
+            explanation: "GIS results create value only when communicated in ways that appropriate audiences can understand and use.",
+            reference: "GISCI Companion focus: Interpreting and communicating results in application context | Misconception check: Communication is secondary to technical correctness. | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 38,
+            domain: "Data Modeling",
+            question: "A dataset used by a multi-county emergency management consortium contains accurate-looking features but no documentation of source, collection date, intended use, or known limitations. What is the strongest concern?",
+            options: ["A) The absence of metadata automatically means the geometry is wrong", "B) Without metadata, future users cannot reliably judge provenance, fitness for purpose, or limitations", "C) The data cannot be displayed in a GIS", "D) Metadata are only needed for web maps"],
+            correct: "B",
+            explanation: "Metadata support interpretation, provenance, limitations, and appropriate reuse even when the data appear technically sound.",
+            reference: "GISCI Companion focus: Metadata as part of a GIS database | Misconception check: Metadata is optional if data look correct. | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 39,
+            domain: "Cartography & Visualization",
+            question: "A natural-hazards research group is converting a detailed neighborhood map into a statewide overview. Which action best supports readability at the smaller scale?",
+            options: ["A) Increase the number of legend classes", "B) Add all available reference layers", "C) Generalize or remove unnecessary detail while preserving the map's purpose", "D) Keep every local street and label at the same size"],
+            correct: "C",
+            explanation: "Generalization reduces detail appropriately as scale decreases so the map remains legible and purposeful.",
+            reference: "GISCI Companion focus: Generalization and scale | Misconception check: More detail always improves a map. | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 40,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A rapidly growing metropolitan planning organization finds a statistically significant cluster of traffic crashes in one part of Stonebridge. Which conclusion is most defensible?",
+            options: ["A) The cluster means every crash in that area has the same cause", "B) A significant cluster eliminates the need to inspect the underlying data", "C) The cluster proves that roadway design caused the crashes", "D) The cluster identifies a spatial pattern that merits investigation, but the analysis alone does not establish causation"],
+            correct: "D",
+            explanation: "Spatial statistics can identify nonrandom patterns, but pattern detection alone does not establish a causal explanation.",
+            reference: "GISCI Companion focus: How spatial statistics should be interpreted conceptually | Misconception check: A statistically significant spatial pattern automatically explains causation. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 41,
+            domain: "Geospatial Data",
+            question: "A watershed restoration collaborative receives a proprietary land-cover dataset with strong positional accuracy but a license prohibiting redistribution. The team plans to publish the raw dataset on an open portal. What is the main concern?",
+            options: ["A) Licensing and use constraints may prohibit the planned redistribution", "B) High positional accuracy makes licensing irrelevant", "C) The data must first be converted from vector to raster", "D) Open portals can legally redistribute any geospatial dataset"],
+            correct: "A",
+            explanation: "Fitness and stewardship include licensing/use constraints; technically strong data may still have restrictions on sharing.",
+            reference: "GISCI Companion focus: Public, proprietary, and open geospatial data | Misconception check: Public sharing is always allowed if the data are useful. | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 42,
+            domain: "Conceptual Foundations",
+            question: "A GNSS receiver reports coordinates to seven decimal places, but field checks show all positions are shifted about 12 meters east. Which statement is correct?",
+            options: ["A) Precision and accuracy mean the same thing", "B) The data are precise but not accurate", "C) The data are accurate but not precise", "D) The number of decimals proves high accuracy"],
+            correct: "B",
+            explanation: "The positions are consistently detailed/repeatable yet systematically displaced from truth, indicating precision without accuracy.",
+            reference: "GISCI Companion focus: Accuracy versus precision | Misconception check: Higher precision always means greater accuracy. | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 43,
+            domain: "Data Modeling",
+            question: "A countywide 911 modernization project wants the same asset database to support field collection, maintenance, dashboards, and future analysis. Which characteristic is most important in the data model?",
+            options: ["A) A unique schema for every individual user", "B) A design optimized only for today's map layout", "C) A structure aligned with business needs that is consistent, maintainable, and documented", "D) The largest possible number of fields"],
+            correct: "C",
+            explanation: "A useful data model should serve organizational purpose while supporting consistency, maintenance, and future use.",
+            reference: "GISCI Companion focus: How data models support long-term maintenance | Misconception check: More fields and complexity always improve a GIS. | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 44,
+            domain: "GI & Society",
+            question: "An analyst at an interagency climate adaptation team chooses which neighborhoods to sample, how to classify a risk index, and which results to show on a public map. Which statement best reflects GISCI's ethics guidance?",
+            options: ["A) The software makes all such decisions neutral once data are digital", "B) Bias can occur only during field collection, not analysis or mapping", "C) Publishing a map automatically removes the analyst's responsibility", "D) Human choices throughout the workflow can introduce bias or shape interpretation, so methods and limitations should be examined and communicated"],
+            correct: "D",
+            explanation: "Technology does not eliminate human judgment; choices in collection, analysis, classification, and communication can introduce bias or influence perception.",
+            reference: "GISCI Companion focus: Bias and representation | Misconception check: Technology itself is neutral, so outputs are unbiased. | Blueprint domain resource: https://geospacebok.eu/GS"
+        },
+        {
+            id: 45,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A city enterprise GIS program repeats the same monthly analysis for 24 service districts. Staff currently run a long sequence of tools manually and sometimes change parameters without recording them. Which improvement best supports reliable future work?",
+            options: ["A) Automate the repeated workflow and document inputs, parameters, and assumptions", "B) Increase the map's visual detail so reviewers can infer the process", "C) Store only the final outputs to reduce clutter", "D) Use a different GIS software package each month to cross-check results"],
+            correct: "A",
+            explanation: "Automation plus documentation improves reproducibility, consistency, reviewability, and maintenance of repeated workflows.",
+            reference: "GISCI Companion focus: Why workflow documentation, automation, and reproducibility matter | Misconception check: Documentation is unnecessary if an analyst can remember the workflow. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 46,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A sensor revisits the same location every two days but its pixels are 30 meters across. Which statement is correct?",
+            options: ["A) Temporal and spatial resolution are the same property", "B) It has relatively high temporal frequency, while the 30-meter value describes spatial resolution", "C) The two-day revisit describes radiometric resolution", "D) The 30-meter pixel size describes spectral resolution"],
+            correct: "B",
+            explanation: "Revisit interval is temporal resolution; pixel ground dimensions describe spatial resolution.",
+            reference: "GISCI Companion focus: Spatial, spectral, temporal, and radiometric resolution | Misconception check: Higher spatial resolution automatically means higher temporal resolution. | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 47,
+            domain: "Geospatial Data",
+            question: "Field staff at a public health surveillance team collect new trail conditions specifically for a current accessibility project. An analyst also downloads last year's trail inventory created by another agency. Which statement is correct?",
+            options: ["A) Both are secondary because GIS stores digital copies", "B) The downloaded inventory becomes primary simply because the analyst edits it", "C) The new field observations are a primary source for this project; the downloaded inventory is a secondary source", "D) Both are primary because both contain geographic coordinates"],
+            correct: "C",
+            explanation: "Primary data are collected directly for the current purpose; secondary data were collected previously by others or for another purpose.",
+            reference: "GISCI Companion focus: Primary versus secondary data sources | Misconception check: Secondary data are inherently lower quality. | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 48,
+            domain: "Cartography & Visualization",
+            question: "A regional electric utility publishes a modeled flood-risk map. The model has substantial uncertainty in sparsely observed areas. What is the most responsible cartographic approach?",
+            options: ["A) Hide uncertainty so users will trust the map", "B) Increase color saturation to imply confidence", "C) Round all values to whole numbers and omit model limitations", "D) Communicate the uncertainty using appropriate symbols, notes, ranges, or related design choices"],
+            correct: "D",
+            explanation: "When uncertainty is meaningful to interpretation, maps should communicate it rather than imply false precision.",
+            reference: "GISCI Companion focus: Communicating uncertainty | Misconception check: Uncertainty should be hidden to avoid confusing users. | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 49,
+            domain: "Cartography & Visualization",
+            question: "A dashboard at a state transportation operations center contains a map, six charts, 18 indicators, and multiple animations, but managers cannot quickly determine which service areas need attention. Which redesign principle is most important?",
+            options: ["A) Prioritize the decision task and create a clear visual hierarchy around actionable information", "B) Add more indicators so no information is omitted", "C) Use brighter colors on every element", "D) Replace the dashboard with a static table because visualization cannot support decisions"],
+            correct: "A",
+            explanation: "Visualization should transform data into understandable, actionable information; hierarchy and purpose are more important than the number of elements.",
+            reference: "GISCI Companion focus: Visualization versus simple display | Misconception check: Dashboards are merely passive displays. | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 50,
+            domain: "Organizational & Institutional Aspects",
+            question: "A shared parcel dataset at a city enterprise GIS program is edited by many teams, but nobody is formally responsible for approving schema changes or maintaining metadata. What is the clearest institutional risk?",
+            options: ["A) The lack of a map title will reduce data integrity", "B) Unclear roles and responsibilities can create inconsistent updates and weaken accountability", "C) The parcel geometry will automatically become raster", "D) The dataset will stop displaying in web maps"],
+            correct: "B",
+            explanation: "Clear ownership/stewardship and approval responsibilities are central to maintaining authoritative shared data.",
+            reference: "GISCI Companion focus: Roles, responsibilities, and stewardship | Misconception check: Everyone using a dataset is equally responsible for authoritative maintenance. | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 51,
+            domain: "Design of Systems",
+            question: "A metropolitan transit authority expects users and data volume to triple over five years. Which design consideration is most important now?",
+            options: ["A) Avoiding documentation so the system remains flexible", "B) Designing only for today's peak load", "C) Scalability and lifecycle planning", "D) Choosing the most decorative basemap"],
+            correct: "C",
+            explanation: "Systems should be planned for future growth, maintenance, reliability, and changing organizational needs.",
+            reference: "GISCI Companion focus: Designing for future growth | Misconception check: A GIS should be designed only for current needs. | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 52,
+            domain: "Conceptual Foundations",
+            question: "An interagency climate adaptation team represents a national highway system as lines for a continental-scale routing study but as polygons for a detailed pavement-maintenance inventory. What principle does this illustrate?",
+            options: ["A) A geographic feature has one universally correct GIS geometry", "B) Changing representation eliminates uncertainty", "C) Only polygon data can be analyzed in GIS", "D) Geographic representation is an abstraction chosen to fit purpose and scale"],
+            correct: "D",
+            explanation: "GIS represents real-world phenomena through abstractions; the appropriate representation depends on purpose, scale, and required detail.",
+            reference: "GISCI Companion focus: Geographic abstraction and modeling | Misconception check: Digital GIS is an exact copy of reality. | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 53,
+            domain: "Design of Systems",
+            question: "Before a field-data project begins, a metropolitan transit authority establishes collection standards, required attributes, and review procedures. After data are collected, staff inspect a sample and run automated checks. Which statement is best?",
+            options: ["A) The standards and procedures are QA; the inspections and checks are QC", "B) All activities are QC because they involve quality", "C) All activities are QA because they occur within one project", "D) QA and QC are unrelated to system reliability"],
+            correct: "A",
+            explanation: "QA focuses on planned processes and standards to prevent problems; QC focuses on checking outputs for defects or nonconformance.",
+            reference: "GISCI Companion focus: QA versus QC | Misconception check: QA and QC are interchangeable post-production checks. | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 54,
+            domain: "Cartography & Visualization",
+            question: "A city enterprise GIS program is mapping a sequential variable from low to high values. Which symbolization principle is most appropriate?",
+            options: ["A) Use labels only and remove all visual differentiation", "B) Use an ordered visual progression that reinforces the low-to-high meaning", "C) Use unrelated symbols with no perceptual order", "D) Randomize colors for each feature"],
+            correct: "B",
+            explanation: "Ordered quantitative data should generally use symbols/colors with a perceptible order that supports the meaning.",
+            reference: "GISCI Companion focus: Symbolization and color selection | Misconception check: Any color scheme communicates the same quantitative meaning. | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 55,
+            domain: "Data Modeling",
+            question: "Two tables at a multi-county emergency management consortium contain a shared unique facility ID. One table stores facility locations; the other stores one current manager record per facility. What makes that shared ID valuable?",
+            options: ["A) It replaces metadata", "B) It makes topology unnecessary", "C) It provides a key that can link related records without duplicating all attributes", "D) It automatically changes the coordinate reference system"],
+            correct: "C",
+            explanation: "A shared key supports relational linkage between records and reduces redundant storage.",
+            reference: "GISCI Companion focus: Keys and relationships conceptually | Misconception check: A shared field is only useful for display. | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 56,
+            domain: "Data Modeling",
+            question: "A countywide 911 modernization project is considering two database designs. Design A stores every possible attribute 'just in case.' Design B stores only attributes tied to defined business needs, uses validation rules, documents fields, and can be extended later. Which is more defensible?",
+            options: ["A) Design A, because more stored information always produces a better GIS", "B) Design A, because database design should be independent of organizational purpose", "C) Both are equivalent because schema design does not affect GIS quality", "D) Design B, because purpose-driven simplicity improves maintainability while preserving future growth"],
+            correct: "D",
+            explanation: "GISCI emphasizes data models driven by purpose, consistency, documentation, and maintainability rather than unnecessary complexity.",
+            reference: "GISCI Companion focus: Purpose-driven data modeling | Misconception check: More data automatically improve the GIS. | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 57,
+            domain: "Conceptual Foundations",
+            question: "A habitat model asks whether forest patches touch one another, while a school-access study asks whether homes lie within a district boundary. Which pair of spatial relationships is most relevant?",
+            options: ["A) Adjacency and containment", "B) Interpolation and classification", "C) Scale and precision", "D) Radiometry and topology"],
+            correct: "A",
+            explanation: "Touching patches involve adjacency; being inside a district involves containment.",
+            reference: "GISCI Companion focus: Spatial relationships | Misconception check: All spatial relationships can be reduced to distance. | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 58,
+            domain: "Analytical Methods & GeoComputation",
+            question: "To estimate the percentage of each parcel affected by a flood hazard, a watershed restoration collaborative overlays parcel polygons with flood-zone polygons. The parcel layer is survey-grade, but the flood layer was generalized from a regional product. What most directly limits the precision of the parcel-level result?",
+            options: ["A) Whether the final map uses a legend", "B) The less detailed flood-hazard input and its positional/generalization limitations", "C) The fact that both inputs are polygons", "D) The number of attributes in the parcel table"],
+            correct: "B",
+            explanation: "Overlay results inherit the limitations of the input layers; a generalized regional flood layer can constrain the meaningful precision of parcel-level estimates.",
+            reference: "GISCI Companion focus: How input quality affects overlay results | Misconception check: Overlay output is more accurate than its inputs. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 59,
+            domain: "Analytical Methods & GeoComputation",
+            question: "An interagency climate adaptation team has a limited budget and must choose between a very complex analytical workflow and a simpler workflow that directly answers the stated decision question with well-documented data. Which principle should guide the choice?",
+            options: ["A) Prefer the workflow with the most software tools so results are easier to defend", "B) Prefer the most sophisticated workflow because complexity signals rigor", "C) Prefer the workflow that best fits the question, data, assumptions, and decision needs", "D) Prefer the workflow that produces the largest number of output layers"],
+            correct: "C",
+            explanation: "GISCI emphasizes selecting methods that fit the geographic question, available data, assumptions, and objectives rather than maximizing technical complexity.",
+            reference: "GISCI Companion focus: Selecting methods that fit the geographic question | Misconception check: The best analysis is the most sophisticated available technique. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 60,
+            domain: "Conceptual Foundations",
+            question: "A state transportation operations center discovers that two datasets line up visually at one scale but produce inconsistent distance measurements after reprojection. Which principle should guide the team?",
+            options: ["A) Assume visual alignment proves the data are spatially compatible", "B) Increase symbol size until discrepancies are hidden", "C) Export both datasets to a new file format because file conversion resolves reference issues", "D) Verify coordinate reference systems, transformations, and intended measurement properties before trusting the analysis"],
+            correct: "D",
+            explanation: "Visual alignment does not guarantee compatible reference frameworks or correct measurement behavior; CRS and transformations must be checked.",
+            reference: "GISCI Companion focus: Spatial reference frameworks and measurement reliability | Misconception check: Visual alignment proves spatial compatibility. | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 61,
+            domain: "Geospatial Data",
+            question: "A public health surveillance team overlays a national road layer with high-resolution municipal building footprints. Roads appear to pass through some buildings. Before editing the buildings, what should analysts investigate first?",
+            options: ["A) Differences in source scale, positional accuracy, collection method, and coordinate reference", "B) Whether the buildings use attractive symbology", "C) Whether the road table has enough text fields", "D) Whether the map title includes a north arrow"],
+            correct: "A",
+            explanation: "Apparent offsets often arise from differences in source scale, positional quality, or spatial reference and should be diagnosed before altering higher-quality local data.",
+            reference: "GISCI Companion focus: Data integration and positional quality | Misconception check: If layers display together, their positional accuracy must be compatible. | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 62,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A public health surveillance team wants to determine which neighborhoods in East Ridge can be reached by an ambulance within eight minutes. The team has a routable street network with speed limits, one-way restrictions, and bridge closures. Which analytical approach best matches the question?",
+            options: ["A) Create equal-distance buffers around ambulance stations", "B) Calculate service areas using travel time on the road network", "C) Interpolate response times from station locations", "D) Dissolve station points into a single feature"],
+            correct: "B",
+            explanation: "Travel time is constrained by the road network and its impedance/restrictions, so network service-area analysis best represents accessibility.",
+            reference: "GISCI Companion focus: When network analysis is preferable to straight-line distance | Misconception check: Straight-line distance is always an adequate proxy for accessibility. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 63,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A natural-hazards research group maps a 300-meter protected-area buffer around streams before evaluating proposed development sites. Later, staff discover that the stream layer was digitized from a generalized small-scale source. Which statement is most defensible?",
+            options: ["A) The only important issue is whether the buffer polygons overlap", "B) The buffer distance guarantees that the output is accurate", "C) The buffer is useful, but the reliability of the result still depends on the quality and scale of the stream data", "D) Buffering converts inaccurate input data into accurate output geometry"],
+            correct: "C",
+            explanation: "A buffer can correctly apply a distance rule while still inheriting limitations from the source data; input quality and scale affect result reliability.",
+            reference: "GISCI Companion focus: Why buffering is useful and what affects analytical reliability | Misconception check: Running an analysis automatically produces a correct answer. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 64,
+            domain: "Analytical Methods & GeoComputation",
+            question: "A watershed restoration collaborative must identify land that is simultaneously outside flood-prone areas, inside designated growth zones, and within 1 kilometer of a major road. The inputs include both polygon constraints and a road layer. Which workflow is most appropriate?",
+            options: ["A) Interpolate all input layers to create a single continuous surface", "B) Use only a network route calculation", "C) Change the map projection until the desired areas visually align", "D) Use overlay to combine the polygon constraints and a road-proximity layer"],
+            correct: "D",
+            explanation: "Overlay is designed to combine spatial constraints, while road proximity can be represented with a buffer or distance layer before overlay.",
+            reference: "GISCI Companion focus: How complementary analytical methods combine in a workflow | Misconception check: There is always one universally correct analytical workflow. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 65,
+            domain: "Data Modeling",
+            question: "A rapidly growing metropolitan planning organization is designing a new asset GIS. Managers first describe the real-world things they must track and how those things relate, without choosing tables or software. Which modeling level are they working on?",
+            options: ["A) Conceptual data model", "B) Physical data model", "C) Cartographic layout", "D) Web service architecture"],
+            correct: "A",
+            explanation: "A conceptual model describes real-world entities and relationships without implementation details.",
+            reference: "GISCI Companion focus: Conceptual, logical, and physical data models | Misconception check: A data model is only the final database schema. | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 66,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A state transportation operations center wants to measure distances and areas from aerial imagery taken over hilly terrain. Why is orthorectification important?",
+            options: ["A) It converts metadata into map symbols", "B) It corrects geometric displacement so image locations better correspond to ground positions", "C) It classifies every pixel into a land-cover category", "D) It increases the number of spectral bands"],
+            correct: "B",
+            explanation: "Orthorectification corrects geometric distortions, including terrain-related displacement, to support more reliable positional use.",
+            reference: "GISCI Companion focus: Why image correction is important | Misconception check: Raw imagery can always support accurate measurement. | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 67,
+            domain: "Conceptual Foundations",
+            question: "A watershed restoration collaborative needs to calculate parcel areas for a local land-use study. The data are currently stored in latitude/longitude. Which action is most appropriate before making area measurements?",
+            options: ["A) Convert the parcels to points", "B) Change only the map symbols", "C) Use a suitable projected coordinate system for the study area", "D) Keep latitude/longitude because angular coordinates are best for area"],
+            correct: "C",
+            explanation: "Projected coordinate systems provide planar units appropriate for local distance and area measurement.",
+            reference: "GISCI Companion focus: Geographic versus projected coordinate systems | Misconception check: Coordinate system choice is merely a display preference. | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 68,
+            domain: "Organizational & Institutional Aspects",
+            question: "A state transportation operations center plans to share emergency-response data with partner agencies. Which approach best balances collaboration and responsible management?",
+            options: ["A) Give every partner unrestricted access to every dataset", "B) Refuse all sharing because collaboration always reduces security", "C) Publish sensitive raw records publicly so everyone works from the same source", "D) Share the information needed for the joint mission using agreed standards, access controls, and documented responsibilities"],
+            correct: "D",
+            explanation: "Effective collaboration balances access and shared purpose with standards, security, roles, and appropriate data protection.",
+            reference: "GISCI Companion focus: Data sharing and institutional collaboration | Misconception check: More access is always better. | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 69,
+            domain: "Conceptual Foundations",
+            question: "A statewide equal-area map is being redesigned by a public health surveillance team for a navigation-focused application. Which statement best reflects projection tradeoffs?",
+            options: ["A) Projection choice should reflect which properties matter most for the intended use because every flat projection distorts something", "B) Changing projection changes the real-world location of features", "C) Projection choice matters only for printed maps, not GIS analysis", "D) One projection can preserve area, shape, distance, and direction everywhere"],
+            correct: "A",
+            explanation: "All flat map projections involve distortion; the appropriate choice depends on the properties most important to the task.",
+            reference: "GISCI Companion focus: Why projections involve tradeoffs | Misconception check: One projection can preserve every property. | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 70,
+            domain: "Organizational & Institutional Aspects",
+            question: "A multi-county emergency management consortium has funding for only part of a proposed GIS modernization project. Which response is most defensible?",
+            options: ["A) Skip stakeholder input to save time", "B) Prioritize requirements that most directly support organizational objectives and design a sustainable scope within available resources", "C) Attempt every feature anyway and assume future funding will cover maintenance", "D) Choose the most expensive technology because cost signals quality"],
+            correct: "B",
+            explanation: "Project and resource decisions should align scope, priorities, staffing, budget, and sustainability with organizational needs.",
+            reference: "GISCI Companion focus: Project and resource considerations | Misconception check: A successful GIS project should maximize features regardless of resources. | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 71,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A state transportation operations center trains an image classifier using examples from only one part of the study area and then assumes the automated output is fully objective. What is the best critique?",
+            options: ["A) Classification is reliable as long as spatial resolution is high", "B) Any training sample works equally well if enough pixels are processed", "C) Classification quality depends on representative training data, parameter choices, validation, and interpretation", "D) Automated classification removes all human judgment"],
+            correct: "C",
+            explanation: "GISCI emphasizes that classification is not entirely automatic; training data, parameters, validation, and professional interpretation affect results.",
+            reference: "GISCI Companion focus: Image classification and professional interpretation | Misconception check: Image classification is entirely automated. | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 72,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Researchers working with a regional conservation alliance have temperature readings from 42 weather stations and need an estimated temperature surface across Cedar City. Station spacing is uneven, with large gaps in the western portion of the study area. Which interpretation is best?",
+            options: ["A) Interpolation converts every estimated cell into an observed measurement", "B) A polygon overlay will estimate the temperature at unsampled locations", "C) The highest-resolution output raster will eliminate uncertainty caused by sparse sampling", "D) Interpolation can estimate values between stations, but confidence should be lower where sampling is sparse"],
+            correct: "D",
+            explanation: "Interpolation estimates a continuous phenomenon from discrete samples, and sparse sampling reduces confidence in unsampled areas.",
+            reference: "GISCI Companion focus: Why interpolation is appropriate and what limits its reliability | Misconception check: Interpolated values are equivalent to direct observations. | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 73,
+            domain: "Geospatial Data",
+            question: "A dataset used by a countywide 911 modernization project is accurate enough for countywide planning but not for parcel-level engineering. Which statement best reflects data fitness for purpose?",
+            options: ["A) The same dataset can be suitable for one application and unsuitable for another", "B) A dataset is either accurate or inaccurate for every possible use", "C) If metadata exist, the dataset is suitable for all uses", "D) Higher file size would make the dataset suitable for parcel engineering"],
+            correct: "A",
+            explanation: "Fitness for purpose is application-specific; acceptable accuracy, resolution, and completeness depend on the decision being supported.",
+            reference: "GISCI Companion focus: Fitness for purpose | Misconception check: A dataset has one universal quality rating. | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 74,
+            domain: "Design of Systems",
+            question: "A city enterprise GIS program finishes deployment of an enterprise GIS. Which action best reflects GISCI's view of the system lifecycle?",
+            options: ["A) Remove documentation after launch because it is no longer needed", "B) Continue maintenance, training, evaluation, documentation, and adaptation as needs change", "C) Treat deployment as the end of the project and freeze the system", "D) Stop collecting feedback so the design remains stable"],
+            correct: "B",
+            explanation: "Deployment begins an ongoing period of maintenance, improvement, training, and adaptation.",
+            reference: "GISCI Companion focus: Why GIS systems should be evaluated and improved over time | Misconception check: A GIS project ends when the system is deployed. | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 75,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "A city enterprise GIS program needs detailed three-dimensional information about tree canopy height and ground elevation. Which technology is especially well suited?",
+            options: ["A) A choropleth classification", "B) A geocoding service", "C) LiDAR", "D) A simple text table"],
+            correct: "C",
+            explanation: "LiDAR measures distances to surfaces and is widely used to derive detailed 3D information about terrain and vegetation structure.",
+            reference: "GISCI Companion focus: LiDAR fundamentals | Misconception check: LiDAR and ordinary photography collect the same information. | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        }
+    ];
+
+    // Dynamic Interface Builder: Injects the 75 questions into the DOM framework
+    function buildQuizInterface() {
+        const target = document.getElementById('questions-container');
+        target.innerHTML = '';
+
+        examQuestions.forEach((q) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'card';
+            
+            let choicesHTML = '';
+            q.options.forEach((choice) => {
+                const choiceLetter = choice.trim().charAt(0); // Extracts A, B, C, or D
+                choicesHTML += `
+                    <label class="option-label">
+                        <input type="radio" name="item-${q.id}" value="${choiceLetter}">
+                        ${choice}
+                    </label>
+                `;
+            });
+
+            wrapper.innerHTML = `
+                <div class="question-header">
+                    <span class="question-num">Question ${q.id} of ${examQuestions.length}</span>
+                    <span class="domain-tag">${q.domain}</span>
+                </div>
+                <div class="question-text">${q.id}. ${q.question}</div>
+                <div class="options-container">
+                    ${choicesHTML}
+                </div>
+            `;
+            target.appendChild(wrapper);
+        });
+    }
+
+    // Timed exam controller: 120 minutes, persisted within this browser tab/session.
+    const EXAM_DURATION_SECONDS = 120 * 60;
+    const examTimerStorageKey = 'gispe_exam_deadline_' + window.location.pathname;
+    let examTimerInterval = null;
+    let examSubmitted = false;
+
+    function formatExamTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function startExamTimer() {
+        let deadline = Number(sessionStorage.getItem(examTimerStorageKey));
+        if (!Number.isFinite(deadline) || deadline <= 0) {
+            deadline = Date.now() + (EXAM_DURATION_SECONDS * 1000);
+            sessionStorage.setItem(examTimerStorageKey, String(deadline));
+        }
+
+        const updateTimer = () => {
+            const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+            const display = document.getElementById('timer-display');
+            const timerCard = document.getElementById('exam-timer');
+            if (display) display.textContent = formatExamTime(remaining);
+            if (timerCard && remaining <= 600) {
+                timerCard.style.borderColor = 'var(--danger)';
+            }
+            if (display && remaining <= 300) {
+                display.style.color = 'var(--danger)';
+            }
+
+            if (remaining <= 0) {
+                clearInterval(examTimerInterval);
+                examTimerInterval = null;
+                if (!examSubmitted) {
+                    alert('Time has expired. Your exam will now be submitted. Any unanswered questions will be scored as incorrect.');
+                    scoreExam(true);
+                }
+            }
+        };
+
+        updateTimer();
+        if (!examSubmitted && examTimerInterval === null) {
+            examTimerInterval = setInterval(updateTimer, 1000);
+        }
+    }
+
+    // Performance Metric Processor: Scores inputs and builds the remediation report
+    async function scoreExam(autoSubmit = false) {
+        if (examSubmitted) return;
+
+        const unansweredCount = examQuestions.reduce((count, q) => {
+            return count + (document.querySelector(`input[name="item-${q.id}"]:checked`) ? 0 : 1);
+        }, 0);
+
+        if (!autoSubmit) {
+            const confirmationMessage = unansweredCount > 0
+                ? `You have ${unansweredCount} unanswered question${unansweredCount === 1 ? '' : 's'}. Unanswered questions will be scored as incorrect.\n\nSubmit exam anyway?`
+                : 'You have answered all 75 questions. Submit exam now?';
+            if (!confirm(confirmationMessage)) return;
+        }
+
+        examSubmitted = true;
+        if (examTimerInterval !== null) {
+            clearInterval(examTimerInterval);
+            examTimerInterval = null;
+        }
+        sessionStorage.removeItem(examTimerStorageKey);
+
+        let scoreCount = 0;
+        const remContainer = document.getElementById('remediation-container');
+        const remHeaderZone = document.getElementById('remediation-header-zone');
+        
+        remContainer.innerHTML = ''; // Clear prior runs
+        remHeaderZone.innerHTML = '';
+        const remediationPayload = [];
+
+        // Tracker dictionary mapping errors across domains
+        const statisticsTracker = {};
+        examQuestions.forEach(q => {
+            if(!statisticsTracker[q.domain]) {
+                statisticsTracker[q.domain] = { total: 0, correct: 0 };
+            }
+            statisticsTracker[q.domain].total++;
+        });
+
+        // Evaluate choices
+        examQuestions.forEach((q) => {
+            const pickedInput = document.querySelector(`input[name="item-${q.id}"]:checked`);
+            const picked = pickedInput ? pickedInput.value : null;
+            
+            if (picked === q.correct) {
+                scoreCount++;
+                statisticsTracker[q.domain].correct++;
+            } else {
+                // Compile targeted remediation entry for wrong response
+                const block = document.createElement('div');
+                block.className = 'card remediation-item';
+                block.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-num" style="color: var(--danger);">Study Required — Item ${q.id}</span>
+                        <span class="domain-tag">${q.domain}</span>
+                    </div>
+                    <div class="question-text">${q.question}</div>
+                    <p><strong>Your Selection:</strong> <span class="badge-wrong">${picked || 'Unanswered'}</span></p>
+                    <p><strong>Validated Target Answer:</strong> <span class="badge-correct">${q.correct}</span></p>
+                    <div class="feedback-box">
+                        <strong>Structural Explanation:</strong> ${q.explanation}
+                        <br>
+                        <div class="ref-tag">Course Framework Reference: ${q.reference}</div>
+                    </div>
+                `;
+                remContainer.appendChild(block);
+                const selectedText = picked ? (q.options.find(o => o.trim().startsWith(picked + ')')) || picked) : 'Unanswered';
+                const correctText = q.options.find(o => o.trim().startsWith(q.correct + ')')) || q.correct;
+                remediationPayload.push({
+                    id: q.id,
+                    domain: q.domain,
+                    question: q.question,
+                    selected: selectedText,
+                    correct: correctText,
+                    explanation: q.explanation,
+                    reference: q.reference
+                });
+            }
+        });
+
+        // Compute scores
+        const rawPercentage = Math.round((scoreCount / examQuestions.length) * 100);
+        let weightedTotal = 0;
+        Object.entries(statisticsTracker).forEach(([domainName, stats]) => {
+            const accuracy = stats.total ? stats.correct / stats.total : 0;
+            weightedTotal += accuracy * (blueprintWeights[domainName] || 0);
+        });
+        const finalPercentage = Math.round(weightedTotal * 10) / 10;
+        const completedAt = new Date().toISOString();
+        const savedResult = {
+            version: 19,
+            examSet: 1,
+            difficulty: "Advanced / Over-Preparation",
+            difficultyCode: "ADV",
+            completedAt,
+            weightedScore: finalPercentage,
+            rawCorrect: scoreCount,
+            rawPercent: rawPercentage,
+            domains: Object.fromEntries(Object.entries(statisticsTracker).map(([d,s]) => [d, {
+                correct: s.correct,
+                total: s.total,
+                percent: s.total ? Math.round((s.correct/s.total)*1000)/10 : 0,
+                weight: blueprintWeights[d] || 0
+            }])),
+            remediation: remediationPayload
+        };
+        try {
+            document.getElementById('save-status').textContent = 'Saving result to your student record…';
+            await GISPEDB.saveAttempt(savedResult);
+            document.getElementById('save-status').textContent = '✓ Result saved to your student portal.';
+            document.getElementById('save-status').style.color = 'var(--success)';
+        } catch(e) {
+            document.getElementById('save-status').textContent = 'Result could not be saved: ' + e.message;
+            document.getElementById('save-status').style.color = 'var(--danger)';
+        }
+        document.getElementById('score-percent').innerText = finalPercentage + "%";
+        document.getElementById('score-raw').innerText = `${scoreCount} out of ${examQuestions.length} Questions Correct (raw ${rawPercentage}%)`;
+        
+        const cardRef = document.getElementById('score-card');
+        const labelRef = document.getElementById('pass-label');
+        
+        if (finalPercentage >= 75) {
+            cardRef.style.borderTop = "10px solid var(--success)";
+            labelRef.innerText = "PASSED: Competency Standard Satisfied";
+            labelRef.style.color = "var(--success)";
+        } else {
+            cardRef.style.borderTop = "10px solid var(--danger)";
+            labelRef.innerText = "REMEDIATION NEEDED: Below 75% Target Threshold";
+            labelRef.style.color = "var(--danger)";
+        }
+
+        // Build dynamic domain statistics reporting table
+        const tableBody = document.getElementById('domain-breakdown-body');
+        tableBody.innerHTML = '';
+        for (const [domainName, stats] of Object.entries(statisticsTracker)) {
+            const rate = Math.round((stats.correct / stats.total) * 100);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${domainName}</strong></td>
+                <td>${blueprintWeights[domainName] || 0}%</td>
+                <td style="font-weight: bold; color: ${rate >= 75 ? 'var(--success)' : 'var(--danger)'};">${stats.correct}/${stats.total} (${rate}%)</td>
+            `;
+            tableBody.appendChild(tr);
+        }
+
+        // Add remediation section header
+        const headerCard = document.createElement('div');
+        headerCard.className = 'card';
+        if(finalPercentage === 100) {
+            headerCard.innerHTML = `<h2 style="color: var(--success); margin:0;">Perfect Score! Excellent work.</h2><p style="margin:5px 0 0 0;">You demonstrated mastery across all 11 blueprint domains.</p>`;
+        } else {
+            headerCard.innerHTML = `<h2 style="color: var(--primary); margin:0;">Custom Study & Remediation Plan</h2><p style="margin:5px 0 0 0;">Review the references below for the ${examQuestions.length - scoreCount} questions answered incorrectly or left unanswered to improve your understanding.</p>`;
+        }
+        remHeaderZone.appendChild(headerCard);
+
+        // Toggle layouts and reset viewport scroll position
+        document.getElementById('quiz-interface').style.display = 'none';
+        document.getElementById('results-dashboard').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    // Execute application load sequence
+    window.onload = async function() {
+        try {
+            const profile = await GISPEDB.studentProfile();
+            if(!profile) {
+                location.href = '../login.html?next=' + encodeURIComponent('exams/GISCI_Companion_Advanced_Practice_Exam_01.html');
+                return;
+            }
+            document.getElementById('student-identity').textContent = profile.display_name + ' • Advanced / Over-Preparation 1';
+            buildQuizInterface();
+            startExamTimer();
+        } catch(e) {
+            alert('Unable to load your student session: ' + e.message);
+            location.href = '../login.html';
+        }
+    };
+</script>
+
+</body>
+</html>
