@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreGISP / GISP-E Probably Final Version 4</title>
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --primary-dark: #114154;
+            --primary-light: #f0f5f7;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --border: #dcdde1;
+            --card-bg: #ffffff;
+            --body-bg: #f5f7fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.3rem;
+        }
+
+        header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .domain-tag {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .question-num {
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .option-label input {
+            margin-right: 15px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .action-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        #results-dashboard {
+            display: none;
+        }
+
+        .score-summary {
+            text-align: center;
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .score-big {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin: 15px 0;
+        }
+
+        .pass-status {
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .remediation-item {
+            border-left: 5px solid var(--danger);
+            background-color: #fffafb;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 18px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 0.98rem;
+        }
+
+        .ref-tag {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: bold;
+            background-color: var(--primary-light);
+            padding: 6px 12px;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .badge-wrong { color: var(--danger); font-weight: bold; background: #fde8e8; padding: 2px 8px; border-radius: 4px; }
+        .badge-correct { color: var(--success); font-weight: bold; background: #e1f7e3; padding: 2px 8px; border-radius: 4px; }
+        
+        .domain-breakdown {
+            margin-top: 20px;
+            text-align: left;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .domain-breakdown th, .domain-breakdown td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .domain-breakdown th { background-color: var(--primary-light); color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+      <a href="../portal.html" style="color:var(--primary);font-weight:700;text-decoration:none">← Return to Student Portal</a>
+      <span id="student-identity" style="color:var(--text-light);font-weight:600"></span>
+    </div>
+    <header>
+        <h1>PreGISP® / GISP-E Probably Final Version 4</h1>
+        <p>PreGISP Content • GISP Professional-Style Knowledge &amp; Reasoning</p>
+    </header>
+
+    <!-- Quiz Test Taking Interface -->
+    <div id="quiz-interface">
+        <div class="card" style="background-color: var(--primary-light); border-left: 5px solid var(--primary);">
+            <strong>Probably Final Version 4.</strong> Target difficulty: approximately 75% easier than the GISP Professional practice exam. Content is limited to the GISCI PreGISP blueprint. <br><strong>Exam Instructions:</strong> You have 120 minutes for 75 multiple-choice questions. You may skip questions and return to them while time remains. Any unanswered question is scored as incorrect. Submit the exam for a blueprint-weighted score, domain analysis, and targeted remediation.
+        </div>
+        <div id="exam-timer" class="card" style="position:sticky;top:8px;z-index:50;border:2px solid var(--primary);background:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 4px 12px rgba(0,0,0,.10);">
+            <div><strong>Timed Practice Exam:</strong> 120-minute limit</div>
+            <div style="font-size:1.25rem;font-weight:800;">Time Remaining: <span id="timer-display">120:00</span></div>
+            <div id="skipped-question-panel" style="width:100%;padding-top:10px;border-top:1px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;"><strong>Skipped / unanswered:</strong> <span id="skipped-question-count" style="font-weight:800;">75</span><span style="color:var(--text-light);font-size:.9rem;">Click a question number to jump directly to it.</span></div>
+                <div id="skipped-question-list" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;"></div>
+            </div>
+        </div>
+        <form id="exam-form">
+            <div id="questions-container"></div>
+            <div class="action-container">
+                <button type="button" class="btn" onclick="scoreExam()">Submit and Score Exam</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results & Remediation Dashboard Interface -->
+    <div id="results-dashboard">
+        <div class="card score-summary" id="score-card">
+            <h2>Your Evaluation Summary</h2><p><strong>Blueprint-weighted diagnostic score</strong></p>
+            <div class="score-big" id="score-percent">0%</div>
+            <p id="score-raw" style="font-size: 1.2rem; font-weight: 600;">0 out of 75 Questions Correct</p><p id="save-status" style="font-weight:600;color:var(--text-light);">Result not yet saved.</p>
+            <div class="pass-status" id="pass-label">STATUS</div>
+            
+            <h3 style="margin-top:30px;">Domain-Specific Performance</h3>
+            <table class="domain-breakdown">
+                <thead>
+                    <tr>
+                        <th>Knowledge Domain</th>
+                        <th>Weight</th>
+                        <th>Your Performance</th>
+                    </tr>
+                </thead>
+                <tbody id="domain-breakdown-body"></tbody>
+            </table>
+        </div>
+
+        <div id="remediation-header-zone"></div>
+        <div id="remediation-container"></div>
+        
+        <div class="action-container">
+            <button type="button" class="btn" onclick="window.scrollTo(0,0); location.reload();">Reset & Retake Exam</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../assets/config.js"></script>
+<script src="../../assets/db.js"></script>
+<script>
+    // Centralized Data Model Architecture storing all 75 platform-neutral blueprint questions
+    const blueprintWeights = {"Analytical Methods & GeoComputation": 18, "Conceptual Foundations": 14, "Data Modeling": 12, "Geospatial Data": 11, "Cartography & Visualization": 10, "Platforms, Sensors, Physics & Image Processing": 10, "Design of Systems": 8, "Organizational & Institutional Aspects": 7, "Thematic & Application Domains": 5, "GI & Society": 3, "Web-Based GIS": 2};
+    const examQuestions = [
+        {
+            id: 1,
+            domain: "Conceptual Foundations",
+            question: "What GIS concept checks relationships such as overlap and connectivity?",
+            options: ["A) Topology", "B) Typography", "C) Spectral resolution", "D) Temporal currency"],
+            correct: "A",
+            explanation: "The correct answer is Topology. This question checks topology within the Conceptual Foundations domain.",
+            reference: "PreGISP Companion focus: topology | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 2,
+            domain: "Conceptual Foundations",
+            question: "What relationship means one feature is inside another?",
+            options: ["A) Connectivity", "B) Classification", "C) Containment", "D) Precision"],
+            correct: "C",
+            explanation: "The correct answer is Containment. This question checks containment within the Conceptual Foundations domain.",
+            reference: "PreGISP Companion focus: containment | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 3,
+            domain: "Geospatial Data",
+            question: "Which data type uses points, lines, and polygons?",
+            options: ["A) Dashboard", "B) Vector data", "C) Raster data", "D) Metadata"],
+            correct: "B",
+            explanation: "The correct answer is Vector data. This question checks vector raster within the Geospatial Data domain.",
+            reference: "PreGISP Companion focus: vector raster | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 4,
+            domain: "Conceptual Foundations",
+            question: "Which coordinate system is used for flat-map coordinates?",
+            options: ["A) Geographic coordinate system", "B) Attribute domain", "C) Spectral signature", "D) Projected coordinate system"],
+            correct: "D",
+            explanation: "The correct answer is Projected coordinate system. This question checks GCS vs PCS within the Conceptual Foundations domain.",
+            reference: "PreGISP Companion focus: GCS vs PCS | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 5,
+            domain: "Design of Systems",
+            question: "What does QA/QC help ensure?",
+            options: ["A) QA/QC", "B) Projection choice alone", "C) Unrestricted access", "D) Decorative mapping"],
+            correct: "A",
+            explanation: "The correct answer is QA/QC. This question checks qa qc within the Design of Systems domain.",
+            reference: "PreGISP Companion focus: qa qc | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 6,
+            domain: "Cartography & Visualization",
+            question: "What should a map do with important uncertainty?",
+            options: ["A) Communicating uncertainty", "B) Use more decorative symbols", "C) Hide limitations", "D) Increase decimal places"],
+            correct: "A",
+            explanation: "The correct answer is Communicating uncertainty. This question checks uncertainty map within the Cartography & Visualization domain.",
+            reference: "PreGISP Companion focus: uncertainty map | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 7,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Which analysis identifies locations that best meet several criteria?",
+            options: ["A) Address matching", "B) Suitability modeling", "C) Label placement", "D) Georeferencing"],
+            correct: "B",
+            explanation: "The correct answer is Suitability modeling. This question checks suitability within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: suitability | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 8,
+            domain: "Organizational & Institutional Aspects",
+            question: "What term describes organizational oversight and decision rules for GIS?",
+            options: ["A) Interpolation", "B) Governance", "C) Symbolization", "D) Radiometry"],
+            correct: "B",
+            explanation: "The correct answer is Governance. This question checks governance within the Organizational & Institutional Aspects domain.",
+            reference: "PreGISP Companion focus: governance | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 9,
+            domain: "Design of Systems",
+            question: "What term describes the stages of a GIS from planning through maintenance?",
+            options: ["A) Spectral signature", "B) One-time deployment only", "C) Map scale", "D) System lifecycle"],
+            correct: "D",
+            explanation: "The correct answer is System lifecycle. This question checks lifecycle within the Design of Systems domain.",
+            reference: "PreGISP Companion focus: lifecycle | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 10,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "What is a material's characteristic response across wavelengths called?",
+            options: ["A) Primary key", "B) Buffer distance", "C) Scale bar", "D) Spectral signature"],
+            correct: "D",
+            explanation: "The correct answer is Spectral signature. This question checks spectral signature within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+            reference: "PreGISP Companion focus: spectral signature | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 11,
+            domain: "Geospatial Data",
+            question: "What quality term concerns missing features?",
+            options: ["A) Projection", "B) Completeness", "C) Radiometric resolution", "D) Normalization"],
+            correct: "B",
+            explanation: "The correct answer is Completeness. This question checks completeness within the Geospatial Data domain.",
+            reference: "PreGISP Companion focus: completeness | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 12,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Why document a GIS workflow?",
+            options: ["A) Manual undocumented editing", "B) Unrestricted public sharing", "C) Reproducible workflow", "D) Decorative cartography"],
+            correct: "C",
+            explanation: "The correct answer is Reproducible workflow. This question checks reproducibility within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: reproducibility | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 13,
+            domain: "Conceptual Foundations",
+            question: "What term describes unavoidable limits in geographic data?",
+            options: ["A) Uncertainty", "B) Perfect exactness", "C) Unlimited resolution", "D) Guaranteed neutrality"],
+            correct: "A",
+            explanation: "The correct answer is Uncertainty. This question checks uncertainty within the Conceptual Foundations domain.",
+            reference: "PreGISP Companion focus: uncertainty | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 14,
+            domain: "Conceptual Foundations",
+            question: "What spatial relationship means 'next to'?",
+            options: ["A) Containment", "B) Adjacency", "C) Temporal currency", "D) Proximity"],
+            correct: "B",
+            explanation: "The correct answer is Adjacency. This question checks adjacency within the Conceptual Foundations domain.",
+            reference: "PreGISP Companion focus: adjacency | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 15,
+            domain: "Conceptual Foundations",
+            question: "What is the term for closeness to the true location?",
+            options: ["A) Accuracy", "B) Resolution", "C) Completeness", "D) Precision"],
+            correct: "A",
+            explanation: "The correct answer is Accuracy. This question checks accuracy precision within the Conceptual Foundations domain.",
+            reference: "PreGISP Companion focus: accuracy precision | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 16,
+            domain: "Geospatial Data",
+            question: "What data-quality term means 'up to date'?",
+            options: ["A) Topology", "B) Cardinality", "C) Precision", "D) Temporal currency"],
+            correct: "D",
+            explanation: "The correct answer is Temporal currency. This question checks currency within the Geospatial Data domain.",
+            reference: "PreGISP Companion focus: currency | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 17,
+            domain: "Analytical Methods & GeoComputation",
+            question: "What should be checked because poor data can produce poor analysis?",
+            options: ["A) Software brand", "B) Input data quality", "C) Screen resolution", "D) Map title wording"],
+            correct: "B",
+            explanation: "The correct answer is Input data quality. This question checks input quality within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: input quality | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 18,
+            domain: "Data Modeling",
+            question: "What database concept reduces duplicated data?",
+            options: ["A) Generalization", "B) Interpolation", "C) Orthorectification", "D) Normalization"],
+            correct: "D",
+            explanation: "The correct answer is Normalization. This question checks normalization within the Data Modeling domain.",
+            reference: "PreGISP Companion focus: normalization | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 19,
+            domain: "Data Modeling",
+            question: "What kind of geodatabase supports shared organizational data?",
+            options: ["A) Enterprise geodatabase", "B) Paper atlas", "C) Standalone legend", "D) Single static map image"],
+            correct: "A",
+            explanation: "The correct answer is Enterprise geodatabase. This question checks enterprise within the Data Modeling domain.",
+            reference: "PreGISP Companion focus: enterprise | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 20,
+            domain: "GI & Society",
+            question: "What issue involves protecting sensitive personal location information?",
+            options: ["A) Publish maximum detail automatically", "B) Ignore possible identification", "C) Privacy and confidentiality", "D) Assume public data have no sensitivity"],
+            correct: "C",
+            explanation: "The correct answer is Privacy and confidentiality. This question checks privacy within the GI & Society domain.",
+            reference: "PreGISP Companion focus: privacy | Blueprint domain resource: https://geospacebok.eu/GS"
+        },
+        {
+            id: 21,
+            domain: "Organizational & Institutional Aspects",
+            question: "What practical resources must be considered when planning GIS projects?",
+            options: ["A) Choose technology without considering capacity", "B) Ignore maintenance needs", "C) Project and resource considerations", "D) Assume unlimited staff and money"],
+            correct: "C",
+            explanation: "The correct answer is Project and resource considerations. This question checks resources within the Organizational & Institutional Aspects domain.",
+            reference: "PreGISP Companion focus: resources | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 22,
+            domain: "Cartography & Visualization",
+            question: "Who the map is for and why it is being made are examples of what consideration?",
+            options: ["A) Audience and purpose", "B) Maximize number of layers", "C) Always use the smallest scale", "D) Use identical design for every audience"],
+            correct: "A",
+            explanation: "The correct answer is Audience and purpose. This question checks audience within the Cartography & Visualization domain.",
+            reference: "PreGISP Companion focus: audience | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 23,
+            domain: "Geospatial Data",
+            question: "What is the ability of different systems to work together called?",
+            options: ["A) Spectral signature", "B) Visual hierarchy", "C) Containment", "D) Interoperability"],
+            correct: "D",
+            explanation: "The correct answer is Interoperability. This question checks interoperability within the Geospatial Data domain.",
+            reference: "PreGISP Companion focus: interoperability | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 24,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Which method is used to combine spatial layers?",
+            options: ["A) Generalization", "B) Geocoding", "C) Overlay analysis", "D) Image enhancement"],
+            correct: "C",
+            explanation: "The correct answer is Overlay analysis. This question checks overlay within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: overlay | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 25,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Which method creates an area around a feature based on distance?",
+            options: ["A) Network analysis", "B) Classification", "C) Interpolation", "D) Buffer analysis"],
+            correct: "D",
+            explanation: "The correct answer is Buffer analysis. This question checks buffer within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: buffer | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 26,
+            domain: "Web-Based GIS",
+            question: "What delivers GIS data or maps to web applications?",
+            options: ["A) Spectral signature", "B) Primary key", "C) Web services", "D) Paper map layout"],
+            correct: "C",
+            explanation: "The correct answer is Web services. This question checks web services within the Web-Based GIS domain.",
+            reference: "PreGISP Companion focus: web services | Blueprint domain resource: https://geospacebok.eu/WB"
+        },
+        {
+            id: 27,
+            domain: "Analytical Methods & GeoComputation",
+            question: "What should an analyst do with GIS results besides create them?",
+            options: ["A) Interpretation of results", "B) Report only the software settings", "C) Ignore uncertainty if the map looks precise", "D) Assume output is correct because processing completed"],
+            correct: "A",
+            explanation: "The correct answer is Interpretation of results. This question checks interpretation within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: interpretation | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 28,
+            domain: "Data Modeling",
+            question: "Which data model begins with real-world entities and relationships?",
+            options: ["A) Map layout", "B) Conceptual data model", "C) Physical data model", "D) Image service"],
+            correct: "B",
+            explanation: "The correct answer is Conceptual data model. This question checks conceptual logical physical within the Data Modeling domain.",
+            reference: "PreGISP Companion focus: conceptual logical physical | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 29,
+            domain: "Conceptual Foundations",
+            question: "What concept affects how much geographic detail a map can show?",
+            options: ["A) Scale", "B) Radiometric resolution", "C) Metadata lineage", "D) Database normalization"],
+            correct: "A",
+            explanation: "The correct answer is Scale. This question checks scale within the Conceptual Foundations domain.",
+            reference: "PreGISP Companion focus: scale | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 30,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Which resolution is about sensitivity to energy levels?",
+            options: ["A) Spatial resolution", "B) Temporal resolution", "C) Radiometric resolution", "D) Topology"],
+            correct: "C",
+            explanation: "The correct answer is Radiometric resolution. This question checks radiometric resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+            reference: "PreGISP Companion focus: radiometric resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 31,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Which sensor type sends out its own energy?",
+            options: ["A) Attribute domain", "B) Active sensor", "C) Passive sensor", "D) Web client"],
+            correct: "B",
+            explanation: "The correct answer is Active sensor. This question checks active passive within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+            reference: "PreGISP Companion focus: active passive | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 32,
+            domain: "Organizational & Institutional Aspects",
+            question: "What helps ensure staff follow consistent GIS practices?",
+            options: ["A) Standards and procedures", "B) Random individual practices", "C) Higher screen resolution", "D) More map decoration"],
+            correct: "A",
+            explanation: "The correct answer is Standards and procedures. This question checks standards within the Organizational & Institutional Aspects domain.",
+            reference: "PreGISP Companion focus: standards | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 33,
+            domain: "Thematic & Application Domains",
+            question: "Can the same GIS principles be used in different fields?",
+            options: ["A) Every industry requires entirely different GIS principles", "B) Methods cannot transfer across disciplines", "C) Only industry terminology matters", "D) Transferable GIS principles"],
+            correct: "D",
+            explanation: "The correct answer is Transferable GIS principles. This question checks transfer within the Thematic & Application Domains domain.",
+            reference: "PreGISP Companion focus: transfer | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 34,
+            domain: "Design of Systems",
+            question: "What kind of requirement says what the GIS must accomplish for users?",
+            options: ["A) Technical requirement", "B) Spectral requirement", "C) Business requirement", "D) Cartographic classification"],
+            correct: "C",
+            explanation: "The correct answer is Business requirement. This question checks business tech within the Design of Systems domain.",
+            reference: "PreGISP Companion focus: business tech | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 35,
+            domain: "Geospatial Data",
+            question: "What is firsthand data collection called?",
+            options: ["A) Database normalization", "B) Secondary data source", "C) Primary data collection", "D) Map generalization"],
+            correct: "C",
+            explanation: "The correct answer is Primary data collection. This question checks primary secondary within the Geospatial Data domain.",
+            reference: "PreGISP Companion focus: primary secondary | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 36,
+            domain: "Organizational & Institutional Aspects",
+            question: "What is working together across organizations called?",
+            options: ["A) No communication between partners", "B) Institutional collaboration", "C) Duplicate uncontrolled copies", "D) Data isolation"],
+            correct: "B",
+            explanation: "The correct answer is Institutional collaboration. This question checks collaboration within the Organizational & Institutional Aspects domain.",
+            reference: "PreGISP Companion focus: collaboration | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 37,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "What process assigns imagery to classes such as forest or water?",
+            options: ["A) Geocoding", "B) Image classification", "C) Normalization", "D) Orthorectification"],
+            correct: "B",
+            explanation: "The correct answer is Image classification. This question checks classification image within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+            reference: "PreGISP Companion focus: classification image | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 38,
+            domain: "Cartography & Visualization",
+            question: "What is the visual representation of map features called?",
+            options: ["A) Normalization", "B) Orthorectification", "C) Replication", "D) Symbolization"],
+            correct: "D",
+            explanation: "The correct answer is Symbolization. This question checks symbolization within the Cartography & Visualization domain.",
+            reference: "PreGISP Companion focus: symbolization | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 39,
+            domain: "Conceptual Foundations",
+            question: "What is the term for repeatability of measurements?",
+            options: ["A) Precision", "B) Accuracy", "C) Interoperability", "D) Currency"],
+            correct: "A",
+            explanation: "The correct answer is Precision. This question checks precision within the Conceptual Foundations domain.",
+            reference: "PreGISP Companion focus: precision | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 40,
+            domain: "Cartography & Visualization",
+            question: "What is simplifying map detail called?",
+            options: ["A) Calibration", "B) Generalization", "C) Interpolation", "D) Normalization"],
+            correct: "B",
+            explanation: "The correct answer is Generalization. This question checks generalization within the Cartography & Visualization domain.",
+            reference: "PreGISP Companion focus: generalization | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 41,
+            domain: "Data Modeling",
+            question: "What key uniquely identifies each record?",
+            options: ["A) Map legend", "B) Primary key", "C) Foreign key", "D) Raster cell"],
+            correct: "B",
+            explanation: "The correct answer is Primary key. This question checks primary key within the Data Modeling domain.",
+            reference: "PreGISP Companion focus: primary key | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 42,
+            domain: "Design of Systems",
+            question: "What design concept means being able to handle growth?",
+            options: ["A) Radiometric resolution", "B) Typography", "C) Adjacency", "D) Scalability"],
+            correct: "D",
+            explanation: "The correct answer is Scalability. This question checks scalability within the Design of Systems domain.",
+            reference: "PreGISP Companion focus: scalability | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 43,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Which sensor type does not send out its own energy?",
+            options: ["A) Primary key", "B) Active sensor", "C) Passive sensor", "D) Topology rule"],
+            correct: "C",
+            explanation: "The correct answer is Passive sensor. This question checks passive within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+            reference: "PreGISP Companion focus: passive | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 44,
+            domain: "Data Modeling",
+            question: "What can restrict a field to approved values?",
+            options: ["A) Attribute domain", "B) Map projection", "C) Web service", "D) Buffer"],
+            correct: "A",
+            explanation: "The correct answer is Attribute domain. This question checks domain within the Data Modeling domain.",
+            reference: "PreGISP Companion focus: domain | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 45,
+            domain: "Design of Systems",
+            question: "Who should be consulted when designing a GIS system?",
+            options: ["A) Design for only the GIS team", "B) Choose software before interviews", "C) Ignore existing workflows", "D) Stakeholder involvement"],
+            correct: "D",
+            explanation: "The correct answer is Stakeholder involvement. This question checks stakeholders within the Design of Systems domain.",
+            reference: "PreGISP Companion focus: stakeholders | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 46,
+            domain: "Analytical Methods & GeoComputation",
+            question: "What should guide the choice of GIS method?",
+            options: ["A) Use the newest tool available", "B) Problem-driven method selection", "C) Use whichever tool was used last", "D) Use the tool with the most parameters"],
+            correct: "B",
+            explanation: "The correct answer is Problem-driven method selection. This question checks workflow choice within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: workflow choice | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 47,
+            domain: "Data Modeling",
+            question: "What is 'data about data' used to document GIS datasets?",
+            options: ["A) Client request", "B) Pixel color", "C) Symbology", "D) Metadata"],
+            correct: "D",
+            explanation: "The correct answer is Metadata. This question checks metadata within the Data Modeling domain.",
+            reference: "PreGISP Companion focus: metadata | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 48,
+            domain: "Data Modeling",
+            question: "What connects related tables?",
+            options: ["A) Color ramp", "B) Raster resampling", "C) Relationship between datasets", "D) Projection distortion"],
+            correct: "C",
+            explanation: "The correct answer is Relationship between datasets. This question checks relationships within the Data Modeling domain.",
+            reference: "PreGISP Companion focus: relationships | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 49,
+            domain: "Analytical Methods & GeoComputation",
+            question: "What term describes nearness between geographic features?",
+            options: ["A) Governance", "B) Proximity", "C) Cardinality", "D) Radiometry"],
+            correct: "B",
+            explanation: "The correct answer is Proximity. This question checks proximity within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: proximity | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 50,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Which resolution is about wavelength bands?",
+            options: ["A) Map scale", "B) Spectral resolution", "C) Temporal resolution", "D) Spatial resolution"],
+            correct: "B",
+            explanation: "The correct answer is Spectral resolution. This question checks spectral resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+            reference: "PreGISP Companion focus: spectral resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 51,
+            domain: "Data Modeling",
+            question: "What term refers to keeping database information valid and consistent?",
+            options: ["A) Decorative balance", "B) Public visibility", "C) Temporal animation", "D) Data integrity"],
+            correct: "D",
+            explanation: "The correct answer is Data integrity. This question checks integrity within the Data Modeling domain.",
+            reference: "PreGISP Companion focus: integrity | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 52,
+            domain: "Geospatial Data",
+            question: "What should determine whether a dataset is suitable for a project?",
+            options: ["A) Newest available dataset", "B) Most colorful map", "C) Fitness for purpose", "D) Largest available file"],
+            correct: "C",
+            explanation: "The correct answer is Fitness for purpose. This question checks fitness within the Geospatial Data domain.",
+            reference: "PreGISP Companion focus: fitness | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 53,
+            domain: "GI & Society",
+            question: "What should GIS professionals consider when data may represent groups unevenly?",
+            options: ["A) Bias and professional responsibility", "B) More detail is always ethically better", "C) Technology is always neutral", "D) Limitations need not be disclosed"],
+            correct: "A",
+            explanation: "The correct answer is Bias and professional responsibility. This question checks bias ethics within the GI & Society domain.",
+            reference: "PreGISP Companion focus: bias ethics | Blueprint domain resource: https://geospacebok.eu/GS"
+        },
+        {
+            id: 54,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Which analysis is used to find routes through a road network?",
+            options: ["A) Network analysis", "B) Straight-line buffering", "C) Interpolation", "D) Raster classification"],
+            correct: "A",
+            explanation: "The correct answer is Network analysis. This question checks network within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: network | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 55,
+            domain: "Cartography & Visualization",
+            question: "What process groups numerical map values into classes?",
+            options: ["A) Classification method", "B) Geocoding method", "C) File compression", "D) GNSS correction"],
+            correct: "A",
+            explanation: "The correct answer is Classification method. This question checks classification within the Cartography & Visualization domain.",
+            reference: "PreGISP Companion focus: classification | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 56,
+            domain: "Cartography & Visualization",
+            question: "What cartographic principle controls what readers notice first?",
+            options: ["A) Visual hierarchy", "B) Topology", "C) Radiometric resolution", "D) Normalization"],
+            correct: "A",
+            explanation: "The correct answer is Visual hierarchy. This question checks visual hierarchy within the Cartography & Visualization domain.",
+            reference: "PreGISP Companion focus: visual hierarchy | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 57,
+            domain: "Organizational & Institutional Aspects",
+            question: "What should define who is responsible for GIS tasks?",
+            options: ["A) Raster cell size", "B) Spectral band", "C) Roles and responsibilities", "D) Map projection"],
+            correct: "C",
+            explanation: "The correct answer is Roles and responsibilities. This question checks roles within the Organizational & Institutional Aspects domain.",
+            reference: "PreGISP Companion focus: roles | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+            id: 58,
+            domain: "Cartography & Visualization",
+            question: "What is arranging map elements called?",
+            options: ["A) Layout and composition", "B) Spectral calibration", "C) Network impedance", "D) Foreign key design"],
+            correct: "A",
+            explanation: "The correct answer is Layout and composition. This question checks layout within the Cartography & Visualization domain.",
+            reference: "PreGISP Companion focus: layout | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 59,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Which area uses statistics to study geographic patterns?",
+            options: ["A) Schema normalization", "B) Spatial statistics", "C) Typography", "D) Image orthorectification"],
+            correct: "B",
+            explanation: "The correct answer is Spatial statistics. This question checks spatial statistics within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: spatial statistics | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 60,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Which method estimates values between measured sample locations?",
+            options: ["A) Geocoding", "B) Dissolve", "C) Interpolation", "D) Topology validation"],
+            correct: "C",
+            explanation: "The correct answer is Interpolation. This question checks interpolation within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: interpolation | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 61,
+            domain: "Design of Systems",
+            question: "What system concern controls who can access data?",
+            options: ["A) Give every user full access", "B) Security and permissions", "C) Publish every dataset publicly", "D) Remove documentation"],
+            correct: "B",
+            explanation: "The correct answer is Security and permissions. This question checks security within the Design of Systems domain.",
+            reference: "PreGISP Companion focus: security | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+            id: 62,
+            domain: "Geospatial Data",
+            question: "What is responsible long-term management of data called?",
+            options: ["A) Raster interpolation", "B) Map decoration", "C) Address labeling", "D) Data stewardship"],
+            correct: "D",
+            explanation: "The correct answer is Data stewardship. This question checks stewardship within the Geospatial Data domain.",
+            reference: "PreGISP Companion focus: stewardship | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 63,
+            domain: "Cartography & Visualization",
+            question: "What should cartographers consider so maps can be understood by more users?",
+            options: ["A) Accessibility", "B) Assume all viewers perceive color identically", "C) Use color alone for every distinction", "D) Use tiny labels to fit more data"],
+            correct: "A",
+            explanation: "The correct answer is Accessibility. This question checks accessibility within the Cartography & Visualization domain.",
+            reference: "PreGISP Companion focus: accessibility | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+            id: 64,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Which type of analysis is used to study terrain?",
+            options: ["A) Address geocoding", "B) Relational modeling", "C) Surface and terrain analysis", "D) Web service design"],
+            correct: "C",
+            explanation: "The correct answer is Surface and terrain analysis. This question checks surface within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: surface | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 65,
+            domain: "Analytical Methods & GeoComputation",
+            question: "What should be considered when choosing an analytical method?",
+            options: ["A) File icon color", "B) Method assumptions", "C) Logo design", "D) Monitor size"],
+            correct: "B",
+            explanation: "The correct answer is Method assumptions. This question checks assumptions within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: assumptions | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 66,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Which resolution is about pixel ground size?",
+            options: ["A) Temporal resolution", "B) Spectral resolution", "C) Radiometric resolution", "D) Spatial resolution"],
+            correct: "D",
+            explanation: "The correct answer is Spatial resolution. This question checks spatial resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+            reference: "PreGISP Companion focus: spatial resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 67,
+            domain: "Analytical Methods & GeoComputation",
+            question: "Which analysis model works with a grid of cells?",
+            options: ["A) Table normalization", "B) Metadata creation", "C) Raster analysis", "D) Network analysis"],
+            correct: "C",
+            explanation: "The correct answer is Raster analysis. This question checks raster vector within the Analytical Methods & Geocomputation domain.",
+            reference: "PreGISP Companion focus: raster vector | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+            id: 68,
+            domain: "Data Modeling",
+            question: "What key refers to another table's primary key?",
+            options: ["A) Spectral band", "B) Primary key", "C) Foreign key", "D) Scale bar"],
+            correct: "C",
+            explanation: "The correct answer is Foreign key. This question checks foreign key within the Data Modeling domain.",
+            reference: "PreGISP Companion focus: foreign key | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+            id: 69,
+            domain: "Platforms, Sensors, Physics & Image Processing",
+            question: "Which resolution is about how often imagery is collected?",
+            options: ["A) Spatial resolution", "B) Spectral resolution", "C) Temporal resolution", "D) Radiometric resolution"],
+            correct: "C",
+            explanation: "The correct answer is Temporal resolution. This question checks temporal resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+            reference: "PreGISP Companion focus: temporal resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+            id: 70,
+            domain: "Thematic & Application Domains",
+            question: "What should GIS results be connected back to?",
+            options: ["A) Report numbers without meaning", "B) Assume one result fits every decision", "C) Ignore the application domain", "D) Interpret results in context"],
+            correct: "D",
+            explanation: "The correct answer is Interpret results in context. This question checks context within the Thematic & Application Domains domain.",
+            reference: "PreGISP Companion focus: context | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 71,
+            domain: "Web-Based GIS",
+            question: "What is the requesting side of client-server called?",
+            options: ["A) Client", "B) Attribute domain", "C) Raster cell", "D) Server"],
+            correct: "A",
+            explanation: "The correct answer is Client. This question checks client server within the Web-Based GIS domain.",
+            reference: "PreGISP Companion focus: client server | Blueprint domain resource: https://geospacebok.eu/WB"
+        },
+        {
+            id: 72,
+            domain: "Conceptual Foundations",
+            question: "What term describes simplifying reality for GIS representation?",
+            options: ["A) Perfect duplication of reality", "B) Cloud deployment", "C) Geographic abstraction", "D) Database encryption"],
+            correct: "C",
+            explanation: "The correct answer is Geographic abstraction. This question checks abstraction within the Conceptual Foundations domain.",
+            reference: "PreGISP Companion focus: abstraction | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+            id: 73,
+            domain: "Thematic & Application Domains",
+            question: "What is the first step in a GIS application: understand the problem or choose software?",
+            options: ["A) Collect every available dataset", "B) Choose symbology before objectives", "C) Start with favorite software", "D) Understand the geographic problem"],
+            correct: "D",
+            explanation: "The correct answer is Understand the geographic problem. This question checks problem first within the Thematic & Application Domains domain.",
+            reference: "PreGISP Companion focus: problem first | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+            id: 74,
+            domain: "Geospatial Data",
+            question: "Which data type is a grid of cells?",
+            options: ["A) Relational key", "B) Raster data", "C) Metadata", "D) Vector data"],
+            correct: "B",
+            explanation: "The correct answer is Raster data. This question checks raster within the Geospatial Data domain.",
+            reference: "PreGISP Companion focus: raster | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+            id: 75,
+            domain: "Conceptual Foundations",
+            question: "Why are map projections a compromise?",
+            options: ["A) Projection choice never affects measurement", "B) Changing projection removes all uncertainty", "C) One projection preserves every property", "D) Projection tradeoffs"],
+            correct: "D",
+            explanation: "The correct answer is Projection tradeoffs. This question checks projection tradeoff within the Conceptual Foundations domain.",
+            reference: "PreGISP Companion focus: projection tradeoff | Blueprint domain resource: https://geospacebok.eu/CF"
+        }
+    ];
+
+    // Dynamic Interface Builder: Injects the 75 questions into the DOM framework
+    function buildQuizInterface() {
+        const target = document.getElementById('questions-container');
+        target.innerHTML = '';
+
+        examQuestions.forEach((q) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'card';
+            wrapper.id = `question-card-${q.id}`;
+            
+            let choicesHTML = '';
+            q.options.forEach((choice) => {
+                const choiceLetter = choice.trim().charAt(0); // Extracts A, B, C, or D
+                choicesHTML += `
+                    <label class="option-label">
+                        <input type="radio" name="item-${q.id}" value="${choiceLetter}">
+                        ${choice}
+                    </label>
+                `;
+            });
+
+            wrapper.innerHTML = `
+                <div class="question-header">
+                    <span class="question-num">Question ${q.id} of ${examQuestions.length}</span>
+                    <span class="domain-tag">${q.domain}</span>
+                </div>
+                <div class="question-text">${q.id}. ${q.question}</div>
+                <div class="options-container">
+                    ${choicesHTML}
+                </div>
+            `;
+            target.appendChild(wrapper);
+        });
+        document.querySelectorAll('#exam-form input[type="radio"]').forEach(input => input.addEventListener('change', updateSkippedQuestions));
+        updateSkippedQuestions();
+    }
+
+    function jumpToQuestion(questionId) {
+        const card = document.getElementById(`question-card-${questionId}`);
+        if (!card) return;
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const oldShadow = card.style.boxShadow;
+        card.style.boxShadow = '0 0 0 4px var(--warning), 0 2px 10px rgba(0,0,0,.08)';
+        setTimeout(() => { card.style.boxShadow = oldShadow; }, 1800);
+    }
+
+    function getUnansweredQuestionIds() {
+        return examQuestions.filter(q => !document.querySelector(`input[name="item-${q.id}"]:checked`)).map(q => q.id);
+    }
+
+    function updateSkippedQuestions() {
+        const ids = getUnansweredQuestionIds();
+        const count = document.getElementById('skipped-question-count');
+        const list = document.getElementById('skipped-question-list');
+        if (count) count.textContent = ids.length === 0 ? 'None' : String(ids.length);
+        if (!list) return;
+        if (ids.length === 0) {
+            list.innerHTML = '<span style="color:var(--success);font-weight:700;">✓ All questions answered</span>';
+            return;
+        }
+        list.innerHTML = ids.map(id => `<button type="button" onclick="jumpToQuestion(${id})" aria-label="Jump to unanswered question ${id}" style="min-width:34px;padding:5px 8px;border:1px solid var(--warning);background:#fff8d8;color:var(--text);font-weight:700;border-radius:5px;cursor:pointer;">${id}</button>`).join('');
+    }
+
+    // Timed exam controller: 120 minutes, persisted within this browser tab/session.
+    const EXAM_DURATION_SECONDS = 120 * 60;
+    const examTimerStorageKey = 'gispe_exam_deadline_' + window.location.pathname;
+    let examTimerInterval = null;
+    let examSubmitted = false;
+
+    function formatExamTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function startExamTimer() {
+        let deadline = Number(sessionStorage.getItem(examTimerStorageKey));
+        if (!Number.isFinite(deadline) || deadline <= 0) {
+            deadline = Date.now() + (EXAM_DURATION_SECONDS * 1000);
+            sessionStorage.setItem(examTimerStorageKey, String(deadline));
+        }
+
+        const updateTimer = () => {
+            const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+            const display = document.getElementById('timer-display');
+            const timerCard = document.getElementById('exam-timer');
+            if (display) display.textContent = formatExamTime(remaining);
+            if (timerCard && remaining <= 600) {
+                timerCard.style.borderColor = 'var(--danger)';
+            }
+            if (display && remaining <= 300) {
+                display.style.color = 'var(--danger)';
+            }
+
+            if (remaining <= 0) {
+                clearInterval(examTimerInterval);
+                examTimerInterval = null;
+                if (!examSubmitted) {
+                    alert('Time has expired. Your exam will now be submitted. Any unanswered questions will be scored as incorrect.');
+                    scoreExam(true);
+                }
+            }
+        };
+
+        updateTimer();
+        if (!examSubmitted && examTimerInterval === null) {
+            examTimerInterval = setInterval(updateTimer, 1000);
+        }
+    }
+
+    // Performance Metric Processor: Scores inputs and builds the remediation report
+    async function scoreExam(autoSubmit = false) {
+        if (examSubmitted) return;
+
+        const unansweredCount = examQuestions.reduce((count, q) => {
+            return count + (document.querySelector(`input[name="item-${q.id}"]:checked`) ? 0 : 1);
+        }, 0);
+
+        if (!autoSubmit) {
+            const unansweredIds = getUnansweredQuestionIds();
+            const confirmationMessage = unansweredCount > 0
+                ? `You have ${unansweredCount} unanswered question${unansweredCount === 1 ? '' : 's'}: ${unansweredIds.join(', ')}. Unanswered questions will be scored as incorrect.\n\nCancel to return to the exam; use the Skipped / unanswered question buttons at the top to jump directly to them.\n\nSubmit exam anyway?`
+                : 'You have answered all 75 questions. Submit exam now?';
+            if (!confirm(confirmationMessage)) return;
+        }
+
+        examSubmitted = true;
+        if (examTimerInterval !== null) {
+            clearInterval(examTimerInterval);
+            examTimerInterval = null;
+        }
+        sessionStorage.removeItem(examTimerStorageKey);
+
+        let scoreCount = 0;
+        const remContainer = document.getElementById('remediation-container');
+        const remHeaderZone = document.getElementById('remediation-header-zone');
+        
+        remContainer.innerHTML = ''; // Clear prior runs
+        remHeaderZone.innerHTML = '';
+        const remediationPayload = [];
+
+        // Tracker dictionary mapping errors across domains
+        const statisticsTracker = {};
+        examQuestions.forEach(q => {
+            if(!statisticsTracker[q.domain]) {
+                statisticsTracker[q.domain] = { total: 0, correct: 0 };
+            }
+            statisticsTracker[q.domain].total++;
+        });
+
+        // Evaluate choices
+        examQuestions.forEach((q) => {
+            const pickedInput = document.querySelector(`input[name="item-${q.id}"]:checked`);
+            const picked = pickedInput ? pickedInput.value : null;
+            
+            if (picked === q.correct) {
+                scoreCount++;
+                statisticsTracker[q.domain].correct++;
+            } else {
+                // Compile targeted remediation entry for wrong response
+                const block = document.createElement('div');
+                block.className = 'card remediation-item';
+                block.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-num" style="color: var(--danger);">Study Required — Item ${q.id}</span>
+                        <span class="domain-tag">${q.domain}</span>
+                    </div>
+                    <div class="question-text">${q.question}</div>
+                    <p><strong>Your Selection:</strong> <span class="badge-wrong">${picked || 'Unanswered'}</span></p>
+                    <p><strong>Validated Target Answer:</strong> <span class="badge-correct">${q.correct}</span></p>
+                    <div class="feedback-box">
+                        <strong>Structural Explanation:</strong> ${q.explanation}
+                        <br>
+                        <div class="ref-tag">Course Framework Reference: ${q.reference}</div>
+                    </div>
+                `;
+                remContainer.appendChild(block);
+                const selectedText = picked ? (q.options.find(o => o.trim().startsWith(picked + ')')) || picked) : 'Unanswered';
+                const correctText = q.options.find(o => o.trim().startsWith(q.correct + ')')) || q.correct;
+                remediationPayload.push({
+                    id: q.id,
+                    domain: q.domain,
+                    question: q.question,
+                    selected: selectedText,
+                    correct: correctText,
+                    explanation: q.explanation,
+                    reference: q.reference
+                });
+            }
+        });
+
+        // Compute scores
+        const rawPercentage = Math.round((scoreCount / examQuestions.length) * 100);
+        let weightedTotal = 0;
+        Object.entries(statisticsTracker).forEach(([domainName, stats]) => {
+            const accuracy = stats.total ? stats.correct / stats.total : 0;
+            weightedTotal += accuracy * (blueprintWeights[domainName] || 0);
+        });
+        const finalPercentage = Math.round(weightedTotal * 10) / 10;
+        const completedAt = new Date().toISOString();
+        const savedResult = {
+            version: 42,
+            examSet: 4,
+            difficulty: "Probably Final Version",
+            difficultyCode: "PFV",
+            completedAt,
+            weightedScore: finalPercentage,
+            rawCorrect: scoreCount,
+            rawPercent: rawPercentage,
+            domains: Object.fromEntries(Object.entries(statisticsTracker).map(([d,s]) => [d, {
+                correct: s.correct,
+                total: s.total,
+                percent: s.total ? Math.round((s.correct/s.total)*1000)/10 : 0,
+                weight: blueprintWeights[d] || 0
+            }])),
+            remediation: remediationPayload
+        };
+        try {
+            document.getElementById('save-status').textContent = 'Saving result to your student record…';
+            await GISPEDB.saveAttempt(savedResult);
+            document.getElementById('save-status').textContent = '✓ Result saved to your student portal.';
+            document.getElementById('save-status').style.color = 'var(--success)';
+        } catch(e) {
+            document.getElementById('save-status').textContent = 'Result could not be saved: ' + e.message;
+            document.getElementById('save-status').style.color = 'var(--danger)';
+        }
+        document.getElementById('score-percent').innerText = finalPercentage + "%";
+        document.getElementById('score-raw').innerText = `${scoreCount} out of ${examQuestions.length} Questions Correct (raw ${rawPercentage}%)`;
+        
+        const cardRef = document.getElementById('score-card');
+        const labelRef = document.getElementById('pass-label');
+        
+        if (finalPercentage >= 75) {
+            cardRef.style.borderTop = "10px solid var(--success)";
+            labelRef.innerText = "PASSED: Competency Standard Satisfied";
+            labelRef.style.color = "var(--success)";
+        } else {
+            cardRef.style.borderTop = "10px solid var(--danger)";
+            labelRef.innerText = "REMEDIATION NEEDED: Below 75% Target Threshold";
+            labelRef.style.color = "var(--danger)";
+        }
+
+        // Build dynamic domain statistics reporting table
+        const tableBody = document.getElementById('domain-breakdown-body');
+        tableBody.innerHTML = '';
+        for (const [domainName, stats] of Object.entries(statisticsTracker)) {
+            const rate = Math.round((stats.correct / stats.total) * 100);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${domainName}</strong></td>
+                <td>${blueprintWeights[domainName] || 0}%</td>
+                <td style="font-weight: bold; color: ${rate >= 75 ? 'var(--success)' : 'var(--danger)'};">${stats.correct}/${stats.total} (${rate}%)</td>
+            `;
+            tableBody.appendChild(tr);
+        }
+
+        // Add remediation section header
+        const headerCard = document.createElement('div');
+        headerCard.className = 'card';
+        if(finalPercentage === 100) {
+            headerCard.innerHTML = `<h2 style="color: var(--success); margin:0;">Perfect Score! Excellent work.</h2><p style="margin:5px 0 0 0;">You demonstrated mastery across all 11 blueprint domains.</p>`;
+        } else {
+            headerCard.innerHTML = `<h2 style="color: var(--primary); margin:0;">Custom Study & Remediation Plan</h2><p style="margin:5px 0 0 0;">Review the references below for the ${examQuestions.length - scoreCount} questions answered incorrectly or left unanswered to improve your understanding.</p>`;
+        }
+        remHeaderZone.appendChild(headerCard);
+
+        // Toggle layouts and reset viewport scroll position
+        document.getElementById('quiz-interface').style.display = 'none';
+        document.getElementById('results-dashboard').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    // Execute application load sequence
+    window.onload = async function() {
+        try {
+            const profile = await GISPEDB.studentProfile();
+            if(!profile) {
+                location.href = '../login.html?next=' + encodeURIComponent('exams/Probably_Final_Version_4.html');
+                return;
+            }
+            document.getElementById('student-identity').textContent = profile.display_name + ' • Probably Final Version 4';
+            buildQuizInterface();
+            startExamTimer();
+        } catch(e) {
+            alert('Unable to load your student session: ' + e.message);
+            location.href = '../login.html';
+        }
+    };
+</script>
+
+</body>
+</html>
