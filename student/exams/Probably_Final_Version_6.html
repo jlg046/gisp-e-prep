@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PreGISP / GISP-E Probably Final Version 6</title>
+    <title>PreGISP / GISP-E Bucknell GISP-E Practice Exam 6</title>
     <style>
         :root {
             --primary: #1a5f7a;
@@ -216,14 +216,14 @@
       <span id="student-identity" style="color:var(--text-light);font-weight:600"></span>
     </div>
     <header>
-        <h1>PreGISP® / GISP-E Probably Final Version 6</h1>
+        <h1>PreGISP® / GISP-E Bucknell GISP-E Practice Exam 6</h1>
         <p>PreGISP Content • GISP Professional-Style Knowledge &amp; Reasoning</p>
     </header>
 
     <!-- Quiz Test Taking Interface -->
     <div id="quiz-interface">
         <div class="card" style="background-color: var(--primary-light); border-left: 5px solid var(--primary);">
-            <strong>Probably Final Version 6.</strong> Target difficulty: approximately the GISCI GISP Professional practice-exam level while remaining strictly within PreGISP content scope. Content is limited to the GISCI PreGISP blueprint. <br><strong>Exam Instructions:</strong> You have 120 minutes for 75 multiple-choice questions. You may skip questions and return to them while time remains. Any unanswered question is scored as incorrect. Submit the exam for a blueprint-weighted score, domain analysis, and targeted remediation.
+            <strong>Bucknell GISP-E Practice Exam 6.</strong> Target difficulty: approximately the GISCI GISP Professional practice-exam level while remaining strictly within PreGISP content scope. Content is limited to the GISCI PreGISP blueprint. <br><strong>Exam Instructions:</strong> You have 120 minutes for 75 multiple-choice questions. You may skip questions and return to them while time remains. Any unanswered question is scored as incorrect. Submit the exam for a blueprint-weighted score, domain analysis, and targeted remediation.
         </div>
         <div id="exam-timer" class="card" style="position:sticky;top:8px;z-index:50;border:2px solid var(--primary);background:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 4px 12px rgba(0,0,0,.10);">
             <div><strong>Timed Practice Exam:</strong> 120-minute limit</div>
@@ -1533,7 +1533,7 @@
         const savedResult = {
             version: 44,
             examSet: 6,
-            difficulty: "Probably Final Version",
+            difficulty: "Bucknell GISP-E Practice Exam",
             difficultyCode: "PFV",
             completedAt,
             weightedScore: finalPercentage,
@@ -1610,7 +1610,7 @@
                 location.href = '../login.html?next=' + encodeURIComponent('exams/Probably_Final_Version_1.html');
                 return;
             }
-            document.getElementById('student-identity').textContent = profile.display_name + ' • Probably Final Version 6';
+            document.getElementById('student-identity').textContent = profile.display_name + ' • Bucknell GISP-E Practice Exam 6';
             buildQuizInterface();
             startExamTimer();
         } catch(e) {
