@@ -223,7 +223,7 @@
     <!-- Quiz Test Taking Interface -->
     <div id="quiz-interface">
         <div class="card" style="background-color: var(--primary-light); border-left: 5px solid var(--primary);">
-            <strong>Probably Final Version 1.</strong> Target difficulty: GISP Professional-style difficulty within PreGISP content scope. Content is limited to the GISCI PreGISP blueprint. <br><strong>Exam Instructions:</strong> You have 120 minutes for 75 multiple-choice questions. You may skip questions and return to them while time remains. Any unanswered question is scored as incorrect. Submit the exam for a blueprint-weighted score, domain analysis, and targeted remediation.
+            <strong>Probably Final Version 1.</strong> Target difficulty: approximately the GISCI GISP Professional practice-exam level while remaining strictly within PreGISP content scope. Content is limited to the GISCI PreGISP blueprint. <br><strong>Exam Instructions:</strong> You have 120 minutes for 75 multiple-choice questions. You may skip questions and return to them while time remains. Any unanswered question is scored as incorrect. Submit the exam for a blueprint-weighted score, domain analysis, and targeted remediation.
         </div>
         <div id="exam-timer" class="card" style="position:sticky;top:8px;z-index:50;border:2px solid var(--primary);background:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 4px 12px rgba(0,0,0,.10);">
             <div><strong>Timed Practice Exam:</strong> 120-minute limit</div>
@@ -279,681 +279,1056 @@
     const blueprintWeights = {"Analytical Methods & GeoComputation": 18, "Conceptual Foundations": 14, "Data Modeling": 12, "Geospatial Data": 11, "Cartography & Visualization": 10, "Platforms, Sensors, Physics & Image Processing": 10, "Design of Systems": 8, "Organizational & Institutional Aspects": 7, "Thematic & Application Domains": 5, "GI & Society": 3, "Web-Based GIS": 2};
     const examQuestions = [
         {
-            id: 1,
-            domain: "Data Modeling",
-            question: "A related table stores an identifier that refers back to the unique identifier in another table. What is that referring field conceptually?",
-            options: ["A) Spectral band", "B) Primary key", "C) Scale bar", "D) Foreign key"],
-            correct: "D",
-            explanation: "The correct answer is Foreign key. This question checks foreign key within the Data Modeling domain.",
-            reference: "PreGISP Companion focus: foreign key | Blueprint domain resource: https://geospacebok.eu/DM"
-        },
-        {
-            id: 2,
-            domain: "Cartography & Visualization",
-            question: "A small-scale national map removes minor road detail so the remaining information is readable. Which cartographic process is being applied?",
-            options: ["A) Normalization", "B) Generalization", "C) Calibration", "D) Interpolation"],
-            correct: "B",
-            explanation: "The correct answer is Generalization. This question checks generalization within the Cartography & Visualization domain.",
-            reference: "PreGISP Companion focus: generalization | Blueprint domain resource: https://geospacebok.eu/CV"
-        },
-        {
-            id: 3,
-            domain: "Conceptual Foundations",
-            question: "A road is represented as a line even though it has physical width in the real world. Which foundational GIS idea best explains this representation choice?",
-            options: ["A) Geographic abstraction", "B) Perfect duplication of reality", "C) Database encryption", "D) Cloud deployment"],
-            correct: "A",
-            explanation: "The correct answer is Geographic abstraction. This question checks abstraction within the Conceptual Foundations domain.",
-            reference: "PreGISP Companion focus: abstraction | Blueprint domain resource: https://geospacebok.eu/CF"
-        },
-        {
-            id: 4,
-            domain: "Geospatial Data",
-            question: "A dataset must preserve individually identifiable parcel boundaries and associated attributes. Which representation is generally most directly suited to discrete features with explicit geometry?",
-            options: ["A) Metadata", "B) Raster data", "C) Dashboard", "D) Vector data"],
-            correct: "D",
-            explanation: "The correct answer is Vector data. This question checks vector raster within the Geospatial Data domain.",
-            reference: "PreGISP Companion focus: vector raster | Blueprint domain resource: https://geospacebok.eu/GD"
-        },
-        {
-            id: 5,
-            domain: "Thematic & Application Domains",
-            question: "A transportation project and a conservation project have different subject matter but both use data evaluation, overlay, and visualization. Which PreGISP principle does this illustrate?",
-            options: ["A) Transferable GIS principles", "B) Only industry terminology matters", "C) Methods cannot transfer across disciplines", "D) Every industry requires entirely different GIS principles"],
-            correct: "A",
-            explanation: "The correct answer is Transferable GIS principles. This question checks transfer within the Thematic & Application Domains domain.",
-            reference: "PreGISP Companion focus: transfer | Blueprint domain resource: https://geospacebok.eu/TA"
-        },
-        {
-            id: 6,
-            domain: "Geospatial Data",
-            question: "A building dataset accurately locates every mapped structure, but 20% of the buildings are missing entirely. Which quality dimension is deficient?",
-            options: ["A) Normalization", "B) Completeness", "C) Radiometric resolution", "D) Projection"],
-            correct: "B",
-            explanation: "The correct answer is Completeness. This question checks completeness within the Geospatial Data domain.",
-            reference: "PreGISP Companion focus: completeness | Blueprint domain resource: https://geospacebok.eu/GD"
-        },
-        {
-            id: 7,
-            domain: "Geospatial Data",
-            question: "A project team sends staff into the field to collect new observations specifically for the current study. What type of source is this?",
-            options: ["A) Database normalization", "B) Map generalization", "C) Primary data collection", "D) Secondary data source"],
-            correct: "C",
-            explanation: "The correct answer is Primary data collection. This question checks primary secondary within the Geospatial Data domain.",
-            reference: "PreGISP Companion focus: primary secondary | Blueprint domain resource: https://geospacebok.eu/GD"
-        },
-        {
-            id: 8,
-            domain: "Cartography & Visualization",
-            question: "Two choropleth maps use the same values but different class boundaries and appear to show different spatial patterns. Which cartographic choice caused the difference?",
-            options: ["A) Classification method", "B) File compression", "C) Geocoding method", "D) GNSS correction"],
-            correct: "A",
-            explanation: "The correct answer is Classification method. This question checks classification within the Cartography & Visualization domain.",
-            reference: "PreGISP Companion focus: classification | Blueprint domain resource: https://geospacebok.eu/CV"
-        },
-        {
-            id: 9,
-            domain: "Cartography & Visualization",
-            question: "A map contains all required elements but the title, legend, map body, and supporting information compete for attention and feel poorly organized. Which design area most directly needs improvement?",
-            options: ["A) Foreign key design", "B) Layout and composition", "C) Network impedance", "D) Spectral calibration"],
-            correct: "B",
-            explanation: "The correct answer is Layout and composition. This question checks layout within the Cartography & Visualization domain.",
-            reference: "PreGISP Companion focus: layout | Blueprint domain resource: https://geospacebok.eu/CV"
-        },
-        {
-            id: 10,
-            domain: "Conceptual Foundations",
-            question: "A regional project requires meaningful planar distance and area measurements in linear units. Which type of reference framework is generally designed to support such measurements on a flat map?",
-            options: ["A) Geographic coordinate system", "B) Spectral signature", "C) Projected coordinate system", "D) Attribute domain"],
-            correct: "C",
-            explanation: "The correct answer is Projected coordinate system. This question checks GCS vs PCS within the Conceptual Foundations domain.",
-            reference: "PreGISP Companion focus: GCS vs PCS | Blueprint domain resource: https://geospacebok.eu/CF"
-        },
-        {
-            id: 11,
-            domain: "Design of Systems",
-            question: "A GIS works for 20 users today but is expected to serve hundreds and much larger datasets in three years. Which design consideration is most directly involved?",
-            options: ["A) Scalability", "B) Radiometric resolution", "C) Adjacency", "D) Typography"],
-            correct: "A",
-            explanation: "The correct answer is Scalability. This question checks scalability within the Design of Systems domain.",
-            reference: "PreGISP Companion focus: scalability | Blueprint domain resource: https://geospacebok.eu/DA"
-        },
-        {
-            id: 12,
-            domain: "GI & Society",
-            question: "A model systematically underrepresents neighborhoods where data collection was sparse, yet its map is presented as complete. Which professional responsibility is most relevant?",
-            options: ["A) More detail is always ethically better", "B) Limitations need not be disclosed", "C) Technology is always neutral", "D) Bias and professional responsibility"],
-            correct: "D",
-            explanation: "The correct answer is Bias and professional responsibility. This question checks bias ethics within the GI & Society domain.",
-            reference: "PreGISP Companion focus: bias ethics | Blueprint domain resource: https://geospacebok.eu/GS"
-        },
-        {
-            id: 13,
-            domain: "Analytical Methods & GeoComputation",
-            question: "A habitat model requires cell-by-cell combination of continuous slope, distance-to-water, and land-cover criteria across an entire study area. Which analytical representation is especially well suited to this workflow?",
-            options: ["A) Metadata creation", "B) Table normalization", "C) Network analysis", "D) Raster analysis"],
-            correct: "D",
-            explanation: "The correct answer is Raster analysis. This question checks raster vector within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: raster vector | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 14,
-            domain: "Geospatial Data",
-            question: "A road dataset is positionally accurate but omits a bridge opened last year. Which data-quality characteristic is the clearest concern?",
-            options: ["A) Precision", "B) Topology", "C) Temporal currency", "D) Cardinality"],
-            correct: "C",
-            explanation: "The correct answer is Temporal currency. This question checks currency within the Geospatial Data domain.",
-            reference: "PreGISP Companion focus: currency | Blueprint domain resource: https://geospacebok.eu/GD"
-        },
-        {
-            id: 15,
-            domain: "Web-Based GIS",
-            question: "Multiple applications need to access centrally maintained geographic information without each maintaining a separate copy. Which Web GIS concept most directly supports delivering that information?",
-            options: ["A) Spectral signature", "B) Web services", "C) Primary key", "D) Paper map layout"],
-            correct: "B",
-            explanation: "The correct answer is Web services. This question checks web services within the Web-Based GIS domain.",
-            reference: "PreGISP Companion focus: web services | Blueprint domain resource: https://geospacebok.eu/WB"
-        },
-        {
-            id: 16,
-            domain: "Platforms, Sensors, Physics & Image Processing",
-            question: "Two images cover the same area, but one can distinguish much smaller ground features because each pixel represents a smaller area. Which resolution differs most directly?",
-            options: ["A) Temporal resolution", "B) Spectral resolution", "C) Spatial resolution", "D) Radiometric resolution"],
-            correct: "C",
-            explanation: "The correct answer is Spatial resolution. This question checks spatial resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
-            reference: "PreGISP Companion focus: spatial resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
-        },
-        {
-            id: 17,
-            domain: "Design of Systems",
-            question: "A system plan defines standards to prevent errors and also includes checks to detect errors in delivered data and workflows. Which paired concept encompasses these activities?",
-            options: ["A) Projection choice alone", "B) Decorative mapping", "C) QA/QC", "D) Unrestricted access"],
-            correct: "C",
-            explanation: "The correct answer is QA/QC. This question checks qa qc within the Design of Systems domain.",
-            reference: "PreGISP Companion focus: qa qc | Blueprint domain resource: https://geospacebok.eu/DA"
-        },
-        {
-            id: 18,
-            domain: "Design of Systems",
-            question: "A GIS has been deployed successfully, but requirements, data, security needs, and technology continue to change. Which principle says the system must continue to be maintained and improved?",
-            options: ["A) System lifecycle", "B) Spectral signature", "C) Map scale", "D) One-time deployment only"],
-            correct: "A",
-            explanation: "The correct answer is System lifecycle. This question checks lifecycle within the Design of Systems domain.",
-            reference: "PreGISP Companion focus: lifecycle | Blueprint domain resource: https://geospacebok.eu/DA"
-        },
-        {
-            id: 19,
-            domain: "Data Modeling",
-            question: "An organization wants attribute values and relationships to remain valid and consistent as data are edited over time. Which data-modeling objective is being protected?",
-            options: ["A) Decorative balance", "B) Data integrity", "C) Public visibility", "D) Temporal animation"],
-            correct: "B",
-            explanation: "The correct answer is Data integrity. This question checks integrity within the Data Modeling domain.",
-            reference: "PreGISP Companion focus: integrity | Blueprint domain resource: https://geospacebok.eu/DM"
-        },
-        {
-            id: 20,
-            domain: "Analytical Methods & GeoComputation",
-            question: "Two fire-station sites are equally distant from a neighborhood as the crow flies, but one requires crossing a river at a distant bridge. Which method best evaluates realistic response accessibility?",
-            options: ["A) Straight-line buffering", "B) Interpolation", "C) Raster classification", "D) Network analysis"],
-            correct: "D",
-            explanation: "The correct answer is Network analysis. This question checks network within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: network | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 21,
-            domain: "Geospatial Data",
-            question: "Two organizations need their systems and datasets to exchange and use geographic information effectively despite different technical environments. Which concept is central?",
-            options: ["A) Spectral signature", "B) Visual hierarchy", "C) Containment", "D) Interoperability"],
-            correct: "D",
-            explanation: "The correct answer is Interoperability. This question checks interoperability within the Geospatial Data domain.",
-            reference: "PreGISP Companion focus: interoperability | Blueprint domain resource: https://geospacebok.eu/GD"
-        },
-        {
-            id: 22,
-            domain: "Cartography & Visualization",
-            question: "An analysis has meaningful uncertainty that could affect decisions. Which cartographic practice is most responsible?",
-            options: ["A) Increase decimal places", "B) Hide limitations", "C) Communicating uncertainty", "D) Use more decorative symbols"],
-            correct: "C",
-            explanation: "The correct answer is Communicating uncertainty. This question checks uncertainty map within the Cartography & Visualization domain.",
-            reference: "PreGISP Companion focus: uncertainty map | Blueprint domain resource: https://geospacebok.eu/CV"
-        },
-        {
-            id: 23,
-            domain: "Geospatial Data",
-            question: "A land-surface variable varies continuously across space and is represented as a regular grid. Which data model is being used?",
-            options: ["A) Vector data", "B) Metadata", "C) Raster data", "D) Relational key"],
-            correct: "C",
-            explanation: "The correct answer is Raster data. This question checks raster within the Geospatial Data domain.",
-            reference: "PreGISP Companion focus: raster | Blueprint domain resource: https://geospacebok.eu/GD"
-        },
-        {
-            id: 24,
-            domain: "Data Modeling",
-            question: "A zoning field should accept only a controlled list of valid zoning codes. Which data-modeling mechanism best supports this requirement?",
-            options: ["A) Attribute domain", "B) Map projection", "C) Web service", "D) Buffer"],
-            correct: "A",
-            explanation: "The correct answer is Attribute domain. This question checks domain within the Data Modeling domain.",
-            reference: "PreGISP Companion focus: domain | Blueprint domain resource: https://geospacebok.eu/DM"
-        },
-        {
-            id: 25,
-            domain: "Conceptual Foundations",
-            question: "A cartographer needs to preserve area for a thematic map but knows shape will be distorted. Which principle explains this compromise?",
-            options: ["A) Changing projection removes all uncertainty", "B) One projection preserves every property", "C) Projection tradeoffs", "D) Projection choice never affects measurement"],
-            correct: "C",
-            explanation: "The correct answer is Projection tradeoffs. This question checks projection tradeoff within the Conceptual Foundations domain.",
-            reference: "PreGISP Companion focus: projection tradeoff | Blueprint domain resource: https://geospacebok.eu/CF"
-        },
-        {
-            id: 26,
-            domain: "Cartography & Visualization",
-            question: "A cartographer chooses graduated symbols rather than identical symbols so magnitude differences are visually encoded. Which cartographic concept is being applied?",
-            options: ["A) Orthorectification", "B) Symbolization", "C) Replication", "D) Normalization"],
-            correct: "B",
-            explanation: "The correct answer is Symbolization. This question checks symbolization within the Cartography & Visualization domain.",
-            reference: "PreGISP Companion focus: symbolization | Blueprint domain resource: https://geospacebok.eu/CV"
-        },
-        {
-            id: 27,
-            domain: "Cartography & Visualization",
-            question: "Engineers, emergency managers, and the public need maps from the same data but for different decisions. What should most strongly drive differences in their map designs?",
-            options: ["A) Audience and purpose", "B) Maximize number of layers", "C) Use identical design for every audience", "D) Always use the smallest scale"],
-            correct: "A",
-            explanation: "The correct answer is Audience and purpose. This question checks audience within the Cartography & Visualization domain.",
-            reference: "PreGISP Companion focus: audience | Blueprint domain resource: https://geospacebok.eu/CV"
-        },
-        {
-            id: 28,
-            domain: "Data Modeling",
-            question: "A project team is first identifying the real-world entities and relationships the GIS must represent, before choosing tables or implementation technology. Which level of data modeling is most relevant?",
-            options: ["A) Map layout", "B) Conceptual data model", "C) Image service", "D) Physical data model"],
-            correct: "B",
-            explanation: "The correct answer is Conceptual data model. This question checks conceptual logical physical within the Data Modeling domain.",
-            reference: "PreGISP Companion focus: conceptual logical physical | Blueprint domain resource: https://geospacebok.eu/DM"
-        },
-        {
-            id: 29,
-            domain: "Analytical Methods & GeoComputation",
-            question: "A site-selection model must weigh slope, access, land availability, and environmental constraints to rank candidate areas. What type of analysis is being performed?",
-            options: ["A) Label placement", "B) Suitability modeling", "C) Georeferencing", "D) Address matching"],
-            correct: "B",
-            explanation: "The correct answer is Suitability modeling. This question checks suitability within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: suitability | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 30,
-            domain: "Cartography & Visualization",
-            question: "A thematic map relies only on red-green differences to distinguish critical classes. Which design consideration has most clearly been neglected?",
-            options: ["A) Accessibility", "B) Use color alone for every distinction", "C) Use tiny labels to fit more data", "D) Assume all viewers perceive color identically"],
-            correct: "A",
-            explanation: "The correct answer is Accessibility. This question checks accessibility within the Cartography & Visualization domain.",
-            reference: "PreGISP Companion focus: accessibility | Blueprint domain resource: https://geospacebok.eu/CV"
-        },
-        {
-            id: 31,
-            domain: "Thematic & Application Domains",
-            question: "A team receives a vague request to 'use GIS' for a community issue. What should it establish before selecting data or analytical methods?",
-            options: ["A) Choose symbology before objectives", "B) Start with favorite software", "C) Collect every available dataset", "D) Understand the geographic problem"],
-            correct: "D",
-            explanation: "The correct answer is Understand the geographic problem. This question checks problem first within the Thematic & Application Domains domain.",
-            reference: "PreGISP Companion focus: problem first | Blueprint domain resource: https://geospacebok.eu/TA"
-        },
-        {
-            id: 32,
-            domain: "Analytical Methods & GeoComputation",
-            question: "Air-quality values were measured at a limited set of monitoring stations, and planners need an estimated continuous surface between them. Which method addresses that need?",
-            options: ["A) Topology validation", "B) Geocoding", "C) Dissolve", "D) Interpolation"],
-            correct: "D",
-            explanation: "The correct answer is Interpolation. This question checks interpolation within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: interpolation | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 33,
-            domain: "Conceptual Foundations",
-            question: "Repeated measurements are tightly grouped even though their average is offset from the true position. Which property do the tightly grouped values demonstrate?",
-            options: ["A) Accuracy", "B) Currency", "C) Precision", "D) Interoperability"],
-            correct: "C",
-            explanation: "The correct answer is Precision. This question checks precision within the Conceptual Foundations domain.",
-            reference: "PreGISP Companion focus: precision | Blueprint domain resource: https://geospacebok.eu/CF"
-        },
-        {
-            id: 34,
-            domain: "Data Modeling",
-            question: "A future analyst needs to know who created a dataset, why it was created, how it was collected, and its limitations. What documentation provides this context?",
-            options: ["A) Metadata", "B) Client request", "C) Symbology", "D) Pixel color"],
-            correct: "A",
-            explanation: "The correct answer is Metadata. This question checks metadata within the Data Modeling domain.",
-            reference: "PreGISP Companion focus: metadata | Blueprint domain resource: https://geospacebok.eu/DM"
-        },
-        {
-            id: 35,
-            domain: "Analytical Methods & GeoComputation",
-            question: "An analyst must identify land that is simultaneously inside a floodplain, zoned for development, and outside protected habitat. Which method is central to combining these spatial conditions?",
-            options: ["A) Overlay analysis", "B) Generalization", "C) Geocoding", "D) Image enhancement"],
-            correct: "A",
-            explanation: "The correct answer is Overlay analysis. This question checks overlay within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: overlay | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 36,
-            domain: "Conceptual Foundations",
-            question: "Two land parcels share a common boundary. Which spatial relationship most specifically describes their relationship?",
-            options: ["A) Proximity", "B) Containment", "C) Temporal currency", "D) Adjacency"],
-            correct: "D",
-            explanation: "The correct answer is Adjacency. This question checks adjacency within the Conceptual Foundations domain.",
-            reference: "PreGISP Companion focus: adjacency | Blueprint domain resource: https://geospacebok.eu/CF"
-        },
-        {
-            id: 37,
-            domain: "Web-Based GIS",
-            question: "In a Web GIS interaction, a user's application requests geographic information from another computer that provides the resource. What role is the requesting application performing?",
-            options: ["A) Raster cell", "B) Client", "C) Server", "D) Attribute domain"],
-            correct: "B",
-            explanation: "The correct answer is Client. This question checks client server within the Web-Based GIS domain.",
-            reference: "PreGISP Companion focus: client server | Blueprint domain resource: https://geospacebok.eu/WB"
-        },
-        {
-            id: 38,
-            domain: "Analytical Methods & GeoComputation",
-            question: "An engineer needs to derive terrain characteristics from an elevation model to understand landform conditions. Which analytical family is most directly relevant?",
-            options: ["A) Relational modeling", "B) Web service design", "C) Surface and terrain analysis", "D) Address geocoding"],
-            correct: "C",
-            explanation: "The correct answer is Surface and terrain analysis. This question checks surface within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: surface | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 39,
-            domain: "Geospatial Data",
-            question: "An organization assigns responsibility for maintaining, documenting, updating, and responsibly managing a dataset throughout its life. Which concept best describes this responsibility?",
-            options: ["A) Raster interpolation", "B) Address labeling", "C) Data stewardship", "D) Map decoration"],
-            correct: "C",
-            explanation: "The correct answer is Data stewardship. This question checks stewardship within the Geospatial Data domain.",
-            reference: "PreGISP Companion focus: stewardship | Blueprint domain resource: https://geospacebok.eu/GD"
-        },
-        {
-            id: 40,
-            domain: "Platforms, Sensors, Physics & Image Processing",
-            question: "A sensor emits its own energy toward a target and measures the returned signal. How is that sensor classified?",
-            options: ["A) Attribute domain", "B) Passive sensor", "C) Web client", "D) Active sensor"],
-            correct: "D",
-            explanation: "The correct answer is Active sensor. This question checks active passive within the Platforms, Sensors, Physical Principles & Image Processing domain.",
-            reference: "PreGISP Companion focus: active passive | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
-        },
-        {
-            id: 41,
-            domain: "Analytical Methods & GeoComputation",
-            question: "Two different workflows could answer a planning question, but each has different data requirements and limitations. What principle should guide the choice?",
-            options: ["A) Use whichever tool was used last", "B) Use the tool with the most parameters", "C) Use the newest tool available", "D) Problem-driven method selection"],
-            correct: "D",
-            explanation: "The correct answer is Problem-driven method selection. This question checks workflow choice within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: workflow choice | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 42,
-            domain: "Analytical Methods & GeoComputation",
-            question: "A county must identify every parcel within a specified distance of a hazardous-material route. Which analytical method most directly creates the required distance zone?",
-            options: ["A) Network analysis", "B) Buffer analysis", "C) Interpolation", "D) Classification"],
-            correct: "B",
-            explanation: "The correct answer is Buffer analysis. This question checks buffer within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: buffer | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 43,
-            domain: "Data Modeling",
-            question: "Many departments need to maintain and use shared geographic information in an organized multiuser environment. Which blueprint concept is most relevant at a conceptual level?",
-            options: ["A) Single static map image", "B) Enterprise geodatabase", "C) Standalone legend", "D) Paper atlas"],
-            correct: "B",
-            explanation: "The correct answer is Enterprise geodatabase. This question checks enterprise within the Data Modeling domain.",
-            reference: "PreGISP Companion focus: enterprise | Blueprint domain resource: https://geospacebok.eu/DM"
-        },
-        {
-            id: 44,
-            domain: "Conceptual Foundations",
-            question: "A polygon layer contains overlaps and gaps that violate the intended spatial structure. Which concept is used to define and check such spatial relationships?",
-            options: ["A) Typography", "B) Temporal currency", "C) Spectral resolution", "D) Topology"],
-            correct: "D",
-            explanation: "The correct answer is Topology. This question checks topology within the Conceptual Foundations domain.",
-            reference: "PreGISP Companion focus: topology | Blueprint domain resource: https://geospacebok.eu/CF"
-        },
-        {
-            id: 45,
-            domain: "Organizational & Institutional Aspects",
-            question: "A proposed GIS design is technically impressive but requires staffing, funding, and maintenance capacity the organization does not have. Which blueprint consideration was neglected?",
-            options: ["A) Assume unlimited staff and money", "B) Choose technology without considering capacity", "C) Ignore maintenance needs", "D) Project and resource considerations"],
-            correct: "D",
-            explanation: "The correct answer is Project and resource considerations. This question checks resources within the Organizational & Institutional Aspects domain.",
-            reference: "PreGISP Companion focus: resources | Blueprint domain resource: https://geospacebok.eu/OI"
-        },
-        {
-            id: 46,
-            domain: "Platforms, Sensors, Physics & Image Processing",
-            question: "An imaging system records naturally available reflected or emitted energy without transmitting its own signal toward the surface. How is it classified?",
-            options: ["A) Primary key", "B) Passive sensor", "C) Active sensor", "D) Topology rule"],
-            correct: "B",
-            explanation: "The correct answer is Passive sensor. This question checks passive within the Platforms, Sensors, Physical Principles & Image Processing domain.",
-            reference: "PreGISP Companion focus: passive | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
-        },
-        {
-            id: 47,
-            domain: "Conceptual Foundations",
-            question: "A generalized regional dataset is used for parcel-level decisions and appears precise on screen. Which foundational concept most clearly warns against assuming the displayed detail is appropriate?",
-            options: ["A) Database normalization", "B) Scale", "C) Metadata lineage", "D) Radiometric resolution"],
-            correct: "B",
-            explanation: "The correct answer is Scale. This question checks scale within the Conceptual Foundations domain.",
-            reference: "PreGISP Companion focus: scale | Blueprint domain resource: https://geospacebok.eu/CF"
-        },
-        {
-            id: 48,
-            domain: "Analytical Methods & GeoComputation",
-            question: "An analyst must rerun a multi-step process next month with updated data and explain exactly how the result was produced. Which practice best supports this requirement?",
-            options: ["A) Unrestricted public sharing", "B) Reproducible workflow", "C) Decorative cartography", "D) Manual undocumented editing"],
-            correct: "B",
-            explanation: "The correct answer is Reproducible workflow. This question checks reproducibility within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: reproducibility | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 49,
-            domain: "Cartography & Visualization",
-            question: "A map reader's attention is intentionally directed first to evacuation routes, then shelters, and only later to background context. Which cartographic principle is being applied?",
-            options: ["A) Visual hierarchy", "B) Topology", "C) Radiometric resolution", "D) Normalization"],
-            correct: "A",
-            explanation: "The correct answer is Visual hierarchy. This question checks visual hierarchy within the Cartography & Visualization domain.",
-            reference: "PreGISP Companion focus: visual hierarchy | Blueprint domain resource: https://geospacebok.eu/CV"
-        },
-        {
-            id: 50,
-            domain: "Data Modeling",
-            question: "Parcel ownership is stored separately from parcel geometry, but users need to connect the information through shared identifiers. Which data-modeling concept enables this?",
-            options: ["A) Relationship between datasets", "B) Projection distortion", "C) Raster resampling", "D) Color ramp"],
-            correct: "A",
-            explanation: "The correct answer is Relationship between datasets. This question checks relationships within the Data Modeling domain.",
-            reference: "PreGISP Companion focus: relationships | Blueprint domain resource: https://geospacebok.eu/DM"
-        },
-        {
-            id: 51,
-            domain: "Design of Systems",
-            question: "A city is planning an enterprise GIS used by several departments. Which early action best reduces the risk that the system will solve the wrong problems?",
-            options: ["A) Ignore existing workflows", "B) Choose software before interviews", "C) Design for only the GIS team", "D) Stakeholder involvement"],
-            correct: "D",
-            explanation: "The correct answer is Stakeholder involvement. This question checks stakeholders within the Design of Systems domain.",
-            reference: "PreGISP Companion focus: stakeholders | Blueprint domain resource: https://geospacebok.eu/DA"
-        },
-        {
-            id: 52,
-            domain: "Platforms, Sensors, Physics & Image Processing",
-            question: "Two sensors have similar spatial and spectral properties, but one can distinguish finer differences in recorded energy intensity. Which resolution characteristic differs?",
-            options: ["A) Temporal resolution", "B) Spatial resolution", "C) Topology", "D) Radiometric resolution"],
-            correct: "D",
-            explanation: "The correct answer is Radiometric resolution. This question checks radiometric resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
-            reference: "PreGISP Companion focus: radiometric resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
-        },
-        {
-            id: 53,
-            domain: "Analytical Methods & GeoComputation",
-            question: "A planning question asks not whether two features touch, but how near one set of features is to another. Which spatial concept is primary?",
-            options: ["A) Radiometry", "B) Governance", "C) Proximity", "D) Cardinality"],
-            correct: "C",
-            explanation: "The correct answer is Proximity. This question checks proximity within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: proximity | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 54,
-            domain: "Organizational & Institutional Aspects",
-            question: "Data from multiple departments cannot be combined efficiently because naming, collection, and documentation practices differ. Which organizational response is most appropriate?",
-            options: ["A) Standards and procedures", "B) Random individual practices", "C) Higher screen resolution", "D) More map decoration"],
-            correct: "A",
-            explanation: "The correct answer is Standards and procedures. This question checks standards within the Organizational & Institutional Aspects domain.",
-            reference: "PreGISP Companion focus: standards | Blueprint domain resource: https://geospacebok.eu/OI"
-        },
-        {
-            id: 55,
-            domain: "Data Modeling",
-            question: "A database repeats the same owner information in hundreds of parcel records, creating inconsistent updates. Which data-modeling principle is intended to reduce this unnecessary duplication?",
-            options: ["A) Normalization", "B) Generalization", "C) Orthorectification", "D) Interpolation"],
-            correct: "A",
-            explanation: "The correct answer is Normalization. This question checks normalization within the Data Modeling domain.",
-            reference: "PreGISP Companion focus: normalization | Blueprint domain resource: https://geospacebok.eu/DM"
-        },
-        {
-            id: 56,
-            domain: "Platforms, Sensors, Physics & Image Processing",
-            question: "Two land-cover types can be distinguished because they reflect and absorb electromagnetic energy differently across wavelengths. What concept describes this characteristic pattern?",
-            options: ["A) Primary key", "B) Spectral signature", "C) Buffer distance", "D) Scale bar"],
-            correct: "B",
-            explanation: "The correct answer is Spectral signature. This question checks spectral signature within the Platforms, Sensors, Physical Principles & Image Processing domain.",
-            reference: "PreGISP Companion focus: spectral signature | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
-        },
-        {
-            id: 57,
-            domain: "Thematic & Application Domains",
-            question: "The same analytical result could have different implications in emergency management and long-range planning. What should the analyst do before recommending action?",
-            options: ["A) Assume one result fits every decision", "B) Report numbers without meaning", "C) Ignore the application domain", "D) Interpret results in context"],
-            correct: "D",
-            explanation: "The correct answer is Interpret results in context. This question checks context within the Thematic & Application Domains domain.",
-            reference: "PreGISP Companion focus: context | Blueprint domain resource: https://geospacebok.eu/TA"
-        },
-        {
-            id: 58,
-            domain: "Design of Systems",
-            question: "An enterprise GIS contains both public information and restricted operational data. Which system-design consideration should determine who can see or edit each resource?",
-            options: ["A) Give every user full access", "B) Security and permissions", "C) Publish every dataset publicly", "D) Remove documentation"],
-            correct: "B",
-            explanation: "The correct answer is Security and permissions. This question checks security within the Design of Systems domain.",
-            reference: "PreGISP Companion focus: security | Blueprint domain resource: https://geospacebok.eu/DA"
-        },
-        {
-            id: 59,
-            domain: "Platforms, Sensors, Physics & Image Processing",
-            question: "An analyst transforms multispectral imagery into mapped land-cover categories such as water, forest, and developed land. Which image-processing task is being performed?",
-            options: ["A) Geocoding", "B) Orthorectification", "C) Image classification", "D) Normalization"],
-            correct: "C",
-            explanation: "The correct answer is Image classification. This question checks classification image within the Platforms, Sensors, Physical Principles & Image Processing domain.",
-            reference: "PreGISP Companion focus: classification image | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
-        },
-        {
-            id: 60,
-            domain: "GI & Society",
-            question: "An online map of emergency responses could allow viewers to infer sensitive information about individuals at specific locations. Which societal consideration is most directly implicated?",
-            options: ["A) Privacy and confidentiality", "B) Ignore possible identification", "C) Assume public data have no sensitivity", "D) Publish maximum detail automatically"],
-            correct: "A",
-            explanation: "The correct answer is Privacy and confidentiality. This question checks privacy within the GI & Society domain.",
-            reference: "PreGISP Companion focus: privacy | Blueprint domain resource: https://geospacebok.eu/GS"
-        },
-        {
-            id: 61,
-            domain: "Organizational & Institutional Aspects",
-            question: "Neighboring jurisdictions need to maintain a regional dataset that crosses their boundaries. Which organizational capability is most important for coordinating shared information?",
-            options: ["A) Data isolation", "B) No communication between partners", "C) Institutional collaboration", "D) Duplicate uncontrolled copies"],
-            correct: "C",
-            explanation: "The correct answer is Institutional collaboration. This question checks collaboration within the Organizational & Institutional Aspects domain.",
-            reference: "PreGISP Companion focus: collaboration | Blueprint domain resource: https://geospacebok.eu/OI"
-        },
-        {
-            id: 62,
-            domain: "Conceptual Foundations",
-            question: "A GPS receiver repeatedly reports nearly identical coordinates, but all observations are several meters from the surveyed location. Which property is deficient?",
-            options: ["A) Resolution", "B) Completeness", "C) Accuracy", "D) Precision"],
-            correct: "C",
-            explanation: "The correct answer is Accuracy. This question checks accuracy precision within the Conceptual Foundations domain.",
-            reference: "PreGISP Companion focus: accuracy precision | Blueprint domain resource: https://geospacebok.eu/CF"
-        },
-        {
-            id: 63,
-            domain: "Organizational & Institutional Aspects",
-            question: "A critical dataset is not updated because each department assumes another group owns maintenance. Which organizational issue is most directly responsible?",
-            options: ["A) Map projection", "B) Roles and responsibilities", "C) Raster cell size", "D) Spectral band"],
-            correct: "B",
-            explanation: "The correct answer is Roles and responsibilities. This question checks roles within the Organizational & Institutional Aspects domain.",
-            reference: "PreGISP Companion focus: roles | Blueprint domain resource: https://geospacebok.eu/OI"
-        },
-        {
-            id: 64,
-            domain: "Conceptual Foundations",
-            question: "A dataset is carefully collected and documented, yet its measurements still cannot represent reality with absolute exactness. Which foundational idea accounts for this?",
-            options: ["A) Unlimited resolution", "B) Uncertainty", "C) Guaranteed neutrality", "D) Perfect exactness"],
-            correct: "B",
-            explanation: "The correct answer is Uncertainty. This question checks uncertainty within the Conceptual Foundations domain.",
-            reference: "PreGISP Companion focus: uncertainty | Blueprint domain resource: https://geospacebok.eu/CF"
-        },
-        {
-            id: 65,
-            domain: "Organizational & Institutional Aspects",
-            question: "Several departments maintain overlapping versions of the same authoritative layer with no agreed ownership or decision process. Which organizational concept most directly needs strengthening?",
-            options: ["A) Radiometry", "B) Governance", "C) Symbolization", "D) Interpolation"],
-            correct: "B",
-            explanation: "The correct answer is Governance. This question checks governance within the Organizational & Institutional Aspects domain.",
-            reference: "PreGISP Companion focus: governance | Blueprint domain resource: https://geospacebok.eu/OI"
-        },
-        {
-            id: 66,
-            domain: "Design of Systems",
-            question: "A public-works department states that field crews must be able to update asset status during inspections. Before deciding devices or software, how should this need be classified?",
-            options: ["A) Business requirement", "B) Technical requirement", "C) Spectral requirement", "D) Cartographic classification"],
-            correct: "A",
-            explanation: "The correct answer is Business requirement. This question checks business tech within the Design of Systems domain.",
-            reference: "PreGISP Companion focus: business tech | Blueprint domain resource: https://geospacebok.eu/DA"
-        },
-        {
-            id: 67,
-            domain: "Platforms, Sensors, Physics & Image Processing",
-            question: "A vegetation study benefits from a sensor that distinguishes information in several narrow wavelength ranges. Which resolution characteristic is most relevant?",
-            options: ["A) Map scale", "B) Spatial resolution", "C) Spectral resolution", "D) Temporal resolution"],
-            correct: "C",
-            explanation: "The correct answer is Spectral resolution. This question checks spectral resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
-            reference: "PreGISP Companion focus: spectral resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
-        },
-        {
-            id: 68,
-            domain: "Analytical Methods & GeoComputation",
-            question: "Two analysts use the same overlay method but obtain unreliable output because one input layer is outdated and positionally poor. Which factor most directly explains the problem?",
-            options: ["A) Software brand", "B) Map title wording", "C) Screen resolution", "D) Input data quality"],
-            correct: "D",
-            explanation: "The correct answer is Input data quality. This question checks input quality within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: input quality | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 69,
-            domain: "Conceptual Foundations",
-            question: "A wetland polygon lies entirely inside a protected-area polygon. Which spatial relationship is most directly illustrated?",
-            options: ["A) Precision", "B) Connectivity", "C) Containment", "D) Classification"],
-            correct: "C",
-            explanation: "The correct answer is Containment. This question checks containment within the Conceptual Foundations domain.",
-            reference: "PreGISP Companion focus: containment | Blueprint domain resource: https://geospacebok.eu/CF"
-        },
-        {
-            id: 70,
-            domain: "Data Modeling",
-            question: "A table requires an attribute whose values uniquely identify individual records so relationships can be established reliably. What role does that attribute serve?",
-            options: ["A) Map legend", "B) Raster cell", "C) Foreign key", "D) Primary key"],
-            correct: "D",
-            explanation: "The correct answer is Primary key. This question checks primary key within the Data Modeling domain.",
-            reference: "PreGISP Companion focus: primary key | Blueprint domain resource: https://geospacebok.eu/DM"
-        },
-        {
-            id: 71,
-            domain: "Analytical Methods & GeoComputation",
-            question: "A technically valid analytical tool produces misleading conclusions because the data violate conditions under which the method is meaningful. What was most likely neglected?",
-            options: ["A) Method assumptions", "B) File icon color", "C) Monitor size", "D) Logo design"],
-            correct: "A",
-            explanation: "The correct answer is Method assumptions. This question checks assumptions within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: assumptions | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 72,
-            domain: "Geospatial Data",
-            question: "An older dataset has the needed historical date and documented accuracy, while a newer dataset cannot answer the study question. Which principle supports selecting the older data?",
-            options: ["A) Fitness for purpose", "B) Largest available file", "C) Newest available dataset", "D) Most colorful map"],
-            correct: "A",
-            explanation: "The correct answer is Fitness for purpose. This question checks fitness within the Geospatial Data domain.",
-            reference: "PreGISP Companion focus: fitness | Blueprint domain resource: https://geospacebok.eu/GD"
-        },
-        {
-            id: 73,
-            domain: "Analytical Methods & GeoComputation",
-            question: "A model completes without errors and produces a polished map. What additional step is essential before using the result for a decision?",
-            options: ["A) Ignore uncertainty if the map looks precise", "B) Assume output is correct because processing completed", "C) Interpretation of results", "D) Report only the software settings"],
-            correct: "C",
-            explanation: "The correct answer is Interpretation of results. This question checks interpretation within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: interpretation | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 74,
-            domain: "Analytical Methods & GeoComputation",
-            question: "A researcher wants to determine whether high values are spatially clustered beyond what would be expected from visual inspection alone. Which blueprint concept most directly addresses that question?",
-            options: ["A) Schema normalization", "B) Image orthorectification", "C) Spatial statistics", "D) Typography"],
-            correct: "C",
-            explanation: "The correct answer is Spatial statistics. This question checks spatial statistics within the Analytical Methods & Geocomputation domain.",
-            reference: "PreGISP Companion focus: spatial statistics | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
-        },
-        {
-            id: 75,
-            domain: "Platforms, Sensors, Physics & Image Processing",
-            question: "A crop-monitoring project requires imagery of the same location much more frequently during the growing season. Which resolution characteristic is most important?",
-            options: ["A) Temporal resolution", "B) Spectral resolution", "C) Radiometric resolution", "D) Spatial resolution"],
-            correct: "A",
-            explanation: "The correct answer is Temporal resolution. This question checks temporal resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
-            reference: "PreGISP Companion focus: temporal resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+                "id": 1,
+                "domain": "Data Modeling",
+                "question": "A related table stores an identifier that refers back to the unique identifier in another table. What is that referring field conceptually?",
+                "options": [
+                        "A) Spectral band",
+                        "B) Primary key",
+                        "C) Scale bar",
+                        "D) Foreign key"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Foreign key. This question checks foreign key within the Data Modeling domain.",
+                "reference": "PreGISP Companion focus: foreign key | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+                "id": 2,
+                "domain": "Cartography & Visualization",
+                "question": "A small-scale national map removes minor road detail so the remaining information is readable. Which cartographic process is being applied?",
+                "options": [
+                        "A) Normalization",
+                        "B) Generalization",
+                        "C) Calibration",
+                        "D) Interpolation"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Generalization. This question checks generalization within the Cartography & Visualization domain.",
+                "reference": "PreGISP Companion focus: generalization | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+                "id": 3,
+                "domain": "Conceptual Foundations",
+                "question": "A road is represented as a line even though it has physical width in the real world. Which foundational GIS idea best explains this representation choice?",
+                "options": [
+                        "A) Geographic abstraction",
+                        "B) Perfect duplication of reality",
+                        "C) Database encryption",
+                        "D) Cloud deployment"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Geographic abstraction. This question checks abstraction within the Conceptual Foundations domain.",
+                "reference": "PreGISP Companion focus: abstraction | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+                "id": 4,
+                "domain": "Geospatial Data",
+                "question": "A dataset must preserve individually identifiable parcel boundaries and associated attributes. Which representation is generally most directly suited to discrete features with explicit geometry?",
+                "options": [
+                        "A) Metadata",
+                        "B) Raster data",
+                        "C) Dashboard",
+                        "D) Vector data"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Vector data. This question checks vector raster within the Geospatial Data domain.",
+                "reference": "PreGISP Companion focus: vector raster | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+                "id": 5,
+                "domain": "Thematic & Application Domains",
+                "question": "A transportation project and a conservation project have different subject matter but both use data evaluation, overlay, and visualization. Which PreGISP principle does this illustrate?",
+                "options": [
+                        "A) Transferable GIS principles",
+                        "B) Only industry terminology matters",
+                        "C) Methods cannot transfer across disciplines",
+                        "D) Every industry requires entirely different GIS principles"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Transferable GIS principles. This question checks transfer within the Thematic & Application Domains domain.",
+                "reference": "PreGISP Companion focus: transfer | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+                "id": 6,
+                "domain": "Geospatial Data",
+                "question": "A building dataset accurately locates every mapped structure, but 20% of the buildings are missing entirely. Which quality dimension is deficient?",
+                "options": [
+                        "A) Normalization",
+                        "B) Completeness",
+                        "C) Radiometric resolution",
+                        "D) Projection"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Completeness. This question checks completeness within the Geospatial Data domain.",
+                "reference": "PreGISP Companion focus: completeness | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+                "id": 7,
+                "domain": "Geospatial Data",
+                "question": "A project team sends staff into the field to collect new observations specifically for the current study. What type of source is this?",
+                "options": [
+                        "A) Database normalization",
+                        "B) Map generalization",
+                        "C) Primary data collection",
+                        "D) Secondary data source"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Primary data collection. This question checks primary secondary within the Geospatial Data domain.",
+                "reference": "PreGISP Companion focus: primary secondary | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+                "id": 8,
+                "domain": "Cartography & Visualization",
+                "question": "Two choropleth maps use the same values but different class boundaries and appear to show different spatial patterns. Which cartographic choice caused the difference?",
+                "options": [
+                        "A) Classification method",
+                        "B) File compression",
+                        "C) Geocoding method",
+                        "D) GNSS correction"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Classification method. This question checks classification within the Cartography & Visualization domain.",
+                "reference": "PreGISP Companion focus: classification | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+                "id": 9,
+                "domain": "Cartography & Visualization",
+                "question": "A map contains all required elements but the title, legend, map body, and supporting information compete for attention and feel poorly organized. Which design area most directly needs improvement?",
+                "options": [
+                        "A) Foreign key design",
+                        "B) Layout and composition",
+                        "C) Network impedance",
+                        "D) Spectral calibration"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Layout and composition. This question checks layout within the Cartography & Visualization domain.",
+                "reference": "PreGISP Companion focus: layout | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+                "id": 10,
+                "domain": "Conceptual Foundations",
+                "question": "A regional project requires meaningful planar distance and area measurements in linear units. Which type of reference framework is generally designed to support such measurements on a flat map?",
+                "options": [
+                        "A) Geographic coordinate system",
+                        "B) Spectral signature",
+                        "C) Projected coordinate system",
+                        "D) Attribute domain"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Projected coordinate system. This question checks GCS vs PCS within the Conceptual Foundations domain.",
+                "reference": "PreGISP Companion focus: GCS vs PCS | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+                "id": 11,
+                "domain": "Design of Systems",
+                "question": "A GIS works for 20 users today but is expected to serve hundreds and much larger datasets in three years. Which design consideration is most directly involved?",
+                "options": [
+                        "A) Scalability",
+                        "B) Radiometric resolution",
+                        "C) Adjacency",
+                        "D) Typography"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Scalability. This question checks scalability within the Design of Systems domain.",
+                "reference": "PreGISP Companion focus: scalability | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+                "id": 12,
+                "domain": "GI & Society",
+                "question": "A model systematically underrepresents neighborhoods where data collection was sparse, yet its map is presented as complete. Which professional responsibility is most relevant?",
+                "options": [
+                        "A) More detail is always ethically better",
+                        "B) Limitations need not be disclosed",
+                        "C) Technology is always neutral",
+                        "D) Bias and professional responsibility"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Bias and professional responsibility. This question checks bias ethics within the GI & Society domain.",
+                "reference": "PreGISP Companion focus: bias ethics | Blueprint domain resource: https://geospacebok.eu/GS"
+        },
+        {
+                "id": 13,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "A habitat model requires cell-by-cell combination of continuous slope, distance-to-water, and land-cover criteria across an entire study area. Which analytical representation is especially well suited to this workflow?",
+                "options": [
+                        "A) Metadata creation",
+                        "B) Table normalization",
+                        "C) Network analysis",
+                        "D) Raster analysis"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Raster analysis. This question checks raster vector within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: raster vector | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 14,
+                "domain": "Geospatial Data",
+                "question": "A road dataset is positionally accurate but omits a bridge opened last year. Which data-quality characteristic is the clearest concern?",
+                "options": [
+                        "A) Precision",
+                        "B) Topology",
+                        "C) Temporal currency",
+                        "D) Cardinality"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Temporal currency. This question checks currency within the Geospatial Data domain.",
+                "reference": "PreGISP Companion focus: currency | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+                "id": 15,
+                "domain": "Web-Based GIS",
+                "question": "Multiple applications need to access centrally maintained geographic information without each maintaining a separate copy. Which Web GIS concept most directly supports delivering that information?",
+                "options": [
+                        "A) Spectral signature",
+                        "B) Web services",
+                        "C) Primary key",
+                        "D) Paper map layout"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Web services. This question checks web services within the Web-Based GIS domain.",
+                "reference": "PreGISP Companion focus: web services | Blueprint domain resource: https://geospacebok.eu/WB"
+        },
+        {
+                "id": 16,
+                "domain": "Platforms, Sensors, Physics & Image Processing",
+                "question": "Two images cover the same area, but one can distinguish much smaller ground features because each pixel represents a smaller area. Which resolution differs most directly?",
+                "options": [
+                        "A) Temporal resolution",
+                        "B) Spectral resolution",
+                        "C) Spatial resolution",
+                        "D) Radiometric resolution"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Spatial resolution. This question checks spatial resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+                "reference": "PreGISP Companion focus: spatial resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+                "id": 17,
+                "domain": "Design of Systems",
+                "question": "A system plan defines standards to prevent errors and also includes checks to detect errors in delivered data and workflows. Which paired concept encompasses these activities?",
+                "options": [
+                        "A) Projection choice alone",
+                        "B) Decorative mapping",
+                        "C) QA/QC",
+                        "D) Unrestricted access"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is QA/QC. This question checks qa qc within the Design of Systems domain.",
+                "reference": "PreGISP Companion focus: qa qc | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+                "id": 18,
+                "domain": "Design of Systems",
+                "question": "A GIS has been deployed successfully, but requirements, data, security needs, and technology continue to change. Which principle says the system must continue to be maintained and improved?",
+                "options": [
+                        "A) System lifecycle",
+                        "B) Spectral signature",
+                        "C) Map scale",
+                        "D) One-time deployment only"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is System lifecycle. This question checks lifecycle within the Design of Systems domain.",
+                "reference": "PreGISP Companion focus: lifecycle | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+                "id": 19,
+                "domain": "Data Modeling",
+                "question": "An organization wants attribute values and relationships to remain valid and consistent as data are edited over time. Which data-modeling objective is being protected?",
+                "options": [
+                        "A) Decorative balance",
+                        "B) Data integrity",
+                        "C) Public visibility",
+                        "D) Temporal animation"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Data integrity. This question checks integrity within the Data Modeling domain.",
+                "reference": "PreGISP Companion focus: integrity | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+                "id": 20,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "Two fire-station sites are equally distant from a neighborhood as the crow flies, but one requires crossing a river at a distant bridge. Which method best evaluates realistic response accessibility?",
+                "options": [
+                        "A) Straight-line buffering",
+                        "B) Interpolation",
+                        "C) Raster classification",
+                        "D) Network analysis"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Network analysis. This question checks network within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: network | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 21,
+                "domain": "Geospatial Data",
+                "question": "Two organizations need their systems and datasets to exchange and use geographic information effectively despite different technical environments. Which concept is central?",
+                "options": [
+                        "A) Spectral signature",
+                        "B) Visual hierarchy",
+                        "C) Containment",
+                        "D) Interoperability"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Interoperability. This question checks interoperability within the Geospatial Data domain.",
+                "reference": "PreGISP Companion focus: interoperability | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+                "id": 22,
+                "domain": "Cartography & Visualization",
+                "question": "An analysis has meaningful uncertainty that could affect decisions. Which cartographic practice is most responsible?",
+                "options": [
+                        "A) Increase decimal places",
+                        "B) Hide limitations",
+                        "C) Communicating uncertainty",
+                        "D) Use more decorative symbols"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Communicating uncertainty. This question checks uncertainty map within the Cartography & Visualization domain.",
+                "reference": "PreGISP Companion focus: uncertainty map | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+                "id": 23,
+                "domain": "Geospatial Data",
+                "question": "A land-surface variable varies continuously across space and is represented as a regular grid. Which data model is being used?",
+                "options": [
+                        "A) Vector data",
+                        "B) Metadata",
+                        "C) Raster data",
+                        "D) Relational key"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Raster data. This question checks raster within the Geospatial Data domain.",
+                "reference": "PreGISP Companion focus: raster | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+                "id": 24,
+                "domain": "Data Modeling",
+                "question": "A zoning field should accept only a controlled list of valid zoning codes. Which data-modeling mechanism best supports this requirement?",
+                "options": [
+                        "A) Attribute domain",
+                        "B) Map projection",
+                        "C) Web service",
+                        "D) Buffer"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Attribute domain. This question checks domain within the Data Modeling domain.",
+                "reference": "PreGISP Companion focus: domain | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+                "id": 25,
+                "domain": "Conceptual Foundations",
+                "question": "A cartographer needs to preserve area for a thematic map but knows shape will be distorted. Which principle explains this compromise?",
+                "options": [
+                        "A) Changing projection removes all uncertainty",
+                        "B) One projection preserves every property",
+                        "C) Projection tradeoffs",
+                        "D) Projection choice never affects measurement"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Projection tradeoffs. This question checks projection tradeoff within the Conceptual Foundations domain.",
+                "reference": "PreGISP Companion focus: projection tradeoff | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+                "id": 26,
+                "domain": "Cartography & Visualization",
+                "question": "A cartographer chooses graduated symbols rather than identical symbols so magnitude differences are visually encoded. Which cartographic concept is being applied?",
+                "options": [
+                        "A) Orthorectification",
+                        "B) Symbolization",
+                        "C) Replication",
+                        "D) Normalization"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Symbolization. This question checks symbolization within the Cartography & Visualization domain.",
+                "reference": "PreGISP Companion focus: symbolization | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+                "id": 27,
+                "domain": "Cartography & Visualization",
+                "question": "Engineers, emergency managers, and the public need maps from the same data but for different decisions. What should most strongly drive differences in their map designs?",
+                "options": [
+                        "A) Audience and purpose",
+                        "B) Maximize number of layers",
+                        "C) Use identical design for every audience",
+                        "D) Always use the smallest scale"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Audience and purpose. This question checks audience within the Cartography & Visualization domain.",
+                "reference": "PreGISP Companion focus: audience | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+                "id": 28,
+                "domain": "Data Modeling",
+                "question": "A project team is first identifying the real-world entities and relationships the GIS must represent, before choosing tables or implementation technology. Which level of data modeling is most relevant?",
+                "options": [
+                        "A) Map layout",
+                        "B) Conceptual data model",
+                        "C) Image service",
+                        "D) Physical data model"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Conceptual data model. This question checks conceptual logical physical within the Data Modeling domain.",
+                "reference": "PreGISP Companion focus: conceptual logical physical | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+                "id": 29,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "A site-selection model must weigh slope, access, land availability, and environmental constraints to rank candidate areas. What type of analysis is being performed?",
+                "options": [
+                        "A) Label placement",
+                        "B) Suitability modeling",
+                        "C) Georeferencing",
+                        "D) Address matching"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Suitability modeling. This question checks suitability within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: suitability | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 30,
+                "domain": "Cartography & Visualization",
+                "question": "A thematic map relies only on red-green differences to distinguish critical classes. Which design consideration has most clearly been neglected?",
+                "options": [
+                        "A) Accessibility",
+                        "B) Use color alone for every distinction",
+                        "C) Use tiny labels to fit more data",
+                        "D) Assume all viewers perceive color identically"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Accessibility. This question checks accessibility within the Cartography & Visualization domain.",
+                "reference": "PreGISP Companion focus: accessibility | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+                "id": 31,
+                "domain": "Thematic & Application Domains",
+                "question": "A team receives a vague request to 'use GIS' for a community issue. What should it establish before selecting data or analytical methods?",
+                "options": [
+                        "A) Choose symbology before objectives",
+                        "B) Start with favorite software",
+                        "C) Collect every available dataset",
+                        "D) Understand the geographic problem"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Understand the geographic problem. This question checks problem first within the Thematic & Application Domains domain.",
+                "reference": "PreGISP Companion focus: problem first | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+                "id": 32,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "Air-quality values were measured at a limited set of monitoring stations, and planners need an estimated continuous surface between them. Which method addresses that need?",
+                "options": [
+                        "A) Topology validation",
+                        "B) Geocoding",
+                        "C) Dissolve",
+                        "D) Interpolation"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Interpolation. This question checks interpolation within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: interpolation | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 33,
+                "domain": "Conceptual Foundations",
+                "question": "Repeated measurements are tightly grouped even though their average is offset from the true position. Which property do the tightly grouped values demonstrate?",
+                "options": [
+                        "A) Accuracy",
+                        "B) Currency",
+                        "C) Precision",
+                        "D) Interoperability"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Precision. This question checks precision within the Conceptual Foundations domain.",
+                "reference": "PreGISP Companion focus: precision | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+                "id": 34,
+                "domain": "Data Modeling",
+                "question": "A future analyst needs to know who created a dataset, why it was created, how it was collected, and its limitations. What documentation provides this context?",
+                "options": [
+                        "A) Metadata",
+                        "B) Client request",
+                        "C) Symbology",
+                        "D) Pixel color"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Metadata. This question checks metadata within the Data Modeling domain.",
+                "reference": "PreGISP Companion focus: metadata | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+                "id": 35,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "An analyst must identify land that is simultaneously inside a floodplain, zoned for development, and outside protected habitat. Which method is central to combining these spatial conditions?",
+                "options": [
+                        "A) Overlay analysis",
+                        "B) Generalization",
+                        "C) Geocoding",
+                        "D) Image enhancement"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Overlay analysis. This question checks overlay within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: overlay | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 36,
+                "domain": "Conceptual Foundations",
+                "question": "Two land parcels share a common boundary. Which spatial relationship most specifically describes their relationship?",
+                "options": [
+                        "A) Proximity",
+                        "B) Containment",
+                        "C) Temporal currency",
+                        "D) Adjacency"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Adjacency. This question checks adjacency within the Conceptual Foundations domain.",
+                "reference": "PreGISP Companion focus: adjacency | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+                "id": 37,
+                "domain": "Web-Based GIS",
+                "question": "In a Web GIS interaction, a user's application requests geographic information from another computer that provides the resource. What role is the requesting application performing?",
+                "options": [
+                        "A) Raster cell",
+                        "B) Client",
+                        "C) Server",
+                        "D) Attribute domain"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Client. This question checks client server within the Web-Based GIS domain.",
+                "reference": "PreGISP Companion focus: client server | Blueprint domain resource: https://geospacebok.eu/WB"
+        },
+        {
+                "id": 38,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "An engineer needs to derive terrain characteristics from an elevation model to understand landform conditions. Which analytical family is most directly relevant?",
+                "options": [
+                        "A) Relational modeling",
+                        "B) Web service design",
+                        "C) Surface and terrain analysis",
+                        "D) Address geocoding"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Surface and terrain analysis. This question checks surface within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: surface | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 39,
+                "domain": "Geospatial Data",
+                "question": "An organization assigns responsibility for maintaining, documenting, updating, and responsibly managing a dataset throughout its life. Which concept best describes this responsibility?",
+                "options": [
+                        "A) Raster interpolation",
+                        "B) Address labeling",
+                        "C) Data stewardship",
+                        "D) Map decoration"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Data stewardship. This question checks stewardship within the Geospatial Data domain.",
+                "reference": "PreGISP Companion focus: stewardship | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+                "id": 40,
+                "domain": "Platforms, Sensors, Physics & Image Processing",
+                "question": "A sensor emits its own energy toward a target and measures the returned signal. How is that sensor classified?",
+                "options": [
+                        "A) Attribute domain",
+                        "B) Passive sensor",
+                        "C) Web client",
+                        "D) Active sensor"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Active sensor. This question checks active passive within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+                "reference": "PreGISP Companion focus: active passive | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+                "id": 41,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "Two different workflows could answer a planning question, but each has different data requirements and limitations. What principle should guide the choice?",
+                "options": [
+                        "A) Use whichever tool was used last",
+                        "B) Use the tool with the most parameters",
+                        "C) Use the newest tool available",
+                        "D) Problem-driven method selection"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Problem-driven method selection. This question checks workflow choice within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: workflow choice | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 42,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "A county must identify every parcel within a specified distance of a hazardous-material route. Which analytical method most directly creates the required distance zone?",
+                "options": [
+                        "A) Network analysis",
+                        "B) Buffer analysis",
+                        "C) Interpolation",
+                        "D) Classification"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Buffer analysis. This question checks buffer within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: buffer | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 43,
+                "domain": "Data Modeling",
+                "question": "Many departments need to maintain and use shared geographic information in an organized multiuser environment. Which blueprint concept is most relevant at a conceptual level?",
+                "options": [
+                        "A) Single static map image",
+                        "B) Enterprise geodatabase",
+                        "C) Standalone legend",
+                        "D) Paper atlas"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Enterprise geodatabase. This question checks enterprise within the Data Modeling domain.",
+                "reference": "PreGISP Companion focus: enterprise | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+                "id": 44,
+                "domain": "Conceptual Foundations",
+                "question": "A polygon layer contains overlaps and gaps that violate the intended spatial structure. Which concept is used to define and check such spatial relationships?",
+                "options": [
+                        "A) Typography",
+                        "B) Temporal currency",
+                        "C) Spectral resolution",
+                        "D) Topology"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Topology. This question checks topology within the Conceptual Foundations domain.",
+                "reference": "PreGISP Companion focus: topology | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+                "id": 45,
+                "domain": "Organizational & Institutional Aspects",
+                "question": "A proposed GIS design is technically impressive but requires staffing, funding, and maintenance capacity the organization does not have. Which blueprint consideration was neglected?",
+                "options": [
+                        "A) Assume unlimited staff and money",
+                        "B) Choose technology without considering capacity",
+                        "C) Ignore maintenance needs",
+                        "D) Project and resource considerations"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Project and resource considerations. This question checks resources within the Organizational & Institutional Aspects domain.",
+                "reference": "PreGISP Companion focus: resources | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+                "id": 46,
+                "domain": "Platforms, Sensors, Physics & Image Processing",
+                "question": "An imaging system records naturally available reflected or emitted energy without transmitting its own signal toward the surface. How is it classified?",
+                "options": [
+                        "A) Primary key",
+                        "B) Passive sensor",
+                        "C) Active sensor",
+                        "D) Topology rule"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Passive sensor. This question checks passive within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+                "reference": "PreGISP Companion focus: passive | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+                "id": 47,
+                "domain": "Conceptual Foundations",
+                "question": "A generalized regional dataset is used for parcel-level decisions and appears precise on screen. Which foundational concept most clearly warns against assuming the displayed detail is appropriate?",
+                "options": [
+                        "A) Database normalization",
+                        "B) Scale",
+                        "C) Metadata lineage",
+                        "D) Radiometric resolution"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Scale. This question checks scale within the Conceptual Foundations domain.",
+                "reference": "PreGISP Companion focus: scale | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+                "id": 48,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "An analyst must rerun a multi-step process next month with updated data and explain exactly how the result was produced. Which practice best supports this requirement?",
+                "options": [
+                        "A) Unrestricted public sharing",
+                        "B) Reproducible workflow",
+                        "C) Decorative cartography",
+                        "D) Manual undocumented editing"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Reproducible workflow. This question checks reproducibility within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: reproducibility | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 49,
+                "domain": "Cartography & Visualization",
+                "question": "A map reader's attention is intentionally directed first to evacuation routes, then shelters, and only later to background context. Which cartographic principle is being applied?",
+                "options": [
+                        "A) Visual hierarchy",
+                        "B) Topology",
+                        "C) Radiometric resolution",
+                        "D) Normalization"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Visual hierarchy. This question checks visual hierarchy within the Cartography & Visualization domain.",
+                "reference": "PreGISP Companion focus: visual hierarchy | Blueprint domain resource: https://geospacebok.eu/CV"
+        },
+        {
+                "id": 50,
+                "domain": "Data Modeling",
+                "question": "Parcel ownership is stored separately from parcel geometry, but users need to connect the information through shared identifiers. Which data-modeling concept enables this?",
+                "options": [
+                        "A) Relationship between datasets",
+                        "B) Projection distortion",
+                        "C) Raster resampling",
+                        "D) Color ramp"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Relationship between datasets. This question checks relationships within the Data Modeling domain.",
+                "reference": "PreGISP Companion focus: relationships | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+                "id": 51,
+                "domain": "Design of Systems",
+                "question": "A city is planning an enterprise GIS used by several departments. Which early action best reduces the risk that the system will solve the wrong problems?",
+                "options": [
+                        "A) Ignore existing workflows",
+                        "B) Choose software before interviews",
+                        "C) Design for only the GIS team",
+                        "D) Stakeholder involvement"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Stakeholder involvement. This question checks stakeholders within the Design of Systems domain.",
+                "reference": "PreGISP Companion focus: stakeholders | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+                "id": 52,
+                "domain": "Platforms, Sensors, Physics & Image Processing",
+                "question": "Two sensors have similar spatial and spectral properties, but one can distinguish finer differences in recorded energy intensity. Which resolution characteristic differs?",
+                "options": [
+                        "A) Temporal resolution",
+                        "B) Spatial resolution",
+                        "C) Topology",
+                        "D) Radiometric resolution"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Radiometric resolution. This question checks radiometric resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+                "reference": "PreGISP Companion focus: radiometric resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+                "id": 53,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "A planning question asks not whether two features touch, but how near one set of features is to another. Which spatial concept is primary?",
+                "options": [
+                        "A) Radiometry",
+                        "B) Governance",
+                        "C) Proximity",
+                        "D) Cardinality"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Proximity. This question checks proximity within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: proximity | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 54,
+                "domain": "Organizational & Institutional Aspects",
+                "question": "Data from multiple departments cannot be combined efficiently because naming, collection, and documentation practices differ. Which organizational response is most appropriate?",
+                "options": [
+                        "A) Standards and procedures",
+                        "B) Random individual practices",
+                        "C) Higher screen resolution",
+                        "D) More map decoration"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Standards and procedures. This question checks standards within the Organizational & Institutional Aspects domain.",
+                "reference": "PreGISP Companion focus: standards | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+                "id": 55,
+                "domain": "Data Modeling",
+                "question": "A database repeats the same owner information in hundreds of parcel records, creating inconsistent updates. Which data-modeling principle is intended to reduce this unnecessary duplication?",
+                "options": [
+                        "A) Normalization",
+                        "B) Generalization",
+                        "C) Orthorectification",
+                        "D) Interpolation"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Normalization. This question checks normalization within the Data Modeling domain.",
+                "reference": "PreGISP Companion focus: normalization | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+                "id": 56,
+                "domain": "Platforms, Sensors, Physics & Image Processing",
+                "question": "Two land-cover types can be distinguished because they reflect and absorb electromagnetic energy differently across wavelengths. What concept describes this characteristic pattern?",
+                "options": [
+                        "A) Primary key",
+                        "B) Spectral signature",
+                        "C) Buffer distance",
+                        "D) Scale bar"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Spectral signature. This question checks spectral signature within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+                "reference": "PreGISP Companion focus: spectral signature | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+                "id": 57,
+                "domain": "Thematic & Application Domains",
+                "question": "The same analytical result could have different implications in emergency management and long-range planning. What should the analyst do before recommending action?",
+                "options": [
+                        "A) Assume one result fits every decision",
+                        "B) Report numbers without meaning",
+                        "C) Ignore the application domain",
+                        "D) Interpret results in context"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Interpret results in context. This question checks context within the Thematic & Application Domains domain.",
+                "reference": "PreGISP Companion focus: context | Blueprint domain resource: https://geospacebok.eu/TA"
+        },
+        {
+                "id": 58,
+                "domain": "Design of Systems",
+                "question": "An enterprise GIS contains both public information and restricted operational data. Which system-design consideration should determine who can see or edit each resource?",
+                "options": [
+                        "A) Give every user full access",
+                        "B) Security and permissions",
+                        "C) Publish every dataset publicly",
+                        "D) Remove documentation"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Security and permissions. This question checks security within the Design of Systems domain.",
+                "reference": "PreGISP Companion focus: security | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+                "id": 59,
+                "domain": "Platforms, Sensors, Physics & Image Processing",
+                "question": "An analyst transforms multispectral imagery into mapped land-cover categories such as water, forest, and developed land. Which image-processing task is being performed?",
+                "options": [
+                        "A) Geocoding",
+                        "B) Orthorectification",
+                        "C) Image classification",
+                        "D) Normalization"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Image classification. This question checks classification image within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+                "reference": "PreGISP Companion focus: classification image | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+                "id": 60,
+                "domain": "GI & Society",
+                "question": "An online map of emergency responses could allow viewers to infer sensitive information about individuals at specific locations. Which societal consideration is most directly implicated?",
+                "options": [
+                        "A) Privacy and confidentiality",
+                        "B) Ignore possible identification",
+                        "C) Assume public data have no sensitivity",
+                        "D) Publish maximum detail automatically"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Privacy and confidentiality. This question checks privacy within the GI & Society domain.",
+                "reference": "PreGISP Companion focus: privacy | Blueprint domain resource: https://geospacebok.eu/GS"
+        },
+        {
+                "id": 61,
+                "domain": "Organizational & Institutional Aspects",
+                "question": "Neighboring jurisdictions need to maintain a regional dataset that crosses their boundaries. Which organizational capability is most important for coordinating shared information?",
+                "options": [
+                        "A) Data isolation",
+                        "B) No communication between partners",
+                        "C) Institutional collaboration",
+                        "D) Duplicate uncontrolled copies"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Institutional collaboration. This question checks collaboration within the Organizational & Institutional Aspects domain.",
+                "reference": "PreGISP Companion focus: collaboration | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+                "id": 62,
+                "domain": "Conceptual Foundations",
+                "question": "A GPS receiver repeatedly reports nearly identical coordinates, but all observations are several meters from the surveyed location. Which property is deficient?",
+                "options": [
+                        "A) Resolution",
+                        "B) Completeness",
+                        "C) Accuracy",
+                        "D) Precision"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Accuracy. This question checks accuracy precision within the Conceptual Foundations domain.",
+                "reference": "PreGISP Companion focus: accuracy precision | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+                "id": 63,
+                "domain": "Organizational & Institutional Aspects",
+                "question": "A critical dataset is not updated because each department assumes another group owns maintenance. Which organizational issue is most directly responsible?",
+                "options": [
+                        "A) Map projection",
+                        "B) Roles and responsibilities",
+                        "C) Raster cell size",
+                        "D) Spectral band"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Roles and responsibilities. This question checks roles within the Organizational & Institutional Aspects domain.",
+                "reference": "PreGISP Companion focus: roles | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+                "id": 64,
+                "domain": "Conceptual Foundations",
+                "question": "A dataset is carefully collected and documented, yet its measurements still cannot represent reality with absolute exactness. Which foundational idea accounts for this?",
+                "options": [
+                        "A) Unlimited resolution",
+                        "B) Uncertainty",
+                        "C) Guaranteed neutrality",
+                        "D) Perfect exactness"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Uncertainty. This question checks uncertainty within the Conceptual Foundations domain.",
+                "reference": "PreGISP Companion focus: uncertainty | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+                "id": 65,
+                "domain": "Organizational & Institutional Aspects",
+                "question": "Several departments maintain overlapping versions of the same authoritative layer with no agreed ownership or decision process. Which organizational concept most directly needs strengthening?",
+                "options": [
+                        "A) Radiometry",
+                        "B) Governance",
+                        "C) Symbolization",
+                        "D) Interpolation"
+                ],
+                "correct": "B",
+                "explanation": "The correct answer is Governance. This question checks governance within the Organizational & Institutional Aspects domain.",
+                "reference": "PreGISP Companion focus: governance | Blueprint domain resource: https://geospacebok.eu/OI"
+        },
+        {
+                "id": 66,
+                "domain": "Design of Systems",
+                "question": "A public-works department states that field crews must be able to update asset status during inspections. Before deciding devices or software, how should this need be classified?",
+                "options": [
+                        "A) Business requirement",
+                        "B) Technical requirement",
+                        "C) Spectral requirement",
+                        "D) Cartographic classification"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Business requirement. This question checks business tech within the Design of Systems domain.",
+                "reference": "PreGISP Companion focus: business tech | Blueprint domain resource: https://geospacebok.eu/DA"
+        },
+        {
+                "id": 67,
+                "domain": "Platforms, Sensors, Physics & Image Processing",
+                "question": "A vegetation study benefits from a sensor that distinguishes information in several narrow wavelength ranges. Which resolution characteristic is most relevant?",
+                "options": [
+                        "A) Map scale",
+                        "B) Spatial resolution",
+                        "C) Spectral resolution",
+                        "D) Temporal resolution"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Spectral resolution. This question checks spectral resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+                "reference": "PreGISP Companion focus: spectral resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
+        },
+        {
+                "id": 68,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "Two analysts use the same overlay method but obtain unreliable output because one input layer is outdated and positionally poor. Which factor most directly explains the problem?",
+                "options": [
+                        "A) Software brand",
+                        "B) Map title wording",
+                        "C) Screen resolution",
+                        "D) Input data quality"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Input data quality. This question checks input quality within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: input quality | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 69,
+                "domain": "Conceptual Foundations",
+                "question": "A wetland polygon lies entirely inside a protected-area polygon. Which spatial relationship is most directly illustrated?",
+                "options": [
+                        "A) Precision",
+                        "B) Connectivity",
+                        "C) Containment",
+                        "D) Classification"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Containment. This question checks containment within the Conceptual Foundations domain.",
+                "reference": "PreGISP Companion focus: containment | Blueprint domain resource: https://geospacebok.eu/CF"
+        },
+        {
+                "id": 70,
+                "domain": "Data Modeling",
+                "question": "A table requires an attribute whose values uniquely identify individual records so relationships can be established reliably. What role does that attribute serve?",
+                "options": [
+                        "A) Map legend",
+                        "B) Raster cell",
+                        "C) Foreign key",
+                        "D) Primary key"
+                ],
+                "correct": "D",
+                "explanation": "The correct answer is Primary key. This question checks primary key within the Data Modeling domain.",
+                "reference": "PreGISP Companion focus: primary key | Blueprint domain resource: https://geospacebok.eu/DM"
+        },
+        {
+                "id": 71,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "A technically valid analytical tool produces misleading conclusions because the data violate conditions under which the method is meaningful. What was most likely neglected?",
+                "options": [
+                        "A) Method assumptions",
+                        "B) File icon color",
+                        "C) Monitor size",
+                        "D) Logo design"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Method assumptions. This question checks assumptions within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: assumptions | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 72,
+                "domain": "Geospatial Data",
+                "question": "An older dataset has the needed historical date and documented accuracy, while a newer dataset cannot answer the study question. Which principle supports selecting the older data?",
+                "options": [
+                        "A) Fitness for purpose",
+                        "B) Largest available file",
+                        "C) Newest available dataset",
+                        "D) Most colorful map"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Fitness for purpose. This question checks fitness within the Geospatial Data domain.",
+                "reference": "PreGISP Companion focus: fitness | Blueprint domain resource: https://geospacebok.eu/GD"
+        },
+        {
+                "id": 73,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "A model completes without errors and produces a polished map. What additional step is essential before using the result for a decision?",
+                "options": [
+                        "A) Ignore uncertainty if the map looks precise",
+                        "B) Assume output is correct because processing completed",
+                        "C) Interpretation of results",
+                        "D) Report only the software settings"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Interpretation of results. This question checks interpretation within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: interpretation | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 74,
+                "domain": "Analytical Methods & GeoComputation",
+                "question": "A researcher wants to determine whether high values are spatially clustered beyond what would be expected from visual inspection alone. Which blueprint concept most directly addresses that question?",
+                "options": [
+                        "A) Schema normalization",
+                        "B) Image orthorectification",
+                        "C) Spatial statistics",
+                        "D) Typography"
+                ],
+                "correct": "C",
+                "explanation": "The correct answer is Spatial statistics. This question checks spatial statistics within the Analytical Methods & Geocomputation domain.",
+                "reference": "PreGISP Companion focus: spatial statistics | Blueprint domain resource: https://geospacebok.eu/AM | https://geospacebok.eu/GC"
+        },
+        {
+                "id": 75,
+                "domain": "Platforms, Sensors, Physics & Image Processing",
+                "question": "A crop-monitoring project requires imagery of the same location much more frequently during the growing season. Which resolution characteristic is most important?",
+                "options": [
+                        "A) Temporal resolution",
+                        "B) Spectral resolution",
+                        "C) Radiometric resolution",
+                        "D) Spatial resolution"
+                ],
+                "correct": "A",
+                "explanation": "The correct answer is Temporal resolution. This question checks temporal resolution within the Platforms, Sensors, Physical Principles & Image Processing domain.",
+                "reference": "PreGISP Companion focus: temporal resolution | Blueprint domain resource: https://geospacebok.eu/PS | https://geospacebok.eu/PP | https://geospacebok.eu/IP"
         }
-    ];
+];
 
     // Dynamic Interface Builder: Injects the 75 questions into the DOM framework
     function buildQuizInterface() {
